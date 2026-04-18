@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Epilogue:wght@400;700;800;900&amp;family=Manrope:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-container": "#1a1a1a",
+                    "inverse-surface": "#fcf9f8",
+                    "outline-variant": "#484847",
+                    "on-primary-fixed": "#000000",
+                    "error": "#ff6e84",
+                    "surface-dim": "#0e0e0e",
+                    "on-tertiary-container": "#090068",
+                    "tertiary-dim": "#9193ff",
+                    "secondary-fixed": "#ffd709",
+                    "tertiary-fixed": "#a8a8ff",
+                    "surface-variant": "#262626",
+                    "on-primary-fixed-variant": "#5c0032",
+                    "on-surface-variant": "#adaaaa",
+                    "primary-container": "#ff6eab",
+                    "surface-container-lowest": "#000000",
+                    "surface-container-high": "#20201f",
+                    "on-tertiary-fixed": "#070060",
+                    "tertiary": "#9b9cff",
+                    "surface-container-low": "#131313",
+                    "on-secondary-fixed-variant": "#665500",
+                    "on-secondary-container": "#fff7e6",
+                    "primary": "#ff88b6",
+                    "on-tertiary-fixed-variant": "#2a2893",
+                    "error-container": "#a70138",
+                    "on-surface": "#ffffff",
+                    "outline": "#767575",
+                    "surface-container-highest": "#262626",
+                    "error-dim": "#d73357",
+                    "inverse-on-surface": "#565555",
+                    "primary-fixed-dim": "#ff4ea1",
+                    "primary-fixed": "#ff6eab",
+                    "secondary": "#ffd709",
+                    "surface-bright": "#2c2c2c",
+                    "secondary-dim": "#efc900",
+                    "on-error": "#490013",
+                    "on-tertiary": "#150e82",
+                    "on-primary-container": "#4b0028",
+                    "surface-tint": "#ff88b6",
+                    "surface": "#0e0e0e",
+                    "tertiary-container": "#8c8df9",
+                    "primary-dim": "#ff68a9",
+                    "background": "#0e0e0e",
+                    "on-secondary": "#5b4b00",
+                    "tertiary-fixed-dim": "#9899ff",
+                    "on-background": "#ffffff",
+                    "on-primary": "#600035",
+                    "on-secondary-fixed": "#453900",
+                    "inverse-primary": "#b9006b",
+                    "on-error-container": "#ffb2b9",
+                    "secondary-fixed-dim": "#efc900",
+                    "secondary-container": "#705d00"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "fontFamily": {
+                    "headline": ["Epilogue"],
+                    "body": ["Manrope"],
+                    "label": ["Manrope"]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glow-primary:hover {
+            box-shadow: 0 0 20px rgba(255, 136, 182, 0.4);
+        }
+        .text-gradient {
+            background: linear-gradient(45deg, #ffd709, #ff88b6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .bg-gradient-sig {
+            background: linear-gradient(45deg, #ffd709, #ff88b6);
+        }
+        .glass-card {
+            background: rgba(38, 38, 38, 0.6);
+            backdrop-filter: blur(12px);
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface font-body selection:bg-primary selection:text-on-primary">
+<!-- TopNavBar -->
+<header class="bg-surface/70 backdrop-blur-xl dark:bg-[#0e0e0e]/70 docked full-width top-0 sticky z-50 shadow-[0_10px_40px_-15px_rgba(255,136,182,0.06)] tonal-layering">
+<nav class="flex justify-between items-center w-full px-8 py-4 max-w-[1920px] mx-auto">
+<div class="flex items-center gap-8">
+<a class="text-2xl font-black italic bg-gradient-to-r from-[#ffd709] to-[#ff88b6] bg-clip-text text-transparent font-headline tracking-tighter" href="#">Fastit Music India</a>
+<div class="hidden md:flex items-center gap-6">
+<a class="text-[#ff88b6] font-bold border-b-2 border-[#ff88b6] pb-1 font-headline tracking-tighter transition-all duration-300" href="#">Home</a>
+<a class="text-white/70 hover:text-white transition-colors font-headline tracking-tighter hover:glow-primary hover:scale-105" href="#">About</a>
+<a class="text-white/70 hover:text-white transition-colors font-headline tracking-tighter hover:glow-primary hover:scale-105" href="#">Services</a>
+<a class="text-white/70 hover:text-white transition-colors font-headline tracking-tighter hover:glow-primary hover:scale-105" href="#">Artists</a>
+<a class="text-white/70 hover:text-white transition-colors font-headline tracking-tighter hover:glow-primary hover:scale-105" href="#">Releases</a>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="bg-gradient-sig text-on-primary-fixed px-6 py-2 rounded-full font-bold hover:glow-primary hover:scale-105 transition-all active:scale-95 duration-300">
+                    Apply Now
+                </button>
+</div>
+</nav>
+</header>
+<main>
+<!-- Hero Section -->
+<section class="relative min-h-[921px] flex items-center justify-center overflow-hidden px-8">
+<div class="absolute inset-0 z-0">
+<div class="absolute top-[-10%] right-[-10%] w-[600px] h-[600px] bg-primary/20 rounded-full blur-[120px]"></div>
+<div class="absolute bottom-[-10%] left-[-10%] w-[600px] h-[600px] bg-secondary/10 rounded-full blur-[120px]"></div>
+</div>
+<div class="relative z-10 max-w-7xl w-full grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+<div class="space-y-8">
+<div class="inline-block px-4 py-1.5 rounded-full bg-surface-variant/50 border border-outline-variant/20 text-secondary font-bold text-sm tracking-widest uppercase">
+                        India's Premier Distribution
+                    </div>
+<h1 class="font-headline text-6xl md:text-8xl font-black tracking-tighter leading-[0.9] text-white">
+                        Empowering <span class="text-gradient">Music.</span><br/>Distributing <span class="text-gradient">Dreams.</span>
+</h1>
+<p class="text-on-surface-variant text-xl max-w-lg font-medium leading-relaxed">
+                        Join the digital revolution. We take your sounds from the studio to millions across 150+ global platforms.
+                    </p>
+<div class="flex flex-wrap gap-4 pt-4">
+<button class="bg-gradient-sig text-on-primary-fixed px-8 py-4 rounded-full font-bold text-lg hover:glow-primary hover:scale-105 transition-all active:scale-95">
+                            Apply as Artist
+                        </button>
+<button class="bg-surface-container-highest border border-outline-variant/30 text-white px-8 py-4 rounded-full font-bold text-lg hover:bg-surface-bright transition-all active:scale-95">
+                            Apply as Record Label
+                        </button>
+</div>
+<button class="flex items-center gap-2 text-primary font-bold hover:translate-x-2 transition-transform">
+                        Explore Our Releases <span class="material-symbols-outlined">arrow_forward</span>
+</button>
+</div>
+<div class="relative">
+<div class="relative aspect-square rounded-xl overflow-hidden shadow-2xl rotate-3 scale-105 hover:rotate-0 transition-all duration-700">
+<img class="w-full h-full object-cover" data-alt="dynamic close-up of a professional dj controller in a dark studio with vibrant pink and yellow neon lighting reflections" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAFlNkEmsHw0DPmGPAhtqrGUoVZZFRKzEUJVrCmMMPFMOdkaPk1EyMl0WKrNc2OFBw52JiFh5MpBMoVUPJuAyfB5os4xLG7yMX09HkaxRpQRqhbsCYZglPhlxqRVDQewTtsBXqPhKUqKWT2CCZLD1dY2ZNyIBnt4ze13scDTdgMJpap0y1nsV33zYrfyQ_Ws6191SzDDPh09up8qZQRtob-VJ7KSmu0z_jslRwqYjblsZ9BHNH_M8vEhTKAQy4OjppX0AIWRmUY31w"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
+<div class="absolute bottom-6 left-6 right-6 p-6 glass-card rounded-xl border border-outline-variant/20">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 bg-primary rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined text-black" style="font-variation-settings: 'FILL' 1;">play_arrow</span>
+</div>
+<div>
+<p class="font-headline font-bold text-white">Now Trending</p>
+<p class="text-sm text-on-surface-variant">Midnight Desires - Arjun S.</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Decorative Element -->
+<div class="absolute -top-10 -right-10 w-32 h-32 bg-secondary/30 rounded-full blur-3xl"></div>
+</div>
+</div>
+</section>
+<!-- Statistics Bar -->
+<section class="bg-surface-container-low py-16 border-y border-outline-variant/10">
+<div class="max-w-7xl mx-auto px-8">
+<div class="grid grid-cols-1 md:grid-cols-3 gap-12 text-center">
+<div class="space-y-2">
+<h3 class="text-5xl font-black font-headline text-white">500+</h3>
+<p class="text-primary font-bold tracking-widest uppercase text-sm">Artists Partnered</p>
+</div>
+<div class="space-y-2">
+<h3 class="text-5xl font-black font-headline text-white">10,000+</h3>
+<p class="text-secondary font-bold tracking-widest uppercase text-sm">Tracks Distributed</p>
+</div>
+<div class="space-y-2">
+<h3 class="text-5xl font-black font-headline text-white">50+</h3>
+<p class="text-tertiary font-bold tracking-widest uppercase text-sm">Platforms Live</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Featured Releases -->
+<section class="py-24 px-8 max-w-7xl mx-auto">
+<div class="flex justify-between items-end mb-16">
+<div class="space-y-4">
+<h2 class="text-4xl md:text-5xl font-black font-headline text-white tracking-tighter">New <span class="text-gradient">Drops</span></h2>
+<p class="text-on-surface-variant max-w-md">Fresh sounds from the heart of India, curated for the world stage.</p>
+</div>
+<button class="px-6 py-2 rounded-full border border-outline-variant/30 font-bold hover:bg-surface-container-high transition-all">View All</button>
+</div>
+<div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+<!-- Release Card 1 -->
+<div class="group cursor-pointer">
+<div class="relative aspect-square rounded-xl overflow-hidden mb-4 bg-surface-container-highest">
+<img class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" data-alt="vibrant abstract album cover with flowing neon waves of pink and indigo on a dark textured background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBaNQ0rW5whJD1Ur7I5bu2pifZJq8ZjiHt-IPYQLCbIu-iKGiif9b-zUxzCoCYUqpQXkidbL2llv-XmmbOCyqFje_Xi9tE5x4MZOF4i9x6AKAhERMDiTD9cP1_PbO0B2eEA507SdGqeJFXgR4ZZyxep22IPPyuoGKMVfDRzSUWQTymVmARMbdcDpN3bqlfxSB32ADqqw7JrO2bORXDV0IHLrtsf-veLhQ8miVx71yfb8R0NiO9P69bt-7pRWLl5_4XUTz67QcZ6wIA"/>
+<div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+<div class="w-16 h-16 bg-white rounded-full flex items-center justify-center text-black scale-90 group-hover:scale-100 transition-transform">
+<span class="material-symbols-outlined text-3xl" style="font-variation-settings: 'FILL' 1;">play_arrow</span>
+</div>
+</div>
+</div>
+<h4 class="font-headline font-bold text-lg text-white mb-1 group-hover:text-primary transition-colors">Electric Monsoon</h4>
+<p class="text-on-surface-variant text-sm font-medium">Kabir &amp; The Beats</p>
+<div class="flex gap-2 mt-3">
+<span class="material-symbols-outlined text-on-surface-variant text-sm">graphic_eq</span>
+<span class="material-symbols-outlined text-on-surface-variant text-sm">headphones</span>
+</div>
+</div>
+<!-- Release Card 2 -->
+<div class="group cursor-pointer">
+<div class="relative aspect-square rounded-xl overflow-hidden mb-4 bg-surface-container-highest">
+<img class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" data-alt="artistic portrait of a musician in silhouette against a golden spotlight with atmospheric smoke and lens flare" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCKcgXtXi95QaGrNPrz929mxy7nS7izaOT3Y16aWt_54HF4M7Ob9Me0Y33M_AM9va0BSpibM2DIANqp7RAQTehHHcOChYPDnHm9G2_YZhsgk2aIJK6q4U7eLEjmZIndP_qa3BEzaUt4WBt9r9rNEmtD88EnIIuj3PNnx6BE36_VtzUmVnebpkZSnlfYdKhg8JRdSHA3_gAGemaLVRo3sJ4-ukgXKlrFTkT-573dWEyD3vVwg1bjw33XcbhGyLDwPuBmCppoBFt3dG4"/>
+<div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+<div class="w-16 h-16 bg-white rounded-full flex items-center justify-center text-black scale-90 group-hover:scale-100 transition-transform">
+<span class="material-symbols-outlined text-3xl" style="font-variation-settings: 'FILL' 1;">play_arrow</span>
+</div>
+</div>
+</div>
+<h4 class="font-headline font-bold text-lg text-white mb-1 group-hover:text-primary transition-colors">Urban Nomad</h4>
+<p class="text-on-surface-variant text-sm font-medium">Anya Khurana</p>
+<div class="flex gap-2 mt-3">
+<span class="material-symbols-outlined text-on-surface-variant text-sm">graphic_eq</span>
+<span class="material-symbols-outlined text-on-surface-variant text-sm">headphones</span>
+</div>
+</div>
+<!-- Release Card 3 -->
+<div class="group cursor-pointer">
+<div class="relative aspect-square rounded-xl overflow-hidden mb-4 bg-surface-container-highest">
+<img class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" data-alt="minimalist album art with geometric shapes in yellow and black evoking a sense of modern rhythmic patterns" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB-n-yRIUmrObVdupaR2esmT0mL2hdCZ_d-6t16Clx2SdDiKIvFCPAbX3i3NZYj_8ldJhhJqPMNlECiu0c6SUDVVv8LVBhwcWRXeJIVuYlWvKyfPKoEv3qZyPNJ7DLN0Seif-8XAzKJUFtIerW8vT1t2W88T6N89yn67pMCUfgYyjvY2oZ09CArEfQYnHmDvOke3dUBdJ9jwID6pmmn5RfD94ypGsQaOAHGohRJNPWbTOdxCYlHb1krUPJpNpgqCsSBpnOrr78jr94"/>
+<div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+<div class="w-16 h-16 bg-white rounded-full flex items-center justify-center text-black scale-90 group-hover:scale-100 transition-transform">
+<span class="material-symbols-outlined text-3xl" style="font-variation-settings: 'FILL' 1;">play_arrow</span>
+</div>
+</div>
+</div>
+<h4 class="font-headline font-bold text-lg text-white mb-1 group-hover:text-primary transition-colors">Static Soul</h4>
+<p class="text-on-surface-variant text-sm font-medium">VIBE Project</p>
+<div class="flex gap-2 mt-3">
+<span class="material-symbols-outlined text-on-surface-variant text-sm">graphic_eq</span>
+<span class="material-symbols-outlined text-on-surface-variant text-sm">headphones</span>
+</div>
+</div>
+<!-- Release Card 4 -->
+<div class="group cursor-pointer">
+<div class="relative aspect-square rounded-xl overflow-hidden mb-4 bg-surface-container-highest">
+<img class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" data-alt="dramatic concert photo showing a sea of crowd hands in the air with bright stage lighting casting long shadows" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBIFynLLt-QbOpN0uE6J5PllafexwooBhJ48n3_p-07gnHXbkUu4ffcUppgmjjXjB3LRI8aThNuSVEpWaOSuj7EwRuX23sQJ4HUYRBYilZwKJO5e5jGhMEMxCqQLm_HlEzTm0Y-_wkgflhn_0R_RK4ABBE_JA_RZ0QZ78U0P_mVKfqm1rC6ActW2yrfA8nIYJq1xjEEySk5pVG8TnPiCyfQqyQDVumvf5VrzZwPR1PoDZq2jdhAepnoP2z9Wxss16FUOBkEvsskNJ4"/>
+<div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+<div class="w-16 h-16 bg-white rounded-full flex items-center justify-center text-black scale-90 group-hover:scale-100 transition-transform">
+<span class="material-symbols-outlined text-3xl" style="font-variation-settings: 'FILL' 1;">play_arrow</span>
+</div>
+</div>
+</div>
+<h4 class="font-headline font-bold text-lg text-white mb-1 group-hover:text-primary transition-colors">Live at Guwahati</h4>
+<p class="text-on-surface-variant text-sm font-medium">Various Artists</p>
+<div class="flex gap-2 mt-3">
+<span class="material-symbols-outlined text-on-surface-variant text-sm">graphic_eq</span>
+<span class="material-symbols-outlined text-on-surface-variant text-sm">headphones</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Platform Partners -->
+<section class="py-24 bg-surface-container/30">
+<div class="max-w-7xl mx-auto px-8 text-center">
+<h2 class="text-2xl font-headline font-bold text-white/40 uppercase tracking-[0.3em] mb-16">Global Reach Across All Major Platforms</h2>
+<div class="flex flex-wrap justify-center items-center gap-12 md:gap-20 opacity-50 grayscale hover:grayscale-0 transition-all duration-700">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-3xl">podcasts</span>
+<span class="font-bold text-xl">Spotify</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-3xl">brand_family</span>
+<span class="font-bold text-xl">Apple Music</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-3xl">smart_display</span>
+<span class="font-bold text-xl">YouTube</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-3xl">album</span>
+<span class="font-bold text-xl">JioSaavn</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-3xl">music_note</span>
+<span class="font-bold text-xl">Gaana</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-3xl">radio</span>
+<span class="font-bold text-xl">Amazon</span>
+</div>
+</div>
+</div>
+</section>
+<!-- CTA Section (Bento Style) -->
+<section class="py-24 px-8 max-w-7xl mx-auto">
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+<div class="md:col-span-2 bg-gradient-sig p-12 rounded-xl flex flex-col justify-between min-h-[400px] relative overflow-hidden group">
+<div class="relative z-10">
+<h2 class="text-5xl font-black font-headline text-on-primary-fixed mb-6 leading-none">Ready to lead the charts?</h2>
+<p class="text-on-primary-fixed/80 text-xl font-bold max-w-md">Our artist dashboard gives you real-time analytics and global distribution in one click.</p>
+</div>
+<div class="relative z-10 mt-8">
+<button class="bg-black text-white px-10 py-4 rounded-full font-bold hover:scale-105 transition-transform">Get Started Today</button>
+</div>
+<span class="material-symbols-outlined absolute -bottom-10 -right-10 text-[300px] text-white/20 rotate-12 group-hover:rotate-0 transition-transform duration-700">speed</span>
+</div>
+<div class="bg-surface-container-highest p-12 rounded-xl flex flex-col justify-between border border-outline-variant/10">
+<div>
+<span class="material-symbols-outlined text-secondary text-5xl mb-6">support_agent</span>
+<h3 class="text-2xl font-headline font-bold text-white mb-4">Dedicated Support</h3>
+<p class="text-on-surface-variant">24/7 human support for all your release queries and metadata fixes.</p>
+</div>
+<a class="text-secondary font-bold flex items-center gap-2 group" href="#">Contact Support <span class="material-symbols-outlined group-hover:translate-x-1 transition-transform">north_east</span></a>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="bg-[#0e0e0e] dark:bg-[#0e0e0e] w-full pt-20 pb-10 tonal-shift via-surface-container-low border-t border-white/5">
+<div class="grid grid-cols-1 md:grid-cols-4 gap-12 px-12 w-full">
+<div class="space-y-6">
+<a class="text-xl font-bold text-white font-headline tracking-tighter" href="#">Fastit Music India</a>
+<p class="font-['Manrope'] body-md text-white/60 leading-relaxed">The sonic heartbeat of India's independent music movement. We don't just distribute; we accelerate careers.</p>
+</div>
+<div class="space-y-4">
+<h4 class="text-white font-bold uppercase tracking-widest text-sm">Distribution</h4>
+<nav class="flex flex-col gap-3">
+<a class="text-white/40 hover:text-[#ffd709] transition-colors hover:translate-x-1 transition-transform" href="#">Artists</a>
+<a class="text-white/40 hover:text-[#ffd709] transition-colors hover:translate-x-1 transition-transform" href="#">Labels</a>
+<a class="text-white/40 hover:text-[#ffd709] transition-colors hover:translate-x-1 transition-transform" href="#">Pricing</a>
+<a class="text-white/40 hover:text-[#ffd709] transition-colors hover:translate-x-1 transition-transform" href="#">Services</a>
+</nav>
+</div>
+<div class="space-y-4">
+<h4 class="text-white font-bold uppercase tracking-widest text-sm">Company</h4>
+<nav class="flex flex-col gap-3">
+<a class="text-white/40 hover:text-[#ffd709] transition-colors hover:translate-x-1 transition-transform" href="#">About Us</a>
+<a class="text-white/40 hover:text-[#ffd709] transition-colors hover:translate-x-1 transition-transform" href="#">Privacy Policy</a>
+<a class="text-white/40 hover:text-[#ffd709] transition-colors hover:translate-x-1 transition-transform" href="#">Terms of Service</a>
+<a class="text-white/40 hover:text-[#ffd709] transition-colors hover:translate-x-1 transition-transform" href="#">Registered Office: Assam</a>
+<a class="text-white/40 hover:text-[#ffd709] transition-colors hover:translate-x-1 transition-transform" href="#">Corporate Office: Guwahati</a>
+</nav>
+</div>
+<div class="space-y-4">
+<h4 class="text-white font-bold uppercase tracking-widest text-sm">Connect</h4>
+<div class="flex gap-6">
+<a class="text-white/40 hover:text-[#ff88b6] transition-colors text-2xl focus-within:ring-2 focus-within:ring-[#ff88b6]" href="#">Instagram</a>
+<a class="text-white/40 hover:text-[#ff88b6] transition-colors text-2xl focus-within:ring-2 focus-within:ring-[#ff88b6]" href="#">X</a>
+<a class="text-white/40 hover:text-[#ff88b6] transition-colors text-2xl focus-within:ring-2 focus-within:ring-[#ff88b6]" href="#">Threads</a>
+</div>
+<div class="mt-8">
+<p class="text-white/20 text-xs font-bold uppercase tracking-[0.2em] mb-4">Newsletter</p>
+<div class="flex bg-surface-container-lowest rounded-full p-1 border border-outline-variant/20 focus-within:border-primary/50 transition-colors">
+<input class="bg-transparent border-none focus:ring-0 text-white px-4 w-full text-sm" placeholder="Your email" type="email"/>
+<button class="bg-primary text-on-primary font-bold px-4 py-2 rounded-full text-xs">Join</button>
+</div>
+</div>
+</div>
+</div>
+<div class="mt-20 px-12 pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between gap-4">
+<p class="font-['Manrope'] body-md text-white/60">© 2024 Fastit Music India. All Rights Reserved.</p>
+<div class="flex gap-8">
+<a class="text-[#ff88b6] text-sm font-bold" href="#">Artist Portal</a>
+<a class="text-white/40 text-sm" href="#">Support Center</a>
+</div>
+</div>
+</footer>
+</body></html>

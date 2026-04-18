@@ -1,0 +1,356 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider   = "prisma-client-js"
+  engineType = "library"
+}
+
+datasource db {
+  provider  = "postgresql"
+}
+
+enum UserRole {
+  ADMIN
+  SUB_ADMIN
+  EMPLOYEE
+  ARTIST
+  LABEL
+}
+
+model User {
+  id            String    @id @default(cuid())
+  email         String    @unique
+  username      String?   @unique
+  passwordHash  String
+  role          UserRole  @default(ARTIST)
+  isFirstLogin  Boolean   @default(true)
+  isActive      Boolean   @default(true)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  artistProfile  ArtistProfile?
+  labelProfile   LabelProfile?
+  employeeProfile EmployeeProfile?
+  notifications Notification[]
+  supportTickets SupportTicket[]
+  messages      TicketMessage[]
+}
+
+model ArtistProfile {
+  id                String    @id @default(cuid())
+  userId            String    @unique
+  user              User      @relation(fields: [userId], references: [id])
+  fullName          String
+  stageName         String
+  dob               DateTime?
+  gender            String?
+  bio               String?   @db.Text
+  profilePhoto      String?
+  primaryGenre      String
+  secondaryGenre    String?
+  primaryLanguage   String
+  city              String
+  state             String
+  country           String    @default("India")
+  pincode           String
+  phone             String
+  whatsapp          String?
+  instagramUrl      String?
+  youtubeUrl        String?
+  spotifyUrl        String?
+  appleMusicUrl     String?
+  twitterUrl        String?
+  facebookUrl       String?
+  govIdType         String?
+  govIdNumber       String?
+  govIdFront        String?
+  govIdBack         String?
+  bankName          String?
+  accountNumber     String?
+  ifscCode          String?
+  upiId             String?
+  panNumber         String?
+  isVerified        Boolean   @default(false)
+  verificationBadge Boolean   @default(false)
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+
+  releases          Release[]
+  revenues          Revenue[]
+}
+
+model LabelProfile {
+  id                  String    @id @default(cuid())
+  userId              String    @unique
+  user                User      @relation(fields: [userId], references: [id])
+  labelName           String
+  logo                String?
+  yearEstablished     Int?
+  website             String?
+  description         String?   @db.Text
+  genreFocus          String?
+  artistCount         Int       @default(0)
+  releaseCount        Int       @default(0)
+  contactPersonName   String
+  contactPersonRole   String
+  email               String
+  phone               String
+  whatsapp            String?
+  city                String
+  state               String
+  country             String    @default("India")
+  pincode             String
+  instagramUrl        String?
+  youtubeUrl          String?
+  twitterUrl          String?
+  facebookUrl         String?
+  spotifyUrl          String?
+  appleMusicUrl       String?
+  businessType        String?
+  registrationNumber  String?
+  gstNumber           String?
+  panNumber           String?
+  businessCertDoc     String?
+  panCardDoc          String?
+  bankName            String?
+  accountHolder       String?
+  accountNumber       String?
+  ifscCode            String?
+  upiId               String?
+  isVerified          Boolean   @default(false)
+  createdAt           DateTime  @default(now())
+  updatedAt           DateTime  @updatedAt
+
+  releases            Release[]
+  revenues            Revenue[]
+}
+
+enum ApplicationType {
+  ARTIST
+  LABEL
+}
+
+enum ApplicationStatus {
+  NEW
+  UNDER_REVIEW
+  APPROVED
+  REJECTED
+  MORE_INFO
+}
+
+model Application {
+  id               String            @id @default(cuid())
+  applicationId    String            @unique // e.g. FMI-ART-XXXX
+  type             ApplicationType
+  applicantData    Json              // Store all form fields here
+  status           ApplicationStatus @default(NEW)
+  adminNotes       String?           @db.Text
+  rejectionReason  String?           @db.Text
+  reviewedBy       String?
+  reviewedAt       DateTime?
+  credentialsSent  Boolean           @default(false)
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
+}
+
+enum ReleaseStatus {
+  DRAFT
+  SUBMITTED
+  UNDER_REVIEW
+  APPROVED
+  LIVE
+  REJECTED
+  TAKEN_DOWN
+}
+
+model Release {
+  id              String        @id @default(cuid())
+  artistId        String
+  artist          ArtistProfile @relation(fields: [artistId], references: [id])
+  labelId         String?
+  label           LabelProfile? @relation(fields: [labelId], references: [id])
+  title           String
+  type            String        // Single, EP, Album
+  coverArtUrl     String?
+  genre           String
+  subGenre        String?
+  language        String
+  releaseDate     DateTime
+  copyrightHolder String
+  copyrightYear   Int
+  description     String?       @db.Text
+  isExplicit      Boolean       @default(false)
+  moodTags        String?       // Comma separated
+  status          ReleaseStatus @default(DRAFT)
+  adminFeedback   String?       @db.Text
+  isrc            String?
+  upc             String?
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  tracks          Track[]
+  distribution    DistributionPlatform[]
+  revenues        Revenue[]
+}
+
+model Track {
+  id              String    @id @default(cuid())
+  releaseId       String
+  release         Release   @relation(fields: [releaseId], references: [id])
+  trackNumber     Int
+  title           String
+  audioFileUrl    String
+  duration        Int       // In seconds
+  featuredArtists String?
+  composer        String?
+  lyricist        String?
+  producer        String?
+  mixer           String?
+  master          String?
+  lyrics          String?   @db.Text
+  isrc            String?
+  createdAt       DateTime  @default(now())
+
+  revenues        Revenue[]
+}
+
+model DistributionPlatform {
+  id            String    @id @default(cuid())
+  releaseId     String
+  release       Release   @relation(fields: [releaseId], references: [id])
+  platformName  String
+  platformUrl   String?
+  deliveryStatus String
+  liveDate      DateTime?
+  takenDownDate DateTime?
+}
+
+model Revenue {
+  id             String    @id @default(cuid())
+  artistId       String?
+  artist         ArtistProfile? @relation(fields: [artistId], references: [id])
+  labelId        String?
+  label          LabelProfile?  @relation(fields: [labelId], references: [id])
+  releaseId      String?
+  release        Release?       @relation(fields: [releaseId], references: [id])
+  trackId        String?
+  track          Track?         @relation(fields: [trackId], references: [id])
+  platform       String
+  period         String    // e.g. "2024-01"
+  streams        Int       @default(0)
+  revenueAmount  Float     @default(0.0)
+  currency       String    @default("INR")
+  createdAt      DateTime  @default(now())
+}
+
+enum PaymentStatus {
+  PENDING
+  PROCESSING
+  COMPLETED
+  FAILED
+}
+
+model Payment {
+  id               String        @id @default(cuid())
+  userId           String
+  amount           Float
+  method           String        // bank/upi
+  referenceNumber  String?
+  status           PaymentStatus @default(PENDING)
+  requestedAt      DateTime      @default(now())
+  processedAt      DateTime?
+}
+
+enum TicketStatus {
+  OPEN
+  IN_PROGRESS
+  RESOLVED
+  CLOSED
+}
+
+model SupportTicket {
+  id           String       @id @default(cuid())
+  userId       String
+  user         User         @relation(fields: [userId], references: [id])
+  category     String
+  subject      String
+  description  String       @db.Text
+  priority     String       // Low, Medium, High, Urgent
+  status       TicketStatus @default(OPEN)
+  createdAt    DateTime     @default(now())
+
+  messages     TicketMessage[]
+}
+
+model TicketMessage {
+  id             String    @id @default(cuid())
+  ticketId       String
+  ticket         SupportTicket @relation(fields: [ticketId], references: [id])
+  senderId       String
+  sender         User      @relation(fields: [senderId], references: [id])
+  message        String    @db.Text
+  attachments    String?   // JSON list of URLs
+  isInternalNote Boolean   @default(false)
+  createdAt      DateTime  @default(now())
+}
+
+model Notification {
+  id          String   @id @default(cuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id])
+  type        String
+  title       String
+  message     String   @db.Text
+  isRead      Boolean  @default(false)
+  createdAt   DateTime @default(now())
+}
+
+model BlogPost {
+  id              String   @id @default(cuid())
+  title           String
+  slug            String   @unique
+  content         String   @db.Text
+  featuredImage   String?
+  category        String?
+  tags            String?
+  authorId        String
+  status          String   @default("DRAFT") // DRAFT, PUBLISHED
+  seoTitle        String?
+  seoDescription  String?
+  publishedAt     DateTime?
+  createdAt       DateTime @default(now())
+}
+
+model FAQ {
+  id        String  @id @default(cuid())
+  question  String
+  answer    String  @db.Text
+  category  String
+  order     Int     @default(0)
+  isActive  Boolean @default(true)
+}
+
+model Testimonial {
+  id        String  @id @default(cuid())
+  name      String
+  photo     String?
+  quote     String  @db.Text
+  rating    Int     @default(5)
+  isActive  Boolean @default(true)
+  order     Int     @default(0)
+}
+
+model EmployeeProfile {
+  id          String   @id @default(cuid())
+  userId      String   @unique
+  user        User     @relation(fields: [userId], references: [id])
+  fullName    String
+  department  String
+  jobTitle    String
+  phone       String?
+  permissions String   @default("read") // read, write, admin
+  createdBy   String   // admin user id
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}

@@ -1,0 +1,210 @@
+"use client";
+
+import { useState } from "react";
+import Image from "next/image";
+import Link from "next/link";
+import { motion } from "framer-motion";
+import { Search, Filter, Play, Music, Headphones, Volume2, Calendar } from "lucide-react";
+import { MOCK_RELEASES } from "@/data/mock";
+import { useAudioStore } from "@/lib/store/useAudioStore";
+
+export default function ReleasesPage() {
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedGenre, setSelectedGenre] = useState("All");
+  const { setTrack } = useAudioStore();
+
+  const handlePlay = (e: React.MouseEvent, rel: any) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setTrack({
+      id: rel.id,
+      title: rel.title,
+      artist: rel.artist,
+      cover: rel.cover,
+      url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"
+    });
+  };
+
+  const genres = ["All", "Pop", "Rock", "Hip Hop", "Electronic", "Folk", "Lo-Fi"];
+
+  const filteredReleases = MOCK_RELEASES.filter(rel => {
+    const matchesSearch = 
+      rel.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
+      rel.artist.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesGenre = selectedGenre === "All" || rel.genre.includes(selectedGenre);
+    return matchesSearch && matchesGenre;
+  });
+
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: { opacity: 1, transition: { staggerChildren: 0.1 } }
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { opacity: 1, y: 0 }
+  };
+
+  return (
+    <div className="min-h-screen pt-24 pb-20 px-8 relative overflow-hidden">
+      {/* Background Decor */}
+      <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-primary/5 rounded-full blur-[100px] -z-10"></div>
+      <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-secondary/5 rounded-full blur-[100px] -z-10"></div>
+
+      <div className="max-w-7xl mx-auto">
+        {/* Header Section */}
+        <div className="flex flex-col md:flex-row justify-between items-end gap-8 mb-16">
+          <div className="space-y-4">
+            <motion.div 
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              className="inline-block px-4 py-1 rounded-full bg-primary/10 border border-primary/20 text-primary font-bold text-xs tracking-widest uppercase"
+            >
+              The Sound of Fastit
+            </motion.div>
+            <motion.h1 
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              className="text-5xl md:text-7xl font-black font-display text-white tracking-tighter"
+            >
+              Our <span className="gradient-text">Releases</span>
+            </motion.h1>
+            <p className="text-white/60 text-lg max-w-xl font-sans">
+              Discover the latest independent sounds from across India, distributed globally through the Fastit network.
+            </p>
+          </div>
+
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="flex flex-col sm:flex-row gap-4 w-full md:w-auto"
+          >
+            <div className="relative">
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-white/30" />
+              <input 
+                type="text" 
+                placeholder="Search tracks, artists..."
+                className="w-full sm:w-[300px] bg-surface-container/50 border border-white/5 rounded-full py-3 pl-12 pr-4 text-white focus:border-primary/50 outline-none transition-all font-sans"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
+            </div>
+            <div className="flex items-center gap-2 bg-surface-container/50 border border-white/5 rounded-full px-4 py-2">
+              <Filter className="w-4 h-4 text-white/30" />
+              <select 
+                className="bg-transparent text-white text-sm font-bold outline-none cursor-pointer pr-4"
+                value={selectedGenre}
+                onChange={(e) => setSelectedGenre(e.target.value)}
+              >
+                {genres.map(g => <option key={g} value={g} className="bg-[#0e0e0e]">{g}</option>)}
+              </select>
+            </div>
+          </motion.div>
+        </div>
+
+        {/* Catalog Grid */}
+        {filteredReleases.length > 0 ? (
+          <motion.div 
+            variants={containerVariants}
+            initial="hidden"
+            animate="visible"
+            className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-8"
+          >
+            {filteredReleases.map((rel) => (
+              <motion.div 
+                key={rel.id}
+                variants={itemVariants}
+                className="group relative"
+              >
+                <Link href={`/releases/${rel.slug}`} className="block">
+                  <div className="relative aspect-square rounded-2xl overflow-hidden mb-4 bg-surface-container-highest shadow-xl">
+                    <Image 
+                      src={rel.cover} 
+                      alt={rel.title} 
+                      fill 
+                      className="object-cover group-hover:scale-110 transition-transform duration-700" 
+                    />
+                    
+                    {/* Hover Overlay */}
+                    <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center backdrop-blur-[2px]">
+                      <button 
+                        onClick={(e) => handlePlay(e, rel)}
+                        className="w-16 h-16 bg-white rounded-full flex items-center justify-center text-black transform scale-75 group-hover:scale-100 transition-transform duration-500 shadow-2xl hover:scale-110 active:scale-90"
+                      >
+                        <Play className="fill-current w-8 h-8 ml-1" />
+                      </button>
+                    </div>
+
+                    {/* Genre Tag */}
+                    <div className="absolute top-4 left-4">
+                      <div className="px-3 py-1 rounded-full bg-black/60 backdrop-blur-md border border-white/10 text-[10px] font-black uppercase tracking-widest text-white/80">
+                        {rel.genre.split(' / ')[0]}
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="space-y-1">
+                    <h3 className="font-display font-bold text-lg text-white group-hover:text-primary transition-colors truncate">
+                      {rel.title}
+                    </h3>
+                    <p className="text-white/50 text-sm font-sans flex items-center gap-1.5 truncate">
+                      <Music className="w-3 h-3" /> {rel.artist}
+                    </p>
+                  </div>
+
+                  <div className="mt-4 pt-3 border-t border-white/5 flex justify-between items-center opacity-0 group-hover:opacity-100 transition-opacity">
+                    <div className="flex gap-2">
+                       <Headphones className="w-4 h-4 text-white/20" />
+                       <Volume2 className="w-4 h-4 text-white/20" />
+                    </div>
+                    <span className="text-[10px] text-white/30 font-bold uppercase tracking-tighter">
+                      Released {new Date(rel.releaseDate).getFullYear()}
+                    </span>
+                  </div>
+                </Link>
+              </motion.div>
+            ))}
+          </motion.div>
+        ) : (
+          <div className="py-40 text-center space-y-4">
+            <Volume2 className="w-16 h-16 text-white/10 mx-auto" />
+            <h3 className="text-2xl font-display font-bold text-white/40">No releases found matching your search.</h3>
+            <button 
+              onClick={() => {setSearchQuery(""); setSelectedGenre("All")}}
+              className="text-primary font-bold hover:underline"
+            >
+              Clear all filters
+            </button>
+          </div>
+        )}
+
+        {/* Newsletter / CTA */}
+        <motion.div 
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          className="mt-32 p-12 glass rounded-3xl border border-white/10 relative overflow-hidden text-center md:text-left"
+        >
+           <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-8">
+              <div className="space-y-2">
+                <h2 className="text-3xl font-display font-black text-white">Never Miss a <span className="gradient-text">Beat.</span></h2>
+                <p className="text-white/50 max-w-sm">Get notified about fresh drops, artist signings, and internal label news.</p>
+              </div>
+              <div className="flex w-full md:w-auto bg-white/5 rounded-full p-1.5 border border-white/10">
+                <input 
+                  type="email" 
+                  placeholder="Your email address"
+                  className="bg-transparent border-none focus:ring-0 text-white px-6 w-full md:w-[300px] font-sans"
+                />
+                <button className="btn-gradient px-8 py-3 rounded-full font-bold text-sm whitespace-nowrap">
+                  Subscribe
+                </button>
+              </div>
+           </div>
+           {/* Background Circles */}
+           <div className="absolute top-[-50%] right-[-10%] w-[300px] h-[300px] bg-primary/10 rounded-full blur-[80px]"></div>
+        </motion.div>
+      </div>
+    </div>
+  );
+}
