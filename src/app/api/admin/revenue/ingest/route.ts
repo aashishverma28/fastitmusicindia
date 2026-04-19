@@ -27,7 +27,7 @@ export async function POST(req: Request) {
     //   currency: "INR"
     // }
 
-    const results = await prisma.$transaction(async (tx) => {
+    const results = await prisma.$transaction(async (tx: any) => {
       const addedRecords = [];
 
       for (const report of reports) {

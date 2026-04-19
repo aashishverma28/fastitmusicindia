@@ -28,7 +28,7 @@ export async function PATCH(
     }
 
     // Start a transaction for the entire approval process
-    const result = await prisma.$transaction(async (tx) => {
+    const result = await prisma.$transaction(async (tx: any) => {
       // 1. Update Application Status
       const updatedApp = await tx.application.update({
         where: { id },

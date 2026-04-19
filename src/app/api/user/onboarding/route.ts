@@ -14,7 +14,7 @@ export async function PATCH(req: Request) {
     const data = await req.json();
 
     // Update Profile and toggle isFirstLogin
-    await prisma.$transaction(async (tx) => {
+    await prisma.$transaction(async (tx: any) => {
       if (session.user.role === "ARTIST") {
         await tx.artistProfile.update({
           where: { userId: session.user.id },

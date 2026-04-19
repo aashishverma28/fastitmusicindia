@@ -44,7 +44,7 @@ export async function POST(req: Request) {
     }
 
     // Create Release with Tracks in a transaction
-    const result = await prisma.$transaction(async (tx) => {
+    const result = await prisma.$transaction(async (tx: any) => {
       const release = await tx.release.create({
         data: {
           artistId: artistId || "placeholder-artist-id",
