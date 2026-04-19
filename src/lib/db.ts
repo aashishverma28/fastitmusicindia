@@ -10,7 +10,10 @@ const globalForPrisma = global as unknown as {
 };
 
 if (!globalForPrisma.pool) {
-  globalForPrisma.pool = new Pool({ connectionString });
+  globalForPrisma.pool = new Pool({
+    connectionString,
+    ssl: process.env.NODE_ENV === "production" ? { rejectUnauthorized: false } : false,
+  });
 }
 
 if (!globalForPrisma.prisma) {
