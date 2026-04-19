@@ -1,9 +1,20 @@
 import { NextResponse } from "next/server";
+import { prisma } from "@/lib/db";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/lib/auth";
-import { prisma } from "@/lib/db";
-import { $Enums } from "@prisma/client";
-type ReleaseStatus = $Enums.ReleaseStatus;
+import type { ReleaseStatus } from "@prisma/client";
+
+// In Prisma 7, enums are strings. We use a constant array for build-time safety
+// and validation since the generated $Enums object is failing to export on Render.
+const VALID_STATUSES: ReleaseStatus[] = [
+  "DRAFT",
+  "SUBMITTED",
+  "UNDER_REVIEW",
+  "APPROVED",
+  "LIVE",
+  "REJECTED",
+  "TAKEN_DOWN"
+];
 
 export async function POST(
   request: Request,
@@ -22,7 +33,7 @@ export async function POST(
     const formData = await request.formData();
     const status = formData.get("status") as string;
 
-    if (!status || !Object.values(ReleaseStatus).includes(status as ReleaseStatus)) {
+    if (!status || !VALID_STATUSES.includes(status as ReleaseStatus)) {
       return NextResponse.json({ error: "Invalid status" }, { status: 400 });
     }
 
