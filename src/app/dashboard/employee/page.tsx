@@ -8,6 +8,7 @@ import {
   CreditCard, Settings, Bell, Search, LogOut, 
   TrendingUp, ClockAlert, CheckCircle2, Users, Menu, X 
 } from "lucide-react";
+import { Skeleton } from "@/components/shared/Skeleton";
 
 const NAV_ITEMS = [
   { label: "Overview",     icon: LayoutDashboard, href: "/dashboard/employee",              active: true  },
@@ -154,11 +155,10 @@ export default function EmployeeDashboard() {
             </div>
           </div>
 
-          {/* Stats grid */}
           {loading ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
               {[0,1,2,3].map(i => (
-                <div key={i} className="rounded-2xl p-5 animate-pulse" style={{ background: "rgba(255,255,255,0.04)", height: 120 }} />
+                <Skeleton key={i} className="h-[120px] rounded-2xl" />
               ))}
             </div>
           ) : (
@@ -208,8 +208,8 @@ export default function EmployeeDashboard() {
             </div>
 
             {loading ? (
-              [0,1,2].map(i => (
-                <div key={i} className="rounded-2xl p-5 animate-pulse" style={{ background: "rgba(255,255,255,0.04)", height: 72 }} />
+              [0,1,2,3,4].map(i => (
+                <Skeleton key={i} className="h-[72px] rounded-2xl" />
               ))
             ) : artists.length === 0 ? (
               <div className="rounded-2xl p-10 text-center" style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.06)" }}>
