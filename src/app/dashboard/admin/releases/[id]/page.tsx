@@ -15,7 +15,7 @@ import {
   Building2, 
   Tag 
 } from "lucide-react";
-import ReleaseStatusManager from "@/components/admin/ReleaseStatusManager"; // I'll assume we either create this or do without it. I will create it or use inline form.
+// ReleaseStatusManager import removed since it doesn't exist and inline forms are used.
 
 export default async function AdminReleaseDetailPage({
   params

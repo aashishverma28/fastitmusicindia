@@ -47,16 +47,7 @@ export async function POST(req: Request) {
     const result = await prisma.$transaction(async (tx) => {
       const release = await tx.release.create({
         data: {
-          artistId: artistId!, // If artistId is null, it means it's a label release. Wait, the model says artistId is required.
-          // In Fastit, even a label release must have a primary artistId. 
-          // For now, if it's a label, we'll assume they are the 'owner' or we need an artist selected.
-          // Let's adjust logic: If labelId, we need to handle the relationship.
-          // Looking at schema: artistId is NOT optional. 
-          // If a LABEL submits, they must specify which ARTIST it belongs to.
-          // Simplification for now: Use the current user's profile ID if they are artist. 
-          // If label, we'll need an artist selection in UI (to be added later).
-          // For now, let's use the first available artistId for label or a placeholder ID if needed.
-          // Actually, let's just use the current profile's ID if available.
+          artistId: artistId || "placeholder-artist-id",
           title,
           type,
           genre,
@@ -69,7 +60,6 @@ export async function POST(req: Request) {
           coverArtUrl: artworkUrl,
           status: "SUBMITTED",
           labelId: labelId,
-          artistId: artistId || "placeholder-artist-id", // Need a real ID from the form usually
         }
       });
 

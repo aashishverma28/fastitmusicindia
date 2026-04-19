@@ -1,11 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import { 
+import {
   CheckCircle2, 
   XCircle, 
   Loader2, 
-  Dialog,
   ArrowRight
 } from "lucide-react";
 import { useRouter } from "next/navigation";

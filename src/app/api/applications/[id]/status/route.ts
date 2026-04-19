@@ -98,6 +98,7 @@ export async function PATCH(
                 city: data.city || "TBD",
                 state: data.state || "TBD",
                 country: "India",
+                pincode: data.pincode || "TBD",
                 description: data.description || "",
                 genreFocus: data.genreFocus || "All",
               },
@@ -117,7 +118,7 @@ export async function PATCH(
           // If user exists but credentials haven't been sent successfully before, 
           // we might want to regenerate or just use a known password. 
           // For now, we skip password reset but still queue the email block if needed.
-          username = user.username;
+          username = user.username || "";
         }
 
         // 3. Mark credentials as sent (this will be finalized if transaction completes)

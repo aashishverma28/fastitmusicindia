@@ -1,0 +1,20 @@
+src/app/api/applications/[id]/status/route.ts(91,15): error TS2322: Type '{ userId: string; labelName: any; contactPersonName: any; contactPersonRole: string; email: any; phone: any; city: any; state: any; country: string; description: any; genreFocus: any; }' is not assignable to type '(Without<LabelProfileCreateInput, LabelProfileUncheckedCreateInput> & LabelProfileUncheckedCreateInput) | (Without<...> & LabelProfileCreateInput)'.
+  Type '{ userId: string; labelName: any; contactPersonName: any; contactPersonRole: string; email: any; phone: any; city: any; state: any; country: string; description: any; genreFocus: any; }' is not assignable to type 'Without<LabelProfileCreateInput, LabelProfileUncheckedCreateInput> & LabelProfileUncheckedCreateInput'.
+    Property 'pincode' is missing in type '{ userId: string; labelName: any; contactPersonName: any; contactPersonRole: string; email: any; phone: any; city: any; state: any; country: string; description: any; genreFocus: any; }' but required in type 'LabelProfileUncheckedCreateInput'.
+src/app/api/applications/[id]/status/route.ts(120,11): error TS2322: Type 'string | null' is not assignable to type 'string'.
+  Type 'null' is not assignable to type 'string'.
+src/app/api/releases/route.ts(72,11): error TS1117: An object literal cannot have multiple properties with the same name.
+src/app/dashboard/admin/releases/[id]/page.tsx(18,34): error TS2307: Cannot find module '@/components/admin/ReleaseStatusManager' or its corresponding type declarations.
+src/app/dashboard/artist/layout.tsx(118,121): error TS2339: Property 'username' does not exist on type '{ id: string; role: string; name?: string | null | undefined; email?: string | null | undefined; image?: string | null | undefined; }'.
+src/app/dashboard/artist/layout.tsx(122,34): error TS2339: Property 'username' does not exist on type '{ id: string; role: string; name?: string | null | undefined; email?: string | null | undefined; image?: string | null | undefined; }'.
+src/app/dashboard/label/layout.tsx(111,123): error TS2339: Property 'username' does not exist on type '{ id: string; role: string; name?: string | null | undefined; email?: string | null | undefined; image?: string | null | undefined; }'.
+src/app/dashboard/label/layout.tsx(115,34): error TS2339: Property 'username' does not exist on type '{ id: string; role: string; name?: string | null | undefined; email?: string | null | undefined; image?: string | null | undefined; }'.
+src/app/login/page.tsx(104,47): error TS2322: Type '{ children: string; href: string; size: string; className: string; }' is not assignable to type 'IntrinsicAttributes & Omit<AnchorHTMLAttributes<HTMLAnchorElement>, keyof LinkProps<any>> & LinkProps<...> & { ...; } & RefAttributes<...>'.
+  Property 'size' does not exist on type 'IntrinsicAttributes & Omit<AnchorHTMLAttributes<HTMLAnchorElement>, keyof LinkProps<any>> & LinkProps<...> & { ...; } & RefAttributes<...>'.
+src/components/admin/PaymentStatusActions.tsx(8,3): error TS2305: Module '"lucide-react"' has no exported member 'Dialog'.
+src/components/audio/AudioPlayer.tsx(4,22): error TS7016: Could not find a declaration file for module 'howler'. 'C:/Users/MONTU/OneDrive/Documents/ANG1APP/Fastit Music India Website/node_modules/howler/dist/howler.js' implicitly has an 'any' type.
+  Try `npm i --save-dev @types/howler` if it exists or add a new declaration (.d.ts) file containing `declare module 'howler';`
+src/components/forms/LabelApplicationForm.tsx(135,13): error TS2304: Cannot find name 'Link'.
+src/components/forms/LabelApplicationForm.tsx(137,14): error TS2304: Cannot find name 'Link'.
+src/components/forms/LabelApplicationForm.tsx(138,13): error TS2304: Cannot find name 'Link'.
+src/components/forms/LabelApplicationForm.tsx(140,14): error TS2304: Cannot find name 'Link'.

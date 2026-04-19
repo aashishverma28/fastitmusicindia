@@ -21,7 +21,7 @@ export default function AudioPlayer() {
     }
 
     // New track or URL change
-    if (!howlRef.current || howlRef.current.src() !== currentTrack.url) {
+    if (!howlRef.current || (howlRef.current as any)._src !== currentTrack.url) {
       if (howlRef.current) howlRef.current.stop();
       
       howlRef.current = new Howl({
