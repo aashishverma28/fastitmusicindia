@@ -2,7 +2,8 @@ import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/db";
-import { ReleaseStatus } from "@prisma/client";
+import { $Enums } from "@prisma/client";
+type ReleaseStatus = $Enums.ReleaseStatus;
 
 export async function POST(
   request: Request,
