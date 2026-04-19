@@ -41,10 +41,10 @@ export default function ReleaseDetailPage({ params }: { params: Promise<{ slug: 
   };
 
   const streamingLinks = [
-    { name: "Spotify", url: "#", icon: <Globe className="w-5 h-5" /> },
-    { name: "Apple Music", url: "#", icon: <Disc className="w-5 h-5" /> },
-    { name: "YouTube Music", url: "#", icon: <Mic2 className="w-5 h-5" /> },
-    { name: "JioSaavn", url: "#", icon: <ListMusic className="w-5 h-5" /> },
+    { name: "Spotify", url: (release as any).links?.spotify || "#", icon: <Globe className="w-5 h-5" /> },
+    { name: "Apple Music", url: (release as any).links?.apple || "#", icon: <Disc className="w-5 h-5" /> },
+    { name: "YouTube Music", url: (release as any).links?.youtube || "#", icon: <Mic2 className="w-5 h-5" /> },
+    { name: "JioSaavn", url: (release as any).links?.jiosaavn || "#", icon: <ListMusic className="w-5 h-5" /> },
   ];
 
   const tracklist = [
