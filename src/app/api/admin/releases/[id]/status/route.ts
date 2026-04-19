@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/lib/auth";
-import type { ReleaseStatus } from "@prisma/client";
+type ReleaseStatus = "DRAFT" | "SUBMITTED" | "UNDER_REVIEW" | "APPROVED" | "LIVE" | "REJECTED" | "TAKEN_DOWN";
 
 // In Prisma 7, enums are strings. We use a constant array for build-time safety
 // and validation since the generated $Enums object is failing to export on Render.
