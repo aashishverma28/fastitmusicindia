@@ -30,8 +30,8 @@ export default async function AdminPaymentsPage() {
   });
 
   // Calculate some quick stats
-  const totalPending = payments.filter(p => p.status === "PENDING" || p.status === "PROCESSING").reduce((acc, p) => acc + p.amount, 0);
-  const totalPaid = payments.filter(p => p.status === "COMPLETED").reduce((acc, p) => acc + p.amount, 0);
+  const totalPending = payments.filter((p: any) => p.status === "PENDING" || p.status === "PROCESSING").reduce((acc: number, p: any) => acc + p.amount, 0);
+  const totalPaid = payments.filter((p: any) => p.status === "COMPLETED").reduce((acc: number, p: any) => acc + p.amount, 0);
 
   return (
     <div className="space-y-10">
@@ -94,7 +94,7 @@ export default async function AdminPaymentsPage() {
             </tr>
           </thead>
           <tbody className="divide-y divide-white/5">
-            {payments.length > 0 ? payments.map((p) => (
+            {payments.length > 0 ? payments.map((p: any) => (
               <tr key={p.id} className="group hover:bg-white/[0.02] transition-colors">
                 <td className="px-8 py-6">
                   <div className="flex items-center gap-4">

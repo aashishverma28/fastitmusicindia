@@ -97,7 +97,7 @@ export default async function ArtistPaymentsPage() {
                       </tr>
                    </thead>
                    <tbody className="divide-y divide-white/5 font-sans">
-                      {payments.map((p) => (
+                      {payments.map((p: any) => (
                          <tr key={p.id} className="hover:bg-white/[0.02] transition-colors group">
                             <td className="px-8 py-5">
                                <p className="text-sm font-bold text-white">{new Date(p.requestedAt).toLocaleDateString()}</p>

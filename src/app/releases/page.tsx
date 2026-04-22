@@ -27,7 +27,7 @@ export default function ReleasesPage() {
 
   const genres = ["All", "Pop", "Rock", "Hip Hop", "Electronic", "Folk", "Lo-Fi"];
 
-  const filteredReleases = MOCK_RELEASES.filter(rel => {
+  const filteredReleases = MOCK_RELEASES.filter((rel: any) => {
     const matchesSearch = 
       rel.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
       rel.artist.toLowerCase().includes(searchQuery.toLowerCase());
@@ -110,7 +110,7 @@ export default function ReleasesPage() {
             animate="visible"
             className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-8"
           >
-            {filteredReleases.map((rel) => (
+            {filteredReleases.map((rel: any) => (
               <motion.div 
                 key={rel.id}
                 variants={itemVariants}

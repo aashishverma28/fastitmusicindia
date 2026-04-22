@@ -95,7 +95,7 @@ export default function LabelDashboardLayout({
                 <div className="h-4 w-px bg-white/10"></div>
                 <div className="flex items-center gap-3">
                    <div className="flex -space-x-2">
-                      {[1, 2, 3].map(i => (
+                      {[1, 2, 3].map((i: any) => (
                         <div key={i} className="w-6 h-6 rounded-full border-2 border-black bg-white/5 ring-1 ring-white/10"></div>
                       ))}
                    </div>

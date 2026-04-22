@@ -10,7 +10,7 @@ import { notFound } from "next/navigation";
 
 export default function BlogPostReader({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = use(params);
-  const post = MOCK_BLOGS.find(p => p.slug === slug);
+  const post = MOCK_BLOGS.find((p: any) => p.slug === slug);
 
   if (!post) {
     notFound();
@@ -132,7 +132,7 @@ export default function BlogPostReader({ params }: { params: Promise<{ slug: str
         <div className="mt-32 pt-24 border-t border-white/5">
            <h3 className="text-3xl font-black font-display text-white mb-12">Related <span className="gradient-text">Insights</span></h3>
            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              {MOCK_BLOGS.filter(p => p.id !== post.id).slice(0, 2).map((p) => (
+              {MOCK_BLOGS.filter((p: any) => p.id !== post.id).slice(0, 2).map((p: any) => (
                 <Link key={p.id} href={`/blog/${p.slug}`} className="glass p-6 rounded-3xl border border-white/5 group hover:border-primary/20 transition-all">
                    <div className="relative aspect-video rounded-2xl overflow-hidden mb-6">
                       <Image src={p.cover} alt={p.title} fill className="object-cover group-hover:scale-105 transition-transform duration-500" />

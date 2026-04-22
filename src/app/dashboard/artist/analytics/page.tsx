@@ -158,7 +158,7 @@ export default async function ArtistAnalyticsPage() {
                        { name: "Apple Music", share: 22, color: "bg-[#FA2D48]" },
                        { name: "YouTube Music", share: 12, color: "bg-[#FF0000]" },
                        { name: "Amazon Music", share: 4, color: "bg-[#00A8E1]" },
-                     ].map(p => (
+                     ].map((p: any) => (
                        <div key={p.name} className="space-y-2">
                           <div className="flex justify-between text-[10px] font-black uppercase tracking-widest">
                              <span className="text-white/40 italic">{p.name}</span>

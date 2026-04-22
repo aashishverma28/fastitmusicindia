@@ -60,8 +60,8 @@ export default function FAQPage() {
     setOpenIndex(openIndex === index ? null : index);
   };
 
-  const categories = faqs.map(f => f.category);
-  const currentFaqs = faqs.find(f => f.category === activeCategory)?.questions || [];
+  const categories = faqs.map((f: any) => f.category);
+  const currentFaqs = faqs.find((f: any) => f.category === activeCategory)?.questions || [];
 
   return (
     <div className="min-h-screen pt-24 pb-20 relative overflow-hidden">

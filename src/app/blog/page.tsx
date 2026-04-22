@@ -12,12 +12,12 @@ export default function BlogPage() {
   
   const categories = ["All", "Distribution", "Education", "Spotlight", "News"];
   
-  const filteredPosts = MOCK_BLOGS.filter(post => 
+  const filteredPosts = MOCK_BLOGS.filter((post: any) => 
     activeCategory === "All" || post.category === activeCategory
   );
 
   const featuredPost = MOCK_BLOGS[0];
-  const secondaryPosts = filteredPosts.filter(p => p.id !== featuredPost.id);
+  const secondaryPosts = filteredPosts.filter((p: any) => p.id !== featuredPost.id);
 
   return (
     <div className="min-h-screen pt-24 pb-20 relative overflow-hidden">

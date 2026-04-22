@@ -91,7 +91,7 @@ export default function ArtistReleasesPage() {
              </div>
              <div className="h-4 w-px bg-white/5 hidden md:block"></div>
              <div className="flex items-center gap-2 p-2">
-                {["All", "Live", "Review", "Rejected"].map((f) => (
+                {["All", "Live", "Review", "Rejected"].map((f: any) => (
                   <button key={f} className={`px-5 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${f === "All" ? "bg-white/10 text-white" : "text-white/40 hover:text-white hover:bg-white/5"}`}>
                     {f}
                   </button>
@@ -173,7 +173,7 @@ export default function ArtistReleasesPage() {
           <div className="flex items-center justify-between px-8 py-4 glass rounded-3xl border border-white/5">
              <p className="text-[10px] font-black uppercase tracking-widest text-white/20">Showing {releases.length} recordings</p>
              <div className="flex gap-2">
-                {[1].map(p => (
+                {[1].map((p: any) => (
                   <button key={p} className="w-8 h-8 rounded-lg bg-primary text-black font-black text-xs">{p}</button>
                 ))}
              </div>

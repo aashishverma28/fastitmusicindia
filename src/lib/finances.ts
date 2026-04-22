@@ -42,7 +42,7 @@ export async function getUserBalance(userId: string, role: string) {
     let pendingPayouts = 0;
     let completedPayouts = 0;
 
-    payments.forEach(p => {
+    payments.forEach((p: any) => {
       if (p.status === "PENDING" || p.status === "PROCESSING") {
         pendingPayouts += p._sum.amount || 0;
       } else if (p.status === "COMPLETED") {

@@ -76,7 +76,7 @@ export default function NewTicketButton() {
                       value={formData.category}
                       onChange={(e) => setFormData({...formData, category: e.target.value})}
                     >
-                       {categories.map(c => <option key={c} value={c}>{c}</option>)}
+                       {categories.map((c: any) => <option key={c} value={c}>{c}</option>)}
                     </select>
                  </div>
                  <div className="space-y-2">
@@ -86,7 +86,7 @@ export default function NewTicketButton() {
                       value={formData.priority}
                       onChange={(e) => setFormData({...formData, priority: e.target.value})}
                     >
-                       {priorities.map(p => <option key={p} value={p}>{p}</option>)}
+                       {priorities.map((p: any) => <option key={p} value={p}>{p}</option>)}
                     </select>
                  </div>
               </div>

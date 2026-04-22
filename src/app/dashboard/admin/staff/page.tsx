@@ -216,7 +216,7 @@ export default function StaffAccessPage() {
                     <select value={form.permissions} onChange={e => setForm({...form, permissions: e.target.value})}
                             className="w-full px-4 py-3 rounded-xl text-sm text-white outline-none"
                             style={{ background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.08)" }}>
-                      {PERMISSIONS.map(p => <option key={p.value} value={p.value} style={{ background: "#141414" }}>{p.label} — {p.desc}</option>)}
+                      {PERMISSIONS.map((p: any) => <option key={p.value} value={p.value} style={{ background: "#141414" }}>{p.label} — {p.desc}</option>)}
                     </select>
                   </div>
                 </div>
@@ -296,8 +296,8 @@ export default function StaffAccessPage() {
       <div className="grid grid-cols-3 gap-4">
         {[
           { label: "Total Staff", value: employees.length, color: "#ff88b6" },
-          { label: "Active",      value: employees.filter(e => e.isActive).length, color: "#ffd709" },
-          { label: "Inactive",    value: employees.filter(e => !e.isActive).length, color: "#ff6e84" },
+          { label: "Active",      value: employees.filter((e: any) => e.isActive).length, color: "#ffd709" },
+          { label: "Inactive",    value: employees.filter((e: any) => !e.isActive).length, color: "#ff6e84" },
         ].map(s => (
           <div key={s.label} className="rounded-xl p-5" style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.06)" }}>
             <p className="text-xs font-bold uppercase tracking-wider mb-2" style={{ color: "rgba(255,255,255,0.35)" }}>{s.label}</p>

@@ -77,7 +77,7 @@ export default function EmployeeDashboard() {
         </div>
 
         <nav className="flex-1 space-y-0.5">
-          {NAV_ITEMS.map(item => (
+          {NAV_ITEMS.map((item: any) => (
             <Link key={item.label} href={item.href}
                   className="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all"
                   style={item.active
@@ -157,7 +157,7 @@ export default function EmployeeDashboard() {
 
           {loading ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-              {[0,1,2,3].map(i => (
+              {[0,1,2,3].map((i: any) => (
                 <Skeleton key={i} className="h-[120px] rounded-2xl" />
               ))}
             </div>
@@ -208,7 +208,7 @@ export default function EmployeeDashboard() {
             </div>
 
             {loading ? (
-              [0,1,2,3,4].map(i => (
+              {[0,1,2,3,4].map((i: any) => (
                 <Skeleton key={i} className="h-[72px] rounded-2xl" />
               ))
             ) : artists.length === 0 ? (
