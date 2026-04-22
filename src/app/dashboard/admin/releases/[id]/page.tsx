@@ -130,7 +130,7 @@ export default async function AdminReleaseDetailPage({
                 <h3 className="text-xl font-bold text-white italic flex items-center gap-2"><Music className="w-5 h-5 text-secondary" /> Tracklist ({release.tracks.length})</h3>
              </div>
              <div className="divide-y divide-white/5">
-                {release.tracks.length > 0 ? release.tracks.map((track) => (
+                {release.tracks.length > 0 ? release.tracks.map((track: any) => (
                   <div key={track.id} className="p-6 flex flex-col md:flex-row md:items-center justify-between gap-4 hover:bg-white/[0.02] transition-colors">
                      <div className="flex items-center gap-4">
                         <div className="w-8 h-8 rounded-full bg-white/5 border border-white/10 flex items-center justify-center font-mono text-xs text-white/40">
