@@ -41,6 +41,7 @@ export default function Footer() {
           <div className="flex gap-6">
             <a href="https://instagram.com/fastitmusicindia" target="_blank" className="text-white/40 hover:text-primary transition-colors text-lg">Instagram</a>
             <a href="https://x.com/fastitmusicind" target="_blank" className="text-white/40 hover:text-primary transition-colors text-lg">X</a>
+            <a href="https://www.youtube.com/@FastitMusicIndia?sub_confirmation=1" target="_blank" className="text-white/40 hover:text-red-500 transition-colors text-lg">YouTube</a>
           </div>
           <div className="mt-8">
             <p className="text-white/20 text-xs font-bold uppercase tracking-[0.2em] mb-4">Newsletter</p>
@@ -56,8 +57,9 @@ export default function Footer() {
           </div>
         </div>
       </div>
-      <div className="mt-20 px-12 pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between gap-4 max-w-[1920px] mx-auto">
-        <p className="text-white/60 text-sm">© 2024 Fastit Music India. All Rights Reserved.</p>
+      <div className="mt-20 px-12 pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-4 max-w-[1920px] mx-auto">
+        <p className="text-white/60 text-sm">© 2026 Fastit Music India. All Rights Reserved.</p>
+        <p className="text-white/40 text-sm">Made with <span className="text-red-500">❤️</span> by Fastit Group Solutions Pvt.Ltd</p>
         <div className="flex gap-8 items-center">
           <Link className="text-primary text-sm font-bold" href="/login">Artist Portal</Link>
           <Link className="text-white/40 text-sm" href="/support">Support Center</Link>
