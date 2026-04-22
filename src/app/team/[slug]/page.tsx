@@ -185,11 +185,6 @@ export default function TeamMemberPage() {
     notFound();
   }
 
-  const fadeUp = {
-    initial: { opacity: 0, y: 30 },
-    animate: { opacity: 1, y: 0 },
-    transition: { duration: 0.6, ease: "easeOut" },
-  };
 
   return (
     <div className="min-h-screen pt-20 pb-24 relative overflow-hidden">
@@ -199,7 +194,11 @@ export default function TeamMemberPage() {
 
       <div className="max-w-6xl mx-auto px-6">
         {/* Back Button */}
-        <motion.div {...fadeUp} className="pt-8 pb-10">
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          className="pt-8 pb-10">
           <Link
             href="/about"
             className="inline-flex items-center gap-2 text-white/50 hover:text-white font-bold text-sm uppercase tracking-widest transition-colors group"
@@ -250,7 +249,8 @@ export default function TeamMemberPage() {
 
           {/* Info */}
           <motion.div
-            {...fadeUp}
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2, duration: 0.6 }}
             className="space-y-8"
           >
