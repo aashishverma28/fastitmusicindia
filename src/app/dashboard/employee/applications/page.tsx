@@ -53,7 +53,7 @@ export default async function EmployeeApplicationsPage() {
           <div className="col-span-1 text-right">View</div>
         </div>
 
-        {applications.length > 0 ? applications.map((app) => (
+        {applications.length > 0 ? applications.map((app: any) => (
           <div key={app.id} className="rounded-2xl px-6 py-4 grid grid-cols-12 items-center gap-4 transition-colors"
                style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.05)" }}>
             <div className="col-span-12 md:col-span-4 flex items-center gap-4">

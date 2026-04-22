@@ -86,7 +86,7 @@ export default async function AdminDashboardPage() {
                 </tr>
               </thead>
               <tbody>
-                {recentApps.length > 0 ? recentApps.map((app) => (
+                {recentApps.length > 0 ? recentApps.map((app: any) => (
                   <tr key={app.id} className="hover:bg-white/[0.02] transition-colors group">
                     <td className="p-5 border-b border-white/5">
                       <div>

@@ -69,7 +69,7 @@ export default async function AdminApplicationsPage() {
         </div>
 
         <div className="divide-y divide-white/5">
-          {applications.length > 0 ? applications.map((app) => (
+          {applications.length > 0 ? applications.map((app: any) => (
             <div key={app.id} className="grid grid-cols-12 gap-4 px-8 py-6 items-center hover:bg-white/[0.02] transition-colors group">
               <div className="col-span-4 flex items-center gap-4">
                  <div className={`w-12 h-12 rounded-2xl flex items-center justify-center font-black text-xs ${
