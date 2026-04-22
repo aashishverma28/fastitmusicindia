@@ -208,7 +208,7 @@ export default function EmployeeDashboard() {
             </div>
 
             {loading ? (
-              {[0,1,2,3,4].map((i: any) => (
+              [0,1,2,3,4].map((i: any) => (
                 <Skeleton key={i} className="h-[72px] rounded-2xl" />
               ))
             ) : artists.length === 0 ? (
