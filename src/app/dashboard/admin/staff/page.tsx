@@ -309,7 +309,7 @@ export default function StaffAccessPage() {
       {/* Employee list */}
       {loading ? (
         <div className="space-y-3">
-          {[0,1,2].map(i => <div key={i} className="rounded-2xl h-20 animate-pulse" style={{ background: "rgba(255,255,255,0.04)" }} />)}
+          {[0,1,2].map((i: any) => <div key={i} className="rounded-2xl h-20 animate-pulse" style={{ background: "rgba(255,255,255,0.04)" }} />)}
         </div>
       ) : employees.length === 0 ? (
         <div className="rounded-2xl p-16 text-center" style={{ background: "rgba(255,255,255,0.02)", border: "1px dashed rgba(255,255,255,0.08)" }}>

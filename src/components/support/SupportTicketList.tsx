@@ -45,7 +45,7 @@ export default function SupportTicketList({ tickets }: { tickets: any[] }) {
           </tr>
         </thead>
         <tbody className="divide-y divide-white/5 font-sans">
-          {tickets.map((t) => (
+          {tickets.map((t: any) => (
             <tr key={t.id} className="group hover:bg-white/[0.02] transition-colors cursor-pointer relative">
               <td className="px-8 py-6">
                 <Link href={`/dashboard/support/tickets/${t.id}`} className="absolute inset-0 z-10" />

@@ -143,7 +143,7 @@ export default async function ArtistAnalyticsPage() {
                </div>
                
                <div className="flex justify-between px-4 pt-6 border-t border-white/5">
-                  {["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"].map(m => (
+                  {["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"].map((m: any) => (
                     <span key={m} className="text-[10px] font-black text-white/20 uppercase tracking-widest">{m}</span>
                   ))}
                </div>

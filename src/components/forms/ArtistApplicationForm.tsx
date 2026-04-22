@@ -158,7 +158,7 @@ export default function ArtistApplicationForm() {
       <div className="mb-12">
         <div className="flex justify-between items-center relative">
           <div className="absolute top-1/2 left-0 w-full h-0.5 bg-white/10 -translate-y-1/2 z-0"></div>
-          {steps.map((step) => (
+          {steps.map((step: any) => (
             <div key={step.id} className="relative z-10 flex flex-col items-center">
               <div 
                 className={`w-12 h-12 rounded-full flex items-center justify-center transition-all duration-500 ${
@@ -334,7 +334,7 @@ export default function ArtistApplicationForm() {
                   <div className="space-y-2">
                     <label className="text-sm font-bold text-white/80">ID Type</label>
                     <div className="grid grid-cols-2 gap-4">
-                      {["Aadhar Card", "PAN Card", "Voter ID", "Passport"].map((type) => (
+                      {["Aadhar Card", "PAN Card", "Voter ID", "Passport"].map((type: any) => (
                         <button 
                           key={type}
                           type="button"

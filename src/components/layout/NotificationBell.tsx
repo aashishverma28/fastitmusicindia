@@ -86,7 +86,7 @@ export default function NotificationBell() {
               </div>
 
               <div className="max-h-96 overflow-y-auto custom-scrollbar">
-                 {notifications.length > 0 ? notifications.map((n) => (
+                 {notifications.length > 0 ? notifications.map((n: any) => (
                    <div 
                     key={n.id} 
                     onClick={() => markAsRead(n.id)}

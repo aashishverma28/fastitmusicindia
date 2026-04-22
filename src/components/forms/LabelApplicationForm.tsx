@@ -150,7 +150,7 @@ export default function LabelApplicationForm() {
       <div className="mb-12">
         <div className="flex justify-between items-center relative">
           <div className="absolute top-1/2 left-0 w-full h-0.5 bg-white/10 -translate-y-1/2 z-0"></div>
-          {steps.map((step) => (
+          {steps.map((step: any) => (
             <div key={step.id} className="relative z-10 flex flex-col items-center">
               <div 
                 className={`w-12 h-12 rounded-full flex items-center justify-center transition-all duration-500 ${
