@@ -9,14 +9,14 @@ const globalForPrisma = global as unknown as {
   pool: Pool;
 };
 
-if (!globalForPrisma.pool) {
+if (!globalForPrisma.pool && connectionString) {
   globalForPrisma.pool = new Pool({
     connectionString,
     ssl: process.env.NODE_ENV === "production" ? { rejectUnauthorized: false } : false,
   });
 }
 
-if (!globalForPrisma.prisma) {
+if (!globalForPrisma.prisma && globalForPrisma.pool) {
   const adapter = new PrismaPg(globalForPrisma.pool);
   globalForPrisma.prisma = new PrismaClient({
     adapter,
