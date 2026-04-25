@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
-import { nanoid } from "nanoid"; // I should check if nanoid is installed, or use a custom generator
+
+export const dynamic = "force-dynamic";
 
 function generateAppId(type: "ARTIST" | "LABEL") {
   const prefix = type === "ARTIST" ? "FMI-ART" : "FMI-LAB";
