@@ -24,8 +24,16 @@ export default async function AdminReleasesPage() {
   const releases = await prisma.release.findMany({
     orderBy: { createdAt: "desc" },
     include: {
-      artist: true,
-      label: true
+      artist: {
+        include: {
+          user: true
+        }
+      },
+      label: {
+        include: {
+          user: true
+        }
+      }
     }
   });
 
@@ -92,8 +100,14 @@ export default async function AdminReleasesPage() {
               </div>
 
               <div className="md:col-span-3">
-                 <p className="text-sm font-bold text-white truncate">{rel.artist.stageName}</p>
-                 {rel.label && <p className="text-[10px] font-bold text-white/40 uppercase tracking-widest truncate">{rel.label.labelName}</p>}
+                 <p className="text-sm font-bold text-white truncate">
+                   {rel.artist.stageName} <span className="text-[10px] font-mono text-primary/60">@{rel.artist.user.username || rel.artist.user.email.split('@')[0]}</span>
+                 </p>
+                 {rel.label && (
+                   <p className="text-[10px] font-bold text-white/40 uppercase tracking-widest truncate">
+                     {rel.label.labelName} <span className="text-[9px] font-mono lowercase">@{rel.label.user.username || rel.label.user.email.split('@')[0]}</span>
+                   </p>
+                 )}
               </div>
 
               <div className="md:col-span-2 flex items-center gap-2">

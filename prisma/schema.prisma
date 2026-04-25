@@ -80,6 +80,9 @@ model ArtistProfile {
 
   releases          Release[]
   revenues          Revenue[]
+
+  labelId           String?
+  label             LabelProfile? @relation(fields: [labelId], references: [id])
 }
 
 model LabelProfile {
@@ -126,6 +129,7 @@ model LabelProfile {
 
   releases            Release[]
   revenues            Revenue[]
+  rosterArtists       ArtistProfile[]
 }
 
 enum ApplicationType {

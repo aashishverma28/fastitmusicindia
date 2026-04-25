@@ -9,6 +9,7 @@ import {
   TrendingUp, ClockAlert, CheckCircle2, Users, Menu, X 
 } from "lucide-react";
 import { Skeleton } from "@/components/shared/Skeleton";
+import ResetPasswordButton from "@/components/admin/ResetPasswordButton";
 
 const NAV_ITEMS = [
   { label: "Overview",     icon: LayoutDashboard, href: "/dashboard/employee",              active: true  },
@@ -249,7 +250,8 @@ export default function EmployeeDashboard() {
                       {artist.isActive ? "Active" : "Inactive"}
                     </span>
                   </div>
-                  <div className="col-span-2 flex justify-end">
+                  <div className="col-span-2 flex justify-end items-center gap-3">
+                    <ResetPasswordButton email={artist.email} />
                     <Link href={`/dashboard/employee/artists/${artist.id}`}
                           className="text-xs font-bold px-4 py-1.5 rounded-full transition-colors"
                           style={{ background: "rgba(255,136,182,0.1)", color: "#ff88b6", border: "1px solid rgba(255,136,182,0.2)" }}>

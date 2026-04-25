@@ -20,6 +20,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import ApplicationStatusActions from "@/components/admin/ApplicationStatusActions";
+import ResetPasswordButton from "@/components/admin/ResetPasswordButton";
 
 export default async function ApplicationDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
@@ -37,7 +38,14 @@ export default async function ApplicationDetailPage({ params }: { params: Promis
     notFound();
   }
 
+  // Fetch user if approved
+  let linkedUser = null;
   const data = application.applicantData as any;
+  if (application.status === "APPROVED") {
+    linkedUser = await prisma.user.findUnique({
+      where: { email: data.email || data.contactEmail }
+    });
+  }
 
   return (
     <div className="max-w-7xl mx-auto space-y-10">
@@ -64,6 +72,28 @@ export default async function ApplicationDetailPage({ params }: { params: Promis
 
         <ApplicationStatusActions application={application} />
       </div>
+
+      {/* Account Info if Approved */}
+      {application.status === "APPROVED" && linkedUser && (
+        <div className="bg-primary/5 border border-primary/10 rounded-[2rem] p-8 flex flex-col md:flex-row items-center justify-between gap-6 animate-in fade-in slide-in-from-top-4 duration-500">
+           <div className="flex items-center gap-6">
+              <div className="w-16 h-16 rounded-2xl bg-primary/20 flex items-center justify-center text-2xl font-black text-primary">
+                 {linkedUser.username ? linkedUser.username[0].toUpperCase() : linkedUser.email[0].toUpperCase()}
+              </div>
+              <div className="space-y-1">
+                 <p className="text-[10px] font-black uppercase tracking-[0.2em] text-primary/60">Account Issued</p>
+                 <h2 className="text-2xl font-black text-white italic">
+                   @{linkedUser.username || linkedUser.email.split('@')[0]}
+                 </h2>
+                 <p className="text-sm text-white/40">{linkedUser.email}</p>
+              </div>
+           </div>
+           <div className="flex flex-col items-end gap-2">
+              <p className="text-[10px] font-bold text-white/30 uppercase tracking-widest">Security Controls</p>
+              <ResetPasswordButton email={linkedUser.email} />
+           </div>
+        </div>
+      )}
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {/* Profile Card & Basic Info */}

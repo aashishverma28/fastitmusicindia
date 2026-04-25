@@ -52,7 +52,12 @@ export default function Footer() {
                 placeholder="Your email" 
                 type="email"
               />
-              <button className="bg-primary text-black font-bold px-4 py-2 rounded-full text-xs">Join</button>
+              <button 
+                suppressHydrationWarning
+                className="bg-primary text-black font-bold px-4 py-2 rounded-full text-xs"
+              >
+                Join
+              </button>
             </div>
           </div>
         </div>

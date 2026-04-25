@@ -12,6 +12,7 @@ export async function POST(req: Request) {
     }
 
     const { 
+      artistId: selectedArtistId,
       title, 
       type, 
       genre, 
@@ -41,43 +42,40 @@ export async function POST(req: Request) {
       });
       if (!label) return NextResponse.json({ error: "Label profile not found" }, { status: 404 });
       labelId = label.id;
+      
+      // For labels, we use the artistId provided in the request
+      if (!selectedArtistId) {
+        return NextResponse.json({ error: "Artist selection is required for label submissions" }, { status: 400 });
+      }
+      artistId = selectedArtistId;
     }
 
-    // Create Release with Tracks in a transaction
-    const result = await prisma.$transaction(async (tx: any) => {
-      const release = await tx.release.create({
-        data: {
-          artistId: artistId || "placeholder-artist-id",
-          title,
-          type,
-          genre,
-          subGenre,
-          language,
-          releaseDate: new Date(releaseDate),
-          copyrightHolder,
-          copyrightYear: parseInt(copyrightYear),
-          isExplicit,
-          coverArtUrl: artworkUrl,
-          status: "SUBMITTED",
-          labelId: labelId,
-        }
-      });
-
-      // Create tracks
-      for (let i = 0; i < tracks.length; i++) {
-        await tx.track.create({
-          data: {
-            releaseId: release.id,
+    // Create Release with Tracks in a single operation
+    const result = await prisma.release.create({
+      data: {
+        artistId: artistId as string,
+        title,
+        type,
+        genre,
+        subGenre,
+        language,
+        releaseDate: new Date(releaseDate),
+        copyrightHolder,
+        copyrightYear: parseInt(copyrightYear),
+        isExplicit,
+        coverArtUrl: artworkUrl,
+        status: "SUBMITTED",
+        labelId: labelId,
+        tracks: {
+          create: tracks.map((track: any, i: number) => ({
             trackNumber: i + 1,
-            title: tracks[i].title,
-            audioFileUrl: tracks[i].audioUrl || "https://mock-audio-url.mp3",
+            title: track.title,
+            audioFileUrl: track.audioUrl || "https://mock-audio-url.mp3",
             duration: 180, // Placeholder
-            featuredArtists: tracks[i].artist,
-          }
-        });
+            featuredArtists: track.artist,
+          }))
+        }
       }
-
-      return release;
     });
 
     return NextResponse.json({ success: true, releaseId: result.id });
@@ -101,6 +99,13 @@ export async function GET(req: Request) {
           { artist: { userId: session.user.id } },
           { label: { userId: session.user.id } }
         ]
+      },
+      include: {
+        artist: {
+          select: {
+            stageName: true
+          }
+        }
       },
       orderBy: { createdAt: "desc" }
     });

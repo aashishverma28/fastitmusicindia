@@ -19,7 +19,7 @@ import {
   Search
 } from "lucide-react";
 import NotificationBell from "@/components/layout/NotificationBell";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export default function LabelDashboardLayout({
   children,
@@ -28,6 +28,17 @@ export default function LabelDashboardLayout({
 }) {
   const { data: session, status } = useSession();
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+
+  const [artistCount, setArtistCount] = useState<number | null>(null);
+
+  useEffect(() => {
+    if (session) {
+      fetch("/api/label/stats")
+        .then(res => res.json())
+        .then(data => setArtistCount(data.artistCount))
+        .catch(() => setArtistCount(0));
+    }
+  }, [session]);
 
   if (status === "loading") return null;
 
@@ -94,12 +105,9 @@ export default function LabelDashboardLayout({
                 <p className="text-[10px] font-black uppercase tracking-widest text-secondary bg-secondary/10 px-3 py-1 rounded-full border border-secondary/20">Label Suite</p>
                 <div className="h-4 w-px bg-white/10"></div>
                 <div className="flex items-center gap-3">
-                   <div className="flex -space-x-2">
-                      {[1, 2, 3].map((i: any) => (
-                        <div key={i} className="w-6 h-6 rounded-full border-2 border-black bg-white/5 ring-1 ring-white/10"></div>
-                      ))}
-                   </div>
-                   <p className="text-[10px] font-black text-white/40 uppercase tracking-widest">3 Active Artists</p>
+                   <p className="text-[10px] font-black text-white/40 uppercase tracking-widest">
+                     {artistCount !== null ? `${artistCount} Active ${artistCount === 1 ? 'Artist' : 'Artists'}` : 'Loading Roster...'}
+                   </p>
                 </div>
              </div>
           </div>

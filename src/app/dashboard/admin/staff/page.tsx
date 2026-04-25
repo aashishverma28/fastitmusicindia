@@ -7,6 +7,7 @@ import {
   BadgeCheck, AlertTriangle 
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import ResetPasswordButton from "@/components/admin/ResetPasswordButton";
 
 type Employee = {
   id: string;
@@ -331,7 +332,10 @@ export default function StaffAccessPage() {
               {/* Info */}
               <div className="flex-1 min-w-0">
                 <div className="flex flex-wrap items-center gap-2">
-                  <p className="font-bold text-white text-sm">{emp.employeeProfile?.fullName || emp.username || "—"}</p>
+                  <p className="font-bold text-white text-sm">
+                    {emp.employeeProfile?.fullName || "Employee"} 
+                    <span className="text-primary/60 font-mono ml-2">@{emp.username || emp.email.split('@')[0]}</span>
+                  </p>
                   <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full"
                         style={{ background: "rgba(255,215,9,0.1)", color: "#ffd709", border: "1px solid rgba(255,215,9,0.2)" }}>
                     {emp.employeeProfile?.permissions || "read"}
@@ -344,7 +348,7 @@ export default function StaffAccessPage() {
                   )}
                 </div>
                 <p className="text-xs mt-0.5 truncate" style={{ color: "rgba(255,255,255,0.35)" }}>
-                  {emp.email} · {emp.employeeProfile?.jobTitle} · {emp.employeeProfile?.department}
+                  {emp.email} · {emp.employeeProfile?.jobTitle || "No Title"} · {emp.employeeProfile?.department || "No Dept"}
                 </p>
               </div>
 
@@ -358,6 +362,9 @@ export default function StaffAccessPage() {
                 >
                   {copiedId === emp.id ? <CheckCheck className="w-4 h-4 text-green-400" /> : <Copy className="w-4 h-4" />}
                 </button>
+                <div className="scale-75 origin-right">
+                   <ResetPasswordButton email={emp.email} />
+                </div>
                 <button
                   onClick={() => toggleStatus(emp.id, emp.isActive)}
                   title={emp.isActive ? "Suspend" : "Reinstate"}

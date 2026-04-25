@@ -40,7 +40,16 @@ export default async function LabelDashboardPage() {
 
   const totalStreams = revenueData._sum.streams || 0;
   const totalRevenue = revenueData._sum.revenueAmount || 0;
-  const rosterCount = labelProfile.artistCount || 0;
+  
+  // Real count of artists who have at least one release under this label
+  const rosterCount = await prisma.artistProfile.count({
+    where: {
+      OR: [
+        { labelId: labelProfile.id },
+        { releases: { some: { labelId: labelProfile.id } } }
+      ]
+    }
+  });
 
   const formatNum = (n: number) => {
     if (n >= 1000000) return (n / 1000000).toFixed(1) + 'M';
@@ -52,8 +61,35 @@ export default async function LabelDashboardPage() {
     { name: "Total Roster", value: `${rosterCount} Artists`, icon: Users, color: "text-secondary", bg: "bg-secondary/10" },
     { name: "Global Plays", value: totalStreams > 0 ? formatNum(totalStreams) : "0", icon: Headphones, color: "text-primary", bg: "bg-primary/10" },
     { name: "Quarterly Revenue", value: `₹${totalRevenue > 0 ? formatNum(totalRevenue) : "0"}`, icon: DollarSign, color: "text-green-400", bg: "bg-green-400/10" },
-    { name: "Market Share", value: totalStreams > 0 ? "2.4%" : "0%", icon: TrendingUp, color: "text-blue-400", bg: "bg-blue-400/10" },
+    { name: "Account Health", value: labelProfile.isVerified ? "100%" : "Under Review", icon: TrendingUp, color: "text-blue-400", bg: "bg-blue-400/10" },
   ];
+
+  // Fetch top performers (artists who have releases under this label)
+  const topPerformers = await prisma.artistProfile.findMany({
+    where: {
+      releases: {
+        some: {
+          labelId: labelProfile.id
+        }
+      }
+    },
+    take: 5,
+    include: {
+      releases: {
+        where: { labelId: labelProfile.id }
+      },
+      revenues: {
+        where: { labelId: labelProfile.id }
+      }
+    }
+  });
+
+  const performerData = topPerformers.map(artist => ({
+    name: artist.stageName,
+    releases: artist.releases.length,
+    plays: formatNum(artist.revenues.reduce((acc, rev) => acc + rev.streams, 0)),
+    color: "bg-primary" // Default color
+  }));
 
   return (
     <div className="space-y-10">
@@ -101,41 +137,49 @@ export default async function LabelDashboardPage() {
            </div>
            
            <div className="glass rounded-[2.5rem] border border-white/5 overflow-hidden">
-              <table className="w-full text-left">
-                 <thead>
-                    <tr className="bg-white/5">
-                       <th className="px-8 py-5 text-[10px] font-black uppercase tracking-widest text-white/20">Artist</th>
-                       <th className="px-8 py-5 text-[10px] font-black uppercase tracking-widest text-white/20">Releases</th>
-                       <th className="px-8 py-5 text-[10px] font-black uppercase tracking-widest text-white/20">Plays (30d)</th>
-                       <th className="px-8 py-5 text-[10px] font-black uppercase tracking-widest text-white/20">Action</th>
-                    </tr>
-                 </thead>
-                 <tbody className="divide-y divide-white/5 font-sans">
-                    {[
-                       { name: "Aria West", releases: 12, plays: "45.2k", color: "bg-primary" },
-                       { name: "Lunar Shadows", releases: 4, plays: "28.1k", color: "bg-blue-400" },
-                       { name: "Oceanic Vibe", releases: 7, plays: "12.5k", color: "bg-green-400" },
-                    ].map((artist, i) => (
-                       <tr key={i} className="group hover:bg-white/[0.02] transition-colors">
-                          <td className="px-8 py-4">
-                             <div className="flex items-center gap-3">
-                                <div className={`w-10 h-10 rounded-xl ${artist.color}/20 flex items-center justify-center font-black text-[10px] text-white`}>
-                                   {artist.name[0]}
-                                </div>
-                                <span className="font-bold text-white group-hover:text-secondary transition-colors">{artist.name}</span>
-                             </div>
-                          </td>
-                          <td className="px-8 py-4 text-white/40 font-bold text-sm tracking-tight">{artist.releases}</td>
-                          <td className="px-8 py-4 text-white/40 font-bold text-sm tracking-tight">{artist.plays}</td>
-                          <td className="px-8 py-4">
-                             <Link href={`/dashboard/label/roster/${i}`} className="text-white/20 group-hover:text-white transition-colors">
-                                <ChevronRight className="w-5 h-5" />
-                             </Link>
-                          </td>
-                       </tr>
-                    ))}
-                 </tbody>
-              </table>
+              {performerData.length > 0 ? (
+                <table className="w-full text-left">
+                  <thead>
+                      <tr className="bg-white/5">
+                        <th className="px-8 py-5 text-[10px] font-black uppercase tracking-widest text-white/20">Artist</th>
+                        <th className="px-8 py-5 text-[10px] font-black uppercase tracking-widest text-white/20">Releases</th>
+                        <th className="px-8 py-5 text-[10px] font-black uppercase tracking-widest text-white/20">Plays (30d)</th>
+                        <th className="px-8 py-5 text-[10px] font-black uppercase tracking-widest text-white/20">Action</th>
+                      </tr>
+                  </thead>
+                  <tbody className="divide-y divide-white/5 font-sans">
+                      {performerData.map((artist, i) => (
+                        <tr key={i} className="group hover:bg-white/[0.02] transition-colors">
+                            <td className="px-8 py-4">
+                              <div className="flex items-center gap-3">
+                                  <div className={`w-10 h-10 rounded-xl ${artist.color}/20 flex items-center justify-center font-black text-[10px] text-white`}>
+                                    {artist.name[0]}
+                                  </div>
+                                  <span className="font-bold text-white group-hover:text-secondary transition-colors">{artist.name}</span>
+                              </div>
+                            </td>
+                            <td className="px-8 py-4 text-white/40 font-bold text-sm tracking-tight">{artist.releases}</td>
+                            <td className="px-8 py-4 text-white/40 font-bold text-sm tracking-tight">{artist.plays}</td>
+                            <td className="px-8 py-4">
+                              <Link href={`/dashboard/label/roster/${i}`} className="text-white/20 group-hover:text-white transition-colors">
+                                  <ChevronRight className="w-5 h-5" />
+                              </Link>
+                            </td>
+                        </tr>
+                      ))}
+                  </tbody>
+                </table>
+              ) : (
+                <div className="p-20 text-center space-y-4">
+                  <div className="w-16 h-16 rounded-full bg-white/5 flex items-center justify-center mx-auto">
+                    <Users className="w-8 h-8 text-white/20" />
+                  </div>
+                  <div className="space-y-1">
+                    <p className="text-white font-bold italic tracking-tight">No Performers Yet</p>
+                    <p className="text-white/20 text-xs font-sans">When you distribute music for artists, they will appear here.</p>
+                  </div>
+                </div>
+              )}
            </div>
         </div>
 
@@ -143,24 +187,28 @@ export default async function LabelDashboardPage() {
         <div className="space-y-6">
            <h2 className="text-xl font-bold text-white italic">Territory Analytics</h2>
            <div className="glass p-8 rounded-[2.5rem] border border-white/5 space-y-8">
-              <div className="space-y-6">
-                 {[
-                    { country: "India", share: 65, color: "bg-secondary" },
-                    { country: "United States", share: 15, color: "bg-primary" },
-                    { country: "United Kingdom", share: 10, color: "bg-blue-400" },
-                    { country: "Others", share: 10, color: "bg-white/10" },
-                 ].map((t) => (
-                    <div key={t.country} className="space-y-2">
-                       <div className="flex justify-between text-[10px] font-black uppercase tracking-widest">
-                          <span className="text-white/40">{t.country}</span>
-                          <span className="text-white">{t.share}%</span>
-                       </div>
-                       <div className="h-1.5 w-full bg-white/5 rounded-full overflow-hidden">
-                          <div className={`h-full ${t.color}`} style={{ width: `${t.share}%` }}></div>
-                       </div>
-                    </div>
-                 ))}
-              </div>
+              {totalStreams > 0 ? (
+                <div className="space-y-6">
+                   {[
+                      { country: "India", share: 100, color: "bg-secondary" },
+                   ].map((t) => (
+                      <div key={t.country} className="space-y-2">
+                         <div className="flex justify-between text-[10px] font-black uppercase tracking-widest">
+                            <span className="text-white/40">{t.country}</span>
+                            <span className="text-white">{t.share}%</span>
+                         </div>
+                         <div className="h-1.5 w-full bg-white/5 rounded-full overflow-hidden">
+                            <div className={`h-full ${t.color}`} style={{ width: `${t.share}%` }}></div>
+                         </div>
+                      </div>
+                   ))}
+                </div>
+              ) : (
+                <div className="py-10 text-center space-y-3">
+                   <Globe className="w-10 h-10 text-white/10 mx-auto" />
+                   <p className="text-[10px] font-black uppercase tracking-widest text-white/20">No Geographic Data</p>
+                </div>
+              )}
               
               <div className="bg-white/5 p-6 rounded-3xl border border-white/10 flex items-center gap-4 group cursor-pointer hover:border-secondary transition-all">
                  <Globe className="w-8 h-8 text-secondary group-hover:scale-110 transition-transform" />

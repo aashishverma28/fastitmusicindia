@@ -4,6 +4,7 @@ import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 import { Mic, Search, Filter, Users, MoreVertical } from "lucide-react";
 import Link from "next/link";
+import ResetPasswordButton from "@/components/admin/ResetPasswordButton";
 
 export default async function EmployeeArtistsPage() {
   const session = await getServerSession(authOptions);
@@ -45,9 +46,9 @@ export default async function EmployeeArtistsPage() {
         <div className="hidden md:grid grid-cols-12 gap-4 px-6 py-2 text-xs font-bold uppercase tracking-wider"
              style={{ color: "rgba(255,255,255,0.3)", borderBottom: "1px solid rgba(255,255,255,0.05)" }}>
           <div className="col-span-5">Artist Node</div>
-          <div className="col-span-3">Genre</div>
-          <div className="col-span-3">Location</div>
-          <div className="col-span-1 text-right">Actions</div>
+          <div className="col-span-2">Genre</div>
+          <div className="col-span-2">Location</div>
+          <div className="col-span-3 text-right">Actions</div>
         </div>
 
         {artists.length > 0 ? artists.map((artist) => (
@@ -60,28 +61,27 @@ export default async function EmployeeArtistsPage() {
                </div>
                <div>
                   <p className="font-bold text-white text-sm" style={{ fontFamily: "Epilogue" }}>
-                     {artist.artistProfile?.stageName || artist.username}
+                     {artist.artistProfile?.stageName || artist.username || artist.email.split('@')[0]}
                   </p>
-                  <p className="text-[10px] uppercase tracking-wider mt-0.5" style={{ color: "rgba(255,255,255,0.35)" }}>{artist.email}</p>
+                  <p className="text-[10px] uppercase tracking-wider mt-0.5" style={{ color: "rgba(255,255,255,0.35)" }}>
+                     @{artist.username || artist.email.split('@')[0]} • {artist.email}
+                  </p>
                </div>
             </div>
 
-            <div className="col-span-6 md:col-span-3">
+            <div className="col-span-6 md:col-span-2">
                <span className="text-[10px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wider"
                      style={{ background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)", color: "rgba(255,255,255,0.7)" }}>
                   {artist.artistProfile?.primaryGenre || "Unknown"}
                </span>
             </div>
 
-            <div className="col-span-6 md:col-span-3 text-xs" style={{ color: "rgba(255,255,255,0.4)" }}>
+            <div className="col-span-6 md:col-span-2 text-xs" style={{ color: "rgba(255,255,255,0.4)" }}>
                {artist.artistProfile?.city || "Unknown City"} 
             </div>
 
-            <div className="col-span-12 md:col-span-1 flex justify-end">
-               <button className="w-8 h-8 rounded-full flex items-center justify-center transition-colors"
-                     style={{ background: "rgba(255,255,255,0.05)", color: "rgba(255,255,255,0.5)" }}>
-                  <MoreVertical className="w-4 h-4" />
-               </button>
+            <div className="col-span-12 md:col-span-3 flex justify-end">
+               <ResetPasswordButton email={artist.email} />
             </div>
           </div>
         )) : (

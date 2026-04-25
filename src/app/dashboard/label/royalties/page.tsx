@@ -69,57 +69,66 @@ export default async function LabelRoyaltiesPage() {
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
          {/* Monthly Statements */}
-         <div className="lg:col-span-12 xl:col-span-8 space-y-6">
-            <div className="flex items-center justify-between px-2">
-               <h2 className="text-xl font-bold text-white flex items-center gap-3">
-                  <Files className="w-5 h-5 text-secondary" /> Financial Statements
-               </h2>
-               <div className="flex items-center gap-2 bg-white/5 px-4 py-2 rounded-xl border border-white/5 text-[10px] font-black uppercase tracking-widest text-white/40">
-                  <Calendar className="w-4 h-4" /> 2024 Archive
-               </div>
-            </div>
-
-            <div className="glass rounded-[2.5rem] border border-white/5 overflow-hidden">
-               <table className="w-full text-left">
-                  <thead>
-                     <tr className="bg-white/5">
-                        <th className="px-8 py-5 text-[10px] font-black uppercase tracking-widest text-white/20">Period</th>
-                        <th className="px-8 py-5 text-[10px] font-black uppercase tracking-widest text-white/20">Active Artists</th>
-                        <th className="px-8 py-5 text-[10px] font-black uppercase tracking-widest text-white/20">Revenue (Label Share)</th>
-                        <th className="px-8 py-5 text-right text-[10px] font-black uppercase tracking-widest text-white/20">Action</th>
-                     </tr>
-                  </thead>
-                  <tbody className="divide-y divide-white/5 font-sans">
-                     {[
-                        { month: "March 2024", artists: 3, revenue: "₹12,450", status: "Available" },
-                        { month: "February 2024", artists: 2, revenue: "₹8,920", status: "Generated" },
-                        { month: "January 2024", artists: 2, revenue: "₹10,100", status: "Generated" }
-                     ].map((item, i) => (
-                        <tr key={i} className="group hover:bg-white/[0.02] transition-colors">
-                           <td className="px-8 py-6">
-                              <p className="text-sm font-bold text-white uppercase tracking-tight">{item.month}</p>
-                              <p className="text-[10px] font-black text-secondary tracking-widest uppercase">Verified</p>
-                           </td>
-                           <td className="px-8 py-6">
-                              <div className="flex items-center gap-2 text-white/40">
-                                 <Users className="w-4 h-4" />
-                                 <span className="text-sm font-bold">{item.artists}</span>
-                              </div>
-                           </td>
-                           <td className="px-8 py-6 font-black text-white italic">
-                              {item.revenue}
-                           </td>
-                           <td className="px-8 py-6 text-right">
-                              <button className="inline-flex items-center gap-2 bg-white/5 px-5 py-2.5 rounded-xl border border-white/5 text-[10px] font-black uppercase tracking-widest text-white/40 hover:bg-secondary/20 hover:text-white hover:border-secondary transition-all">
-                                 <Download className="w-4 h-4" /> PDF Statement
-                              </button>
-                           </td>
+          <div className="lg:col-span-12 xl:col-span-8 space-y-6">
+             <div className="flex items-center justify-between px-2">
+                <h2 className="text-xl font-bold text-white flex items-center gap-3">
+                   <Files className="w-5 h-5 text-secondary" /> Financial Statements
+                </h2>
+                <div className="flex items-center gap-2 bg-white/5 px-4 py-2 rounded-xl border border-white/5 text-[10px] font-black uppercase tracking-widest text-white/40">
+                   <Calendar className="w-4 h-4" /> Statements Archive
+                </div>
+             </div>
+ 
+             <div className="glass rounded-[2.5rem] border border-white/5 overflow-hidden">
+                {payments.length > 0 ? (
+                  <table className="w-full text-left">
+                    <thead>
+                        <tr className="bg-white/5">
+                          <th className="px-8 py-5 text-[10px] font-black uppercase tracking-widest text-white/20">Period</th>
+                          <th className="px-8 py-5 text-[10px] font-black uppercase tracking-widest text-white/20">Status</th>
+                          <th className="px-8 py-5 text-[10px] font-black uppercase tracking-widest text-white/20">Amount</th>
+                          <th className="px-8 py-5 text-right text-[10px] font-black uppercase tracking-widest text-white/20">Action</th>
                         </tr>
-                     ))}
-                  </tbody>
-               </table>
-            </div>
-         </div>
+                    </thead>
+                    <tbody className="divide-y divide-white/5 font-sans">
+                        {payments.map((item, i) => (
+                          <tr key={i} className="group hover:bg-white/[0.02] transition-colors">
+                              <td className="px-8 py-6">
+                                <p className="text-sm font-bold text-white uppercase tracking-tight">{new Date(item.requestedAt).toLocaleDateString(undefined, { month: 'long', year: 'numeric' })}</p>
+                                <p className="text-[10px] font-black text-secondary tracking-widest uppercase">Verified</p>
+                              </td>
+                              <td className="px-8 py-6">
+                                <span className={`text-[10px] font-bold px-2 py-1 rounded-full uppercase ${
+                                  item.status === 'COMPLETED' ? 'bg-green-500/10 text-green-500' : 'bg-yellow-500/10 text-yellow-500'
+                                }`}>
+                                  {item.status}
+                                </span>
+                              </td>
+                              <td className="px-8 py-6 font-black text-white italic">
+                                ₹{item.amount.toLocaleString()}
+                              </td>
+                              <td className="px-8 py-6 text-right">
+                                <button className="inline-flex items-center gap-2 bg-white/5 px-5 py-2.5 rounded-xl border border-white/5 text-[10px] font-black uppercase tracking-widest text-white/40 hover:bg-secondary/20 hover:text-white hover:border-secondary transition-all">
+                                    <Download className="w-4 h-4" /> PDF
+                                </button>
+                              </td>
+                          </tr>
+                        ))}
+                    </tbody>
+                  </table>
+                ) : (
+                  <div className="p-20 text-center space-y-4">
+                    <div className="w-16 h-16 rounded-full bg-white/5 flex items-center justify-center mx-auto">
+                      <Files className="w-8 h-8 text-white/20" />
+                    </div>
+                    <div className="space-y-1">
+                      <p className="text-white font-bold italic tracking-tight">No Statements Yet</p>
+                      <p className="text-white/20 text-xs font-sans">Your monthly revenue breakdowns will appear here.</p>
+                    </div>
+                  </div>
+                )}
+             </div>
+          </div>
 
          {/* Payout Summary / Quick Actions */}
          <div className="xl:col-span-4 space-y-8">
