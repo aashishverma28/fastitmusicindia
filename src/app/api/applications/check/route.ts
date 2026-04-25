@@ -1,9 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
+import { headers } from "next/headers";
 
 export const dynamic = "force-dynamic";
 
 export async function GET(req: NextRequest) {
+  await headers(); // Explicitly bail out of static generation
   try {
     const trackingId = req.nextUrl.searchParams.get("id");
 

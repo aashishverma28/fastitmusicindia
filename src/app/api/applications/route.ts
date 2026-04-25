@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
+import { headers } from "next/headers";
 
 export const dynamic = "force-dynamic";
 
@@ -11,6 +12,7 @@ function generateAppId(type: "ARTIST" | "LABEL") {
 }
 
 export async function POST(req: Request) {
+  await headers();
   try {
     const body = await req.json();
     const { type, applicantData } = body;
