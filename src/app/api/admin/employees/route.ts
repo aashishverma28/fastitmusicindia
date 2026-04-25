@@ -4,6 +4,8 @@ import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 import bcrypt from "bcryptjs";
 
+export const dynamic = "force-dynamic";
+
 // GET - list all employees (admin only)
 export async function GET() {
   const session = await getServerSession(authOptions);
