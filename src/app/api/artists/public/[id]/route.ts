@@ -5,13 +5,18 @@ export const dynamic = "force-dynamic";
 
 export async function GET(
   req: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { id } = params;
+    const { id } = await params;
 
-    const artist = await prisma.publicArtist.findUnique({
-      where: { id }
+    const artist = await (prisma as any).publicArtist.findFirst({
+      where: {
+        OR: [
+          { id: id },
+          { slug: id }
+        ]
+      }
     });
 
     if (!artist) {
@@ -35,7 +40,12 @@ export async function GET(
       avatar: artist.avatar || "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=400&q=80",
       bio: "Independent artist making waves from the heart of India.",
       followers: artist.followers,
-      links: {},
+      links: {
+        instagram: artist.instagramUrl || null,
+        spotify: artist.spotifyUrl || null,
+        youtube: artist.youtubeUrl || null,
+        twitter: artist.twitterUrl || null
+      },
       releases: releases.map(rel => ({
         id: rel.id,
         title: rel.title,
