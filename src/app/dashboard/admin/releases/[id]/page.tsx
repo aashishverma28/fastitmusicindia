@@ -167,14 +167,26 @@ export default async function AdminReleaseDetailPage({
                  <p className="text-[10px] font-black uppercase text-white/30 text-center">Current Status: {release.status}</p>
                  {release.status === "SUBMITTED" || release.status === "UNDER_REVIEW" ? (
                    <div className="flex flex-col gap-3">
-                     <form method="POST" action={`/api/admin/releases/${release.id}/status`} className="w-full">
+                     <form method="POST" action={`/api/admin/releases/${release.id}/status`} className="w-full space-y-4">
                        <input type="hidden" name="status" value="APPROVED" />
                        <button type="submit" className="w-full btn-gradient py-3 rounded-xl font-bold text-sm">Approve Release</button>
                      </form>
-                     <form method="POST" action={`/api/admin/releases/${release.id}/status`} className="w-full">
-                       <input type="hidden" name="status" value="REJECTED" />
-                       <button type="submit" className="w-full bg-red-500/10 text-red-500 border border-red-500/20 py-3 rounded-xl font-bold text-sm hover:bg-red-500/20 transition-colors">Reject / Request Changes</button>
-                     </form>
+                     
+                     <div className="pt-2 border-t border-white/5">
+                        <form method="POST" action={`/api/admin/releases/${release.id}/status`} className="w-full space-y-4">
+                          <input type="hidden" name="status" value="REJECTED" />
+                          <div className="space-y-2">
+                             <label className="text-[10px] font-black uppercase tracking-widest text-white/30 px-1">Rejection Reason / Feedback</label>
+                             <textarea 
+                               name="adminFeedback"
+                               placeholder="e.g. Artwork size too small, or Audio file corrupted..."
+                               className="w-full bg-black/40 border border-white/10 rounded-xl p-4 text-xs text-white placeholder:text-white/10 focus:border-secondary/50 outline-none h-24 resize-none"
+                               required
+                             ></textarea>
+                          </div>
+                          <button type="submit" className="w-full bg-red-500/10 text-red-500 border border-red-500/20 py-3 rounded-xl font-bold text-sm hover:bg-red-500/20 transition-colors">Reject / Request Changes</button>
+                        </form>
+                     </div>
                    </div>
                  ) : (
                    <div className="p-4 rounded-xl bg-white/5 text-center">

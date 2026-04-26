@@ -1,8 +1,14 @@
 import { Resend } from "resend";
 
-const resend = process.env.RESEND_API_KEY 
-  ? new Resend(process.env.RESEND_API_KEY) 
-  : null;
+const resend = (() => {
+  const key = process.env.RESEND_API_KEY;
+  if (key) {
+    console.log("[MAIL] Resend client initialized with key:", `${key.substring(0, 6)}...${key.substring(key.length - 4)}`);
+    return new Resend(key);
+  }
+  console.warn("[MAIL] Resend API key missing, running in MOCK mode");
+  return null;
+})();
 
 const FROM_EMAIL = "Fastit Music India <onboarding@fastitmusic.in>";
 
@@ -126,6 +132,72 @@ export async function sendPasswordResetEmail(
     return { success: true, data };
   } catch (err) {
     console.error("[MAIL EXCEPTION]", err);
+    return { success: false, error: err };
+  }
+}
+
+/**
+ * Sends a rejection email to an artist or label when their release is rejected.
+ */
+export async function sendReleaseRejectionEmail(
+  email: string,
+  releaseTitle: string,
+  userName: string,
+  adminFeedback?: string
+) {
+  const dashboardUrl = `${process.env.NEXTAUTH_URL || "http://localhost:3000"}/dashboard`;
+
+  const html = `
+    <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #eee; border-radius: 10px;">
+      <h2 style="color: #ef4444;">Release Rejected ❌</h2>
+      <p>Hello ${userName},</p>
+      <p>We've reviewed your submission <strong>"${releaseTitle}"</strong> and unfortunately, it has been rejected at this time.</p>
+      
+      ${adminFeedback ? `
+      <div style="background: #fef2f2; padding: 20px; border-radius: 8px; margin: 20px 0; border: 1px solid #fee2e2;">
+        <p style="margin: 0; font-size: 14px; color: #991b1b; font-weight: bold;">Feedback from Reviewer:</p>
+        <p style="margin: 10px 0 0 0; color: #b91c1c; font-style: italic;">"${adminFeedback}"</p>
+      </div>
+      ` : ""}
+
+      <p>Please review the feedback and make the necessary changes before resubmitting. You can update your release details and artwork in your dashboard.</p>
+      
+      <a href="${dashboardUrl}" style="display: inline-block; background: #FFD209; color: #000; padding: 12px 24px; border-radius: 6px; text-decoration: none; font-weight: bold; margin-top: 20px;">
+        Go to Dashboard
+      </a>
+
+      <hr style="border: none; border-top: 1px solid #eee; margin: 30px 0;" />
+      <p style="font-size: 12px; color: #999;">If you have any questions regarding this rejection, please reach out to our content team at support@fastitmusic.in</p>
+    </div>
+  `;
+
+  if (!resend) {
+    console.log("-----------------------------------------");
+    console.log("[MOCK MAIL] To:", email);
+    console.log("[MOCK MAIL] Subject: Fastit Music - Release Rejected");
+    console.log("[MOCK MAIL] Content:", `Release: ${releaseTitle}, Feedback: ${adminFeedback}`);
+    console.log("-----------------------------------------");
+    return { success: true, mocked: true };
+  }
+
+  try {
+    console.log("[MAIL] Sending email to:", email, "via Resend...");
+    const { data, error } = await resend.emails.send({
+      from: FROM_EMAIL,
+      to: [email],
+      subject: `Action Required: Release Rejected - ${releaseTitle}`,
+      html: html,
+    });
+
+    if (error) {
+      console.error("[MAIL ERROR] Resend API error:", error);
+      return { success: false, error };
+    }
+
+    console.log("[MAIL] Email sent successfully. ID:", data?.id);
+    return { success: true, data };
+  } catch (err) {
+    console.error("[MAIL EXCEPTION] Failed to send email:", err);
     return { success: false, error: err };
   }
 }
