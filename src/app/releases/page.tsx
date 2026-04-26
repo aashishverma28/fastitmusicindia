@@ -17,7 +17,8 @@ import {
   PlusCircle,
   X,
   Check,
-  Disc
+  Disc,
+  Upload
 } from "lucide-react";
 import { useAudioStore } from "@/lib/store/useAudioStore";
 import { useSession } from "next-auth/react";
