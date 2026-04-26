@@ -19,19 +19,19 @@ export default function ContactPage() {
     {
       title: "General Support",
       description: "Distribution queries, metadata updates, and account help.",
-      email: "support@fastitmusic.com",
+      email: "support@fastitmusic.in",
       icon: <Headphones className="w-6 h-6 text-primary" />,
     },
     {
       title: "Business & Partnerships",
       description: "For record labels, brands, and collaborative ventures.",
-      email: "partners@fastitmusic.com",
+      email: "partners@fastitmusic.in",
       icon: <Globe className="w-6 h-6 text-secondary" />,
     },
     {
       title: "Legal & DMCA",
       description: "Copyright infringement and legal documentation.",
-      email: "legal@fastitmusic.com",
+      email: "legal@fastitmusic.in",
       icon: <MapPin className="w-6 h-6 text-blue-400" />,
     }
   ];
