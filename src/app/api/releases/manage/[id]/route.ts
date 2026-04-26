@@ -15,15 +15,14 @@ export async function DELETE(
 
     const { id } = params;
 
-    // Set status to TAKEN_DOWN to remove from public list
-    await prisma.release.update({
-      where: { id },
-      data: { status: "TAKEN_DOWN" }
+    // Physically delete the curated entry
+    await prisma.publicRelease.delete({
+      where: { id }
     });
 
-    return NextResponse.json({ message: "Release taken down" });
+    return NextResponse.json({ message: "Release deleted from public list" });
   } catch (error: any) {
-    console.error("Release management error:", error);
-    return NextResponse.json({ error: "Failed to manage release" }, { status: 500 });
+    console.error("Release management delete error:", error);
+    return NextResponse.json({ error: "Failed to delete release" }, { status: 500 });
   }
 }

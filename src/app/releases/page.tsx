@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { 
   Search, 
   Filter, 
@@ -14,7 +14,10 @@ import {
   Calendar, 
   Trash2, 
   Loader2,
-  PlusCircle
+  PlusCircle,
+  X,
+  Check,
+  Disc
 } from "lucide-react";
 import { useAudioStore } from "@/lib/store/useAudioStore";
 import { useSession } from "next-auth/react";
@@ -26,6 +29,20 @@ export default function ReleasesPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedGenre, setSelectedGenre] = useState("All");
   const { setTrack } = useAudioStore();
+
+  // Modal State
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [formData, setFormData] = useState({
+    title: "",
+    artistName: "",
+    coverArtUrl: "",
+    genre: "Pop",
+    releaseDate: new Date().toISOString().split('T')[0],
+    audioFileUrl: "",
+    slug: ""
+  });
+
   const isAdminOrStaff = session?.user?.role === "ADMIN" || session?.user?.role === "EMPLOYEE";
 
   useEffect(() => {
@@ -63,6 +80,41 @@ export default function ReleasesPage() {
       }
     } catch (err) {
       console.error("Error removing release:", err);
+    }
+  };
+
+  const handleAddRelease = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    try {
+      const res = await fetch("/api/releases/manage", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData)
+      });
+      if (res.ok) {
+        const data = await res.json();
+        // Format for UI
+        const newRel = {
+          id: data.release.id,
+          title: data.release.title,
+          artist: data.release.artistName,
+          cover: data.release.coverArtUrl,
+          genre: data.release.genre,
+          releaseDate: data.release.releaseDate,
+          audioUrl: data.release.audioFileUrl,
+          slug: data.release.slug || data.release.id
+        };
+        setRealReleases(prev => [newRel, ...prev]);
+        setIsModalOpen(false);
+        setFormData({ title: "", artistName: "", coverArtUrl: "", genre: "Pop", releaseDate: new Date().toISOString().split('T')[0], audioFileUrl: "", slug: "" });
+      } else {
+        alert("Failed to add release.");
+      }
+    } catch (err) {
+      console.error("Error adding release:", err);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -129,12 +181,12 @@ export default function ReleasesPage() {
 
           <div className="flex flex-col items-end gap-4 w-full md:w-auto">
             {isAdminOrStaff && (
-              <Link 
-                href={session?.user?.role === "ADMIN" ? "/dashboard/admin/releases" : "/dashboard/employee/releases"} 
+              <button 
+                onClick={() => setIsModalOpen(true)}
                 className="btn-gradient px-6 py-3 rounded-full flex items-center gap-2 font-black text-xs tracking-widest uppercase hover:scale-105 transition-all"
               >
-                <PlusCircle className="w-4 h-4" /> Manage Releases
-              </Link>
+                <PlusCircle className="w-4 h-4" /> Add Public Release
+              </button>
             )}
             <motion.div 
               initial={{ opacity: 0, y: 20 }}
@@ -255,6 +307,112 @@ export default function ReleasesPage() {
             </button>
           </div>
         )}
+
+        {/* Add Release Modal */}
+        <AnimatePresence>
+          {isModalOpen && (
+            <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+              <motion.div 
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                onClick={() => setIsModalOpen(false)}
+                className="absolute inset-0 bg-black/80 backdrop-blur-sm"
+              />
+              <motion.div 
+                initial={{ opacity: 0, scale: 0.9, y: 20 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.9, y: 20 }}
+                className="relative w-full max-w-lg bg-surface-container p-8 rounded-[32px] border border-white/10 shadow-2xl overflow-y-auto max-h-[90vh]"
+              >
+                <div className="flex justify-between items-center mb-8">
+                  <h2 className="text-2xl font-black font-display text-white">Add <span className="text-primary">Manual</span> Release</h2>
+                  <button onClick={() => setIsModalOpen(false)} className="text-white/40 hover:text-white transition-colors">
+                    <X className="w-6 h-6" />
+                  </button>
+                </div>
+
+                <form onSubmit={handleAddRelease} className="space-y-6">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <label className="text-[10px] font-black uppercase tracking-widest text-white/40 ml-2">Track Title</label>
+                      <input 
+                        type="text" 
+                        required
+                        className="w-full bg-white/5 border border-white/10 rounded-2xl py-4 px-6 text-white focus:border-primary outline-none transition-all font-sans"
+                        value={formData.title}
+                        onChange={(e) => setFormData({...formData, title: e.target.value})}
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-[10px] font-black uppercase tracking-widest text-white/40 ml-2">Artist Name</label>
+                      <input 
+                        type="text" 
+                        required
+                        className="w-full bg-white/5 border border-white/10 rounded-2xl py-4 px-6 text-white focus:border-primary outline-none transition-all font-sans"
+                        value={formData.artistName}
+                        onChange={(e) => setFormData({...formData, artistName: e.target.value})}
+                      />
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <label className="text-[10px] font-black uppercase tracking-widest text-white/40 ml-2">Genre</label>
+                      <select 
+                        className="w-full bg-white/5 border border-white/10 rounded-2xl py-4 px-6 text-white focus:border-primary outline-none transition-all font-sans appearance-none"
+                        value={formData.genre}
+                        onChange={(e) => setFormData({...formData, genre: e.target.value})}
+                      >
+                        {genres.filter(g => g !== "All").map(g => <option key={g} value={g} className="bg-[#1a1a1a]">{g}</option>)}
+                      </select>
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-[10px] font-black uppercase tracking-widest text-white/40 ml-2">Release Date</label>
+                      <input 
+                        type="date" 
+                        className="w-full bg-white/5 border border-white/10 rounded-2xl py-4 px-6 text-white focus:border-primary outline-none transition-all font-sans"
+                        value={formData.releaseDate}
+                        onChange={(e) => setFormData({...formData, releaseDate: e.target.value})}
+                      />
+                    </div>
+                  </div>
+
+                  <div className="space-y-2">
+                    <label className="text-[10px] font-black uppercase tracking-widest text-white/40 ml-2">Cover Art URL (Image2URL)</label>
+                    <input 
+                      type="url" 
+                      required
+                      placeholder="https://..."
+                      className="w-full bg-white/5 border border-white/10 rounded-2xl py-4 px-6 text-white focus:border-primary outline-none transition-all font-sans"
+                      value={formData.coverArtUrl}
+                      onChange={(e) => setFormData({...formData, coverArtUrl: e.target.value})}
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <label className="text-[10px] font-black uppercase tracking-widest text-white/40 ml-2">Audio File URL (Direct MP3 link)</label>
+                    <input 
+                      type="url" 
+                      placeholder="https://..."
+                      className="w-full bg-white/5 border border-white/10 rounded-2xl py-4 px-6 text-white focus:border-primary outline-none transition-all font-sans"
+                      value={formData.audioFileUrl}
+                      onChange={(e) => setFormData({...formData, audioFileUrl: e.target.value})}
+                    />
+                  </div>
+
+                  <button 
+                    type="submit" 
+                    disabled={isSubmitting}
+                    className="w-full btn-gradient py-5 rounded-2xl font-black font-display text-sm tracking-widest uppercase flex items-center justify-center gap-2 disabled:opacity-50"
+                  >
+                    {isSubmitting ? <Loader2 className="w-5 h-5 animate-spin" /> : <><Check className="w-5 h-5" /> PUBLISH TRACK</>}
+                  </button>
+                </form>
+              </motion.div>
+            </div>
+          )}
+        </AnimatePresence>
 
         {/* Newsletter / CTA */}
         <motion.div 

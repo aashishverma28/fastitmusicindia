@@ -15,16 +15,14 @@ export async function DELETE(
 
     const { id } = params;
 
-    // We don't actually delete the artist user, we just remove them from being "Featured" (verified)
-    // or we could deactivate them. Let's toggle isVerified to false.
-    await prisma.artistProfile.update({
-      where: { id },
-      data: { isVerified: false }
+    // Physically delete the curated entry
+    await prisma.publicArtist.delete({
+      where: { id }
     });
 
-    return NextResponse.json({ message: "Artist removed from public list" });
+    return NextResponse.json({ message: "Artist deleted from public list" });
   } catch (error: any) {
-    console.error("Artist management error:", error);
-    return NextResponse.json({ error: "Failed to manage artist" }, { status: 500 });
+    console.error("Artist management delete error:", error);
+    return NextResponse.json({ error: "Failed to delete artist" }, { status: 500 });
   }
 }

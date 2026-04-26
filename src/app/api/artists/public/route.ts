@@ -5,22 +5,22 @@ export const dynamic = "force-dynamic";
 
 export async function GET() {
   try {
-    const artists = await prisma.artistProfile.findMany({
+    const artists = await prisma.publicArtist.findMany({
       where: {
-        isVerified: true // Only show verified artists on public page by default
+        isVerified: true
       },
       orderBy: {
-        stageName: "asc"
+        name: "asc"
       }
     });
 
     const formattedArtists = artists.map(artist => ({
       id: artist.id,
-      name: artist.stageName,
-      genre: artist.primaryGenre,
-      avatar: artist.profilePhoto || "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=400&q=80",
-      followers: "10K+", // Placeholder since we don't have follower count in schema
-      slug: artist.id,
+      name: artist.name,
+      genre: artist.genre,
+      avatar: artist.avatar || "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=400&q=80",
+      followers: artist.followers,
+      slug: artist.slug || artist.id,
       isVerified: artist.isVerified
     }));
 

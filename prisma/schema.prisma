@@ -360,3 +360,29 @@ model EmployeeProfile {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }
+
+model PublicArtist {
+  id          String   @id @default(cuid())
+  name        String
+  genre       String
+  avatar      String?
+  followers   String   @default("10K+")
+  isVerified  Boolean  @default(true)
+  slug        String?  @unique
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model PublicRelease {
+  id              String   @id @default(cuid())
+  title           String
+  artistName      String
+  coverArtUrl     String?
+  genre           String
+  releaseDate     DateTime @default(now())
+  audioFileUrl    String?
+  slug            String?  @unique
+  isFeatured      Boolean  @default(false)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
