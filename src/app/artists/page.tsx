@@ -93,7 +93,7 @@ export default function ArtistsPage() {
 
     setIsUploadingAvatar(true);
     try {
-      const url = await uploadFile(file, "artists", "avatars");
+      const url = await uploadFile(file, "releases", "artists");
       setFormData(prev => ({ ...prev, avatar: url }));
     } catch (err: any) {
       console.error("Avatar upload failed:", err);
