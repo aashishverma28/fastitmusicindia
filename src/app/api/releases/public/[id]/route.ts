@@ -5,13 +5,18 @@ export const dynamic = "force-dynamic";
 
 export async function GET(
   req: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { id } = params;
+    const { id } = await params;
 
-    const release = await prisma.publicRelease.findUnique({
-      where: { id }
+    const release = await prisma.publicRelease.findFirst({
+      where: {
+        OR: [
+          { id: id },
+          { slug: id }
+        ]
+      }
     });
 
     if (!release) {

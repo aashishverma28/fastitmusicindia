@@ -96,7 +96,7 @@ export default function ReleaseDetailPage({ params }: { params: Promise<{ slug: 
           >
             <div className="relative aspect-square rounded-[2rem] overflow-hidden shadow-[0_40px_100px_rgba(0,0,0,0.6)] border border-white/10">
               <Image 
-                src={release.cover} 
+                src={release.cover || "https://images.unsplash.com/photo-1614613535308-eb5fbd3d2c17?w=800&q=80"} 
                 alt={release.title} 
                 fill 
                 className="object-cover group-hover:scale-105 transition-transform duration-1000" 

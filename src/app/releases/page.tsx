@@ -125,7 +125,7 @@ export default function ReleasesPage() {
           id: data.release.id,
           title: data.release.title,
           artist: data.release.artistName,
-          cover: data.release.coverArtUrl,
+          cover: data.release.coverArtUrl || "https://images.unsplash.com/photo-1614613535308-eb5fbd3d2c17?w=800&q=80",
           genre: data.release.genre,
           releaseDate: data.release.releaseDate,
           audioUrl: data.release.audioFileUrl,
@@ -267,10 +267,11 @@ export default function ReleasesPage() {
                 <Link href={`/releases/${rel.slug}`} className="block">
                   <div className="relative aspect-square rounded-2xl overflow-hidden mb-4 bg-surface-container-highest shadow-xl">
                     <Image 
-                      src={rel.cover} 
+                      src={rel.cover || "https://images.unsplash.com/photo-1614613535308-eb5fbd3d2c17?w=800&q=80"} 
                       alt={rel.title} 
                       fill 
-                      className="object-cover group-hover:scale-110 transition-transform duration-700" 
+                      className="object-cover group-hover:scale-105 transition-transform duration-1000" 
+                      priority
                     />
                     
                     {/* Hover Overlay */}
