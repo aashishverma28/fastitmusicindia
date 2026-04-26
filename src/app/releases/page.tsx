@@ -4,33 +4,65 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { Search, Filter, Play, Music, Headphones, Volume2, Calendar } from "lucide-react";
-import { MOCK_RELEASES } from "@/data/mock";
+import { 
+  Search, 
+  Filter, 
+  Play, 
+  Music, 
+  Headphones, 
+  Volume2, 
+  Calendar, 
+  Trash2, 
+  Loader2,
+  PlusCircle
+} from "lucide-react";
 import { useAudioStore } from "@/lib/store/useAudioStore";
+import { useSession } from "next-auth/react";
 
 export default function ReleasesPage() {
+  const { data: session } = useSession();
   const [realReleases, setRealReleases] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedGenre, setSelectedGenre] = useState("All");
   const { setTrack } = useAudioStore();
+  const isAdminOrStaff = session?.user?.role === "ADMIN" || session?.user?.role === "EMPLOYEE";
 
   useEffect(() => {
-    const fetchReleases = async () => {
-      try {
-        const res = await fetch("/api/releases/public");
-        const data = await res.json();
-        if (data.releases) {
-          setRealReleases(data.releases);
-        }
-      } catch (err) {
-        console.error("Error fetching releases:", err);
-      } finally {
-        setIsLoading(false);
-      }
-    };
     fetchReleases();
   }, []);
+
+  const fetchReleases = async () => {
+    setIsLoading(true);
+    try {
+      const res = await fetch("/api/releases/public");
+      const data = await res.json();
+      if (data.releases) {
+        setRealReleases(data.releases);
+      }
+    } catch (err) {
+      console.error("Error fetching releases:", err);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleRemoveRelease = async (id: string) => {
+    if (!confirm("Are you sure you want to remove this release from the public catalog?")) return;
+    
+    try {
+      const res = await fetch(`/api/releases/manage/${id}`, {
+        method: "DELETE",
+      });
+      if (res.ok) {
+        setRealReleases(prev => prev.filter(r => r.id !== id));
+      } else {
+        alert("Failed to remove release.");
+      }
+    } catch (err) {
+      console.error("Error removing release:", err);
+    }
+  };
 
   const handlePlay = (e: React.MouseEvent, rel: any) => {
     e.preventDefault();
@@ -93,36 +125,51 @@ export default function ReleasesPage() {
             </p>
           </div>
 
-          <motion.div 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="flex flex-col sm:flex-row gap-4 w-full md:w-auto"
-          >
-            <div className="relative">
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-white/30" />
-              <input 
-                type="text" 
-                placeholder="Search tracks, artists..."
-                className="w-full sm:w-[300px] bg-surface-container/50 border border-white/5 rounded-full py-3 pl-12 pr-4 text-white focus:border-primary/50 outline-none transition-all font-sans"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-              />
-            </div>
-            <div className="flex items-center gap-2 bg-surface-container/50 border border-white/5 rounded-full px-4 py-2">
-              <Filter className="w-4 h-4 text-white/30" />
-              <select 
-                className="bg-transparent text-white text-sm font-bold outline-none cursor-pointer pr-4"
-                value={selectedGenre}
-                onChange={(e) => setSelectedGenre(e.target.value)}
+          <div className="flex flex-col items-end gap-4 w-full md:w-auto">
+            {isAdminOrStaff && (
+              <Link 
+                href="/sysadmin/releases" 
+                className="btn-gradient px-6 py-3 rounded-full flex items-center gap-2 font-black text-xs tracking-widest uppercase hover:scale-105 transition-all"
               >
-                {genres.map(g => <option key={g} value={g} className="bg-[#0e0e0e]">{g}</option>)}
-              </select>
-            </div>
-          </motion.div>
+                <PlusCircle className="w-4 h-4" /> Manage Releases
+              </Link>
+            )}
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="flex flex-col sm:flex-row gap-4 w-full"
+            >
+              <div className="relative">
+                <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-white/30" />
+                <input 
+                  type="text" 
+                  placeholder="Search tracks, artists..."
+                  className="w-full sm:w-[300px] bg-surface-container/50 border border-white/5 rounded-full py-3 pl-12 pr-4 text-white focus:border-primary/50 outline-none transition-all font-sans"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                />
+              </div>
+              <div className="flex items-center gap-2 bg-surface-container/50 border border-white/5 rounded-full px-4 py-2">
+                <Filter className="w-4 h-4 text-white/30" />
+                <select 
+                  className="bg-transparent text-white text-sm font-bold outline-none cursor-pointer pr-4"
+                  value={selectedGenre}
+                  onChange={(e) => setSelectedGenre(e.target.value)}
+                >
+                  {genres.map(g => <option key={g} value={g} className="bg-[#0e0e0e]">{g}</option>)}
+                </select>
+              </div>
+            </motion.div>
+          </div>
         </div>
 
         {/* Catalog Grid */}
-        {filteredReleases.length > 0 ? (
+        {isLoading ? (
+          <div className="py-40 flex flex-col items-center justify-center gap-4">
+            <Loader2 className="w-12 h-12 text-primary animate-spin" />
+            <p className="text-white/40 font-bold font-display uppercase tracking-widest">Loading Catalog...</p>
+          </div>
+        ) : filteredReleases.length > 0 ? (
           <motion.div 
             variants={containerVariants}
             initial="hidden"
@@ -135,6 +182,16 @@ export default function ReleasesPage() {
                 variants={itemVariants}
                 className="group relative"
               >
+                {isAdminOrStaff && (
+                  <button 
+                    onClick={() => handleRemoveRelease(rel.id)}
+                    className="absolute top-2 right-2 z-20 p-2 bg-red-500/20 border border-red-500/30 text-red-400 rounded-lg hover:bg-red-500 hover:text-white transition-all backdrop-blur-md opacity-0 group-hover:opacity-100"
+                    title="Remove Release"
+                  >
+                    <Trash2 className="w-4 h-4" />
+                  </button>
+                )}
+                
                 <Link href={`/releases/${rel.slug}`} className="block">
                   <div className="relative aspect-square rounded-2xl overflow-hidden mb-4 bg-surface-container-highest shadow-xl">
                     <Image 

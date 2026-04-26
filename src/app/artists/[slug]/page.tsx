@@ -1,6 +1,6 @@
 "use client";
 
-import { use } from "react";
+import React, { use, useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
@@ -16,20 +16,48 @@ import {
   Music,
   Disc,
   ArrowRight,
-  Verified
+  Verified,
+  Loader2
 } from "lucide-react";
-import { MOCK_ARTISTS, MOCK_RELEASES } from "@/data/mock";
+import { useAudioStore } from "@/lib/store/useAudioStore";
 import { notFound } from "next/navigation";
 
 export default function ArtistProfilePage({ params }: { params: Promise<{ slug: string }> }) {
-  const { slug } = use(params);
-  const artist = MOCK_ARTISTS.find(a => a.slug === slug);
+  const { slug: id } = use(params);
+  const [artist, setArtist] = useState<any>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const { setTrack } = useAudioStore();
+
+  useEffect(() => {
+    const fetchArtist = async () => {
+      try {
+        const res = await fetch(`/api/artists/public/${id}`);
+        const data = await res.json();
+        if (data.artist) {
+          setArtist(data.artist);
+        } else {
+          setArtist(null);
+        }
+      } catch (err) {
+        console.error("Error fetching artist detail:", err);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchArtist();
+  }, [id]);
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-background">
+        <Loader2 className="w-12 h-12 text-secondary animate-spin" />
+      </div>
+    );
+  }
 
   if (!artist) {
     notFound();
   }
-
-  const artistReleases = MOCK_RELEASES.filter(r => r.artist === artist.name);
 
   return (
     <div className="min-h-screen pt-24 pb-20 relative overflow-hidden">
@@ -95,7 +123,7 @@ export default function ArtistProfilePage({ params }: { params: Promise<{ slug: 
             </div>
 
             <p className="text-white/60 text-xl font-sans leading-relaxed max-w-2xl">
-              Independent artist making waves from the heart of India. Collaborating with international producers to redefine the future of {artist.genre} on a global scale.
+              {artist.bio}
             </p>
 
             <div className="flex flex-wrap items-center justify-center lg:justify-start gap-4">
@@ -103,12 +131,21 @@ export default function ArtistProfilePage({ params }: { params: Promise<{ slug: 
                   <Play className="fill-current w-6 h-6" /> FOLLOW ARTIST
                </button>
                <div className="flex gap-4 ml-4">
-                  <a href="#" className="w-14 h-14 rounded-full bg-white/5 border border-white/5 flex items-center justify-center hover:bg-white/10 transition-all text-white/40 hover:text-white">
-                     <Instagram className="w-6 h-6" />
-                  </a>
-                  <a href="#" className="w-14 h-14 rounded-full bg-white/5 border border-white/5 flex items-center justify-center hover:bg-white/10 transition-all text-white/40 hover:text-white">
-                     <Twitter className="w-6 h-6" />
-                  </a>
+                  {artist.links?.instagram && (
+                    <a href={artist.links.instagram} target="_blank" rel="noopener noreferrer" className="w-14 h-14 rounded-full bg-white/5 border border-white/5 flex items-center justify-center hover:bg-white/10 transition-all text-white/40 hover:text-white">
+                       <Instagram className="w-6 h-6" />
+                    </a>
+                  )}
+                  {artist.links?.twitter && (
+                    <a href={artist.links.twitter} target="_blank" rel="noopener noreferrer" className="w-14 h-14 rounded-full bg-white/5 border border-white/5 flex items-center justify-center hover:bg-white/10 transition-all text-white/40 hover:text-white">
+                       <Twitter className="w-6 h-6" />
+                    </a>
+                  )}
+                  {artist.links?.youtube && (
+                    <a href={artist.links.youtube} target="_blank" rel="noopener noreferrer" className="w-14 h-14 rounded-full bg-white/5 border border-white/5 flex items-center justify-center hover:bg-white/10 transition-all text-white/40 hover:text-white">
+                       <Youtube className="w-6 h-6" />
+                    </a>
+                  )}
                   <a href="#" className="w-14 h-14 rounded-full bg-white/5 border border-white/5 flex items-center justify-center hover:bg-white/10 transition-all text-white/40 hover:text-white">
                      <Globe className="w-6 h-6" />
                   </a>
@@ -132,8 +169,8 @@ export default function ArtistProfilePage({ params }: { params: Promise<{ slug: 
               </div>
 
               <div className="space-y-4">
-                 {artistReleases.length > 0 ? (
-                    artistReleases.map((rel, i) => (
+                 {artist.releases.length > 0 ? (
+                    artist.releases.map((rel: any, i: number) => (
                        <Link 
                         key={rel.id} 
                         href={`/releases/${rel.slug}`}

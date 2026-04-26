@@ -1,16 +1,68 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { motion } from "framer-motion";
-import { Search, Users, Music2, ArrowRight, Star, Globe } from "lucide-react";
-import { MOCK_ARTISTS } from "@/data/mock";
+import { motion, AnimatePresence } from "framer-motion";
+import { 
+  Search, 
+  Users, 
+  Music2, 
+  ArrowRight, 
+  Star, 
+  Globe, 
+  Plus, 
+  Trash2, 
+  Loader2,
+  X,
+  UserPlus
+} from "lucide-react";
+import { useSession } from "next-auth/react";
 
 export default function ArtistsPage() {
+  const { data: session } = useSession();
+  const [realArtists, setRealArtists] = useState<any[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
+  const isAdminOrStaff = session?.user?.role === "ADMIN" || session?.user?.role === "EMPLOYEE";
 
-  const filteredArtists = MOCK_ARTISTS.filter(artist => 
+  useEffect(() => {
+    fetchArtists();
+  }, []);
+
+  const fetchArtists = async () => {
+    setIsLoading(true);
+    try {
+      const res = await fetch("/api/artists/public");
+      const data = await res.json();
+      if (data.artists) {
+        setRealArtists(data.artists);
+      }
+    } catch (err) {
+      console.error("Error fetching artists:", err);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleRemoveArtist = async (id: string) => {
+    if (!confirm("Are you sure you want to remove this artist from the public list?")) return;
+    
+    try {
+      const res = await fetch(`/api/artists/manage/${id}`, {
+        method: "DELETE",
+      });
+      if (res.ok) {
+        setRealArtists(prev => prev.filter(a => a.id !== id));
+      } else {
+        alert("Failed to remove artist.");
+      }
+    } catch (err) {
+      console.error("Error removing artist:", err);
+    }
+  };
+
+  const filteredArtists = realArtists.filter(artist => 
     artist.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
     artist.genre.toLowerCase().includes(searchQuery.toLowerCase())
   );
@@ -54,26 +106,41 @@ export default function ArtistsPage() {
             </p>
           </div>
 
-          <motion.div 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="w-full md:w-auto"
-          >
-            <div className="relative">
-              <Search className="absolute left-6 top-1/2 -translate-y-1/2 w-6 h-6 text-white/20" />
-              <input 
-                type="text" 
-                placeholder="Find an artist..."
-                className="w-full md:w-[400px] bg-white/5 border border-white/10 rounded-full py-5 pl-16 pr-6 text-white text-lg font-display placeholder:text-white/10 focus:border-secondary/50 outline-none transition-all"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-              />
-            </div>
-          </motion.div>
+          <div className="flex flex-col items-end gap-4 w-full md:w-auto">
+            {isAdminOrStaff && (
+              <Link 
+                href="/sysadmin/users" 
+                className="btn-gradient px-6 py-3 rounded-full flex items-center gap-2 font-black text-xs tracking-widest uppercase hover:scale-105 transition-all"
+              >
+                <UserPlus className="w-4 h-4" /> Add Artist
+              </Link>
+            )}
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="w-full"
+            >
+              <div className="relative">
+                <Search className="absolute left-6 top-1/2 -translate-y-1/2 w-6 h-6 text-white/20" />
+                <input 
+                  type="text" 
+                  placeholder="Find an artist..."
+                  className="w-full md:w-[400px] bg-white/5 border border-white/10 rounded-full py-5 pl-16 pr-6 text-white text-lg font-display placeholder:text-white/10 focus:border-secondary/50 outline-none transition-all"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                />
+              </div>
+            </motion.div>
+          </div>
         </div>
 
         {/* Artist Grid */}
-        {filteredArtists.length > 0 ? (
+        {isLoading ? (
+          <div className="py-40 flex flex-col items-center justify-center gap-4">
+            <Loader2 className="w-12 h-12 text-secondary animate-spin" />
+            <p className="text-white/40 font-bold font-display uppercase tracking-widest">Loading Artists...</p>
+          </div>
+        ) : filteredArtists.length > 0 ? (
           <motion.div 
             variants={containerVariants}
             initial="hidden"
@@ -84,8 +151,18 @@ export default function ArtistsPage() {
               <motion.div 
                 key={artist.id}
                 variants={itemVariants}
-                className="group flex flex-col items-center text-center"
+                className="group flex flex-col items-center text-center relative"
               >
+                {isAdminOrStaff && (
+                  <button 
+                    onClick={() => handleRemoveArtist(artist.id)}
+                    className="absolute top-0 right-0 z-20 p-3 bg-red-500/10 border border-red-500/20 text-red-500 rounded-full hover:bg-red-500 hover:text-white transition-all shadow-xl backdrop-blur-md opacity-0 group-hover:opacity-100"
+                    title="Remove Artist"
+                  >
+                    <Trash2 className="w-5 h-5" />
+                  </button>
+                )}
+                
                 <Link href={`/artists/${artist.slug}`} className="block w-full">
                   <div className="relative mb-8 mx-auto">
                     {/* Outer Glow / Ring */}
