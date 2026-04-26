@@ -15,7 +15,7 @@ export async function POST(req: Request) {
     const { name, genre, avatar, followers, slug, instagramUrl, spotifyUrl, youtubeUrl, twitterUrl } = body;
 
     // @ts-ignore
-    const artist = await (prisma as any).publicArtist.create({
+    const artist = await (prisma as any)['publicArtist'].create({
       data: {
         name,
         genre,

@@ -10,7 +10,7 @@ export async function GET(
   try {
     const { id } = await params;
 
-    const artist = await (prisma as any).publicArtist.findFirst({
+    const artist = await (prisma as any)['publicArtist'].findFirst({
       where: {
         OR: [
           { id: id },
@@ -25,7 +25,7 @@ export async function GET(
 
     // Also fetch their manual releases
     // @ts-ignore
-    const releases = await (prisma as any).publicRelease.findMany({
+    const releases = await (prisma as any)['publicRelease'].findMany({
       where: {
         artistName: artist.name
       },
