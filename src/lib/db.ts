@@ -1,5 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 import { PrismaPg } from "@prisma/adapter-pg";
+// Database client initialized with PG adapter
 import { Pool } from "pg";
 
 const connectionString = process.env.DATABASE_URL;
