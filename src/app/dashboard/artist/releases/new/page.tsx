@@ -49,8 +49,35 @@ export default function NewReleasePage() {
   const [error, setError] = useState("");
   const router = useRouter();
 
-  const nextStep = () => setCurrentStep(prev => Math.min(prev + 1, steps.length));
-  const prevStep = () => setCurrentStep(prev => Math.max(prev - 1, 1));
+  const nextStep = () => {
+    // Validation
+    if (currentStep === 1) {
+      if (!formData.title || !formData.genre || !formData.language || !formData.releaseDate) {
+        setError("Please fill in all metadata fields.");
+        return;
+      }
+    }
+    if (currentStep === 2) {
+      const missingAudio = formData.tracks.some(t => !t.audioUrl || !t.title);
+      if (missingAudio) {
+        setError("Please provide title and upload audio for all tracks.");
+        return;
+      }
+    }
+    if (currentStep === 3) {
+      if (!formData.artworkUrl) {
+        setError("Please upload your release artwork.");
+        return;
+      }
+    }
+    
+    setError("");
+    setCurrentStep(prev => Math.min(prev + 1, steps.length));
+  };
+  const prevStep = () => {
+    setError("");
+    setCurrentStep(prev => Math.max(prev - 1, 1));
+  };
 
   const updateFormData = (field: string, value: any) => {
     setFormData(prev => ({ ...prev, [field]: value }));
@@ -161,6 +188,12 @@ export default function NewReleasePage() {
       </div>
 
       <div className="glass p-8 md:p-12 rounded-[2.5rem] border border-white/5 shadow-3xl min-h-[600px] flex flex-col">
+        {error && (
+           <div className="mb-8 p-4 bg-red-500/10 border border-red-500/20 rounded-2xl flex gap-3 text-red-400 text-sm font-bold animate-in fade-in slide-in-from-top-2">
+             <AlertCircle className="w-5 h-5 flex-shrink-0" />
+             {error}
+           </div>
+        )}
         <AnimatePresence mode="wait">
            <motion.div
             key={currentStep}
@@ -177,12 +210,7 @@ export default function NewReleasePage() {
                       <p className="text-white/40 text-sm font-sans underline decoration-primary/30 underline-offset-4">Enter the essential details for your release as they will appear on Stores.</p>
                    </div>
                    
-                   {error && (
-                      <div className="p-4 bg-red-500/10 border border-red-500/20 rounded-xl flex gap-3 text-red-400 text-sm font-bold">
-                        <AlertCircle className="w-5 h-5 flex-shrink-0" />
-                        {error}
-                      </div>
-                    )}
+
 
                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                       <div className="md:col-span-2 space-y-2">
@@ -360,7 +388,7 @@ export default function NewReleasePage() {
                         }`}
                       >
                          {formData.artworkUrl && (
-                           <img src={formData.artworkUrl} alt="Artwork Preview" className="absolute inset-0 w-full h-full object-cover opacity-40 group-hover:scale-105 transition-transform" />
+                           <img src={formData.artworkUrl} alt="Artwork Preview" className="absolute inset-0 w-full h-full object-cover opacity-40 group-hover:scale-105 transition-transform pointer-events-none" />
                          )}
                          <div className="z-10 bg-black/60 backdrop-blur-md p-6 rounded-2xl border border-white/10 space-y-4 group-hover:scale-105 transition-transform">
                             {uploadingField === "artwork" ? (
@@ -428,22 +456,39 @@ export default function NewReleasePage() {
 
                       <div className="glass p-8 rounded-3xl border border-white/5 space-y-6">
                          <div className="flex items-center justify-between">
-                            <p className="text-xs font-black uppercase tracking-widest text-primary italic">Distribution</p>
+                            <p className="text-xs font-black uppercase tracking-widest text-primary italic">Distribution & Visuals</p>
                          </div>
-                         <div className="space-y-4">
-                            <div className="flex items-center gap-3">
-                               <CheckCircle2 className="w-4 h-4 text-green-400" />
-                               <span className="text-xs font-bold text-white/60">Stores: Spotify, Apple, YT Music, Amazon</span>
+                         <div className="flex gap-6 items-start">
+                            <div className="w-24 h-24 rounded-2xl bg-white/5 border border-white/5 overflow-hidden flex-shrink-0 relative">
+                               {formData.artworkUrl ? (
+                                 <img src={formData.artworkUrl} alt="Artwork" className="w-full h-full object-cover" />
+                               ) : (
+                                 <div className="w-full h-full flex items-center justify-center">
+                                    <ImageIcon className="w-8 h-8 text-white/10" />
+                                 </div>
+                               )}
                             </div>
-                            <div className="flex items-center gap-3">
-                               <CheckCircle2 className="w-4 h-4 text-green-400" />
-                               <span className="text-xs font-bold text-white/60">Monetization: Content ID, FB/IG Audio</span>
-                            </div>
-                            <div className="bg-primary/5 p-4 rounded-xl border border-primary/20 text-[10px] font-sans text-primary leading-relaxed">
-                               Distribution typically takes 24-72 hours. We recommend setting a release date at least 14 days in the future for playlist pitching.
-                            </div>
-                         </div>
-                      </div>
+                            <div className="space-y-4 flex-grow">
+                               <div className="flex items-center gap-3">
+                                  <CheckCircle2 className={`w-4 h-4 ${formData.artworkUrl ? "text-green-400" : "text-red-400"}`} />
+                                  <span className="text-xs font-bold text-white/60">Artwork: {formData.artworkUrl ? "Uploaded" : "Missing"}</span>
+                               </div>
+                               <div className="flex items-center gap-3">
+                                  <CheckCircle2 className="w-4 h-4 text-green-400" />
+                                  <span className="text-xs font-bold text-white/60">Stores: Spotify, Apple, YT Music, Amazon</span>
+                                </div>
+                                <div className="flex items-center gap-3">
+                                   <CheckCircle2 className="w-4 h-4 text-green-400" />
+                                   <span className="text-xs font-bold text-white/60">Monetization: Content ID, FB/IG Audio</span>
+                                </div>
+                             </div>
+                          </div>
+                          <div className="space-y-4 pt-2">
+                             <div className="bg-primary/5 p-4 rounded-xl border border-primary/20 text-[10px] font-sans text-primary leading-relaxed">
+                                Distribution typically takes 24-72 hours. We recommend setting a release date at least 14 days in the future for playlist pitching.
+                             </div>
+                          </div>
+                       </div>
                    </div>
 
                    <button 
