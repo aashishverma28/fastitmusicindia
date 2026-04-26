@@ -12,12 +12,16 @@ import {
   UserPlus, 
   Trash2, 
   Verified, 
-  Loader2,
+  Check,
   X,
   Upload,
-  Check
+  Instagram,
+  Youtube,
+  Twitter
 } from "lucide-react";
 import { useSession } from "next-auth/react";
+import { uploadFile } from "@/lib/supabase";
+import { Disc } from "lucide-react";
 
 export default function ArtistsPage() {
   const { data: session } = useSession();
@@ -34,8 +38,13 @@ export default function ArtistsPage() {
     genre: "Pop",
     avatar: "",
     followers: "10K+",
-    slug: ""
+    slug: "",
+    instagramUrl: "",
+    spotifyUrl: "",
+    youtubeUrl: "",
+    twitterUrl: ""
   });
+  const [isUploadingAvatar, setIsUploadingAvatar] = useState(false);
 
   const isAdminOrStaff = session?.user?.role === "ADMIN" || session?.user?.role === "EMPLOYEE";
 
@@ -77,6 +86,22 @@ export default function ArtistsPage() {
     }
   };
 
+  const handleAvatarUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setIsUploadingAvatar(true);
+    try {
+      const url = await uploadFile(file, "artists", "avatars");
+      setFormData(prev => ({ ...prev, avatar: url }));
+    } catch (err: any) {
+      console.error("Avatar upload failed:", err);
+      alert(`Upload failed: ${err.message}`);
+    } finally {
+      setIsUploadingAvatar(false);
+    }
+  };
+
   const handleAddArtist = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
@@ -90,7 +115,17 @@ export default function ArtistsPage() {
         const data = await res.json();
         setRealArtists(prev => [...prev, data.artist]);
         setIsModalOpen(false);
-        setFormData({ name: "", genre: "Pop", avatar: "", followers: "10K+", slug: "" });
+        setFormData({ 
+          name: "", 
+          genre: "Pop", 
+          avatar: "", 
+          followers: "10K+", 
+          slug: "",
+          instagramUrl: "",
+          spotifyUrl: "",
+          youtubeUrl: "",
+          twitterUrl: ""
+        });
       } else {
         alert("Failed to add artist.");
       }
@@ -241,6 +276,23 @@ export default function ArtistsPage() {
                     <Users className="w-4 h-4 text-white/20" />
                     <span className="text-white/40 text-sm font-mono">{artist.followers}</span>
                   </div>
+                  <div className="flex gap-3">
+                    {artist.instagramUrl && (
+                      <a href={artist.instagramUrl} target="_blank" rel="noopener noreferrer" className="w-8 h-8 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white/40 hover:text-secondary hover:border-secondary/50 transition-all">
+                        <Instagram className="w-4 h-4" />
+                      </a>
+                    )}
+                    {artist.spotifyUrl && (
+                      <a href={artist.spotifyUrl} target="_blank" rel="noopener noreferrer" className="w-8 h-8 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white/40 hover:text-[#1DB954] hover:border-[#1DB954]/50 transition-all">
+                        <Disc className="w-4 h-4" />
+                      </a>
+                    )}
+                    {artist.youtubeUrl && (
+                      <a href={artist.youtubeUrl} target="_blank" rel="noopener noreferrer" className="w-8 h-8 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white/40 hover:text-[#FF0000] hover:border-[#FF0000]/50 transition-all">
+                        <Youtube className="w-4 h-4" />
+                      </a>
+                    )}
+                  </div>
                   <Link 
                     href={`/artists/${artist.slug}`}
                     className="w-10 h-10 rounded-full border border-white/5 flex items-center justify-center text-white/20 hover:text-secondary hover:border-secondary/50 transition-all"
@@ -324,15 +376,107 @@ export default function ArtistsPage() {
                     </div>
                   </div>
 
-                  <div className="space-y-2">
-                    <label className="text-[10px] font-black uppercase tracking-widest text-white/40 ml-2">Avatar URL (Image2URL Link)</label>
-                    <input 
-                      type="url" 
-                      placeholder="https://..."
-                      className="w-full bg-white/5 border border-white/10 rounded-2xl py-4 px-6 text-white focus:border-secondary outline-none transition-all font-sans"
-                      value={formData.avatar}
-                      onChange={(e) => setFormData({...formData, avatar: e.target.value})}
-                    />
+                  <div className="space-y-4">
+                    <label className="text-[10px] font-black uppercase tracking-widest text-white/40 ml-2">Artist Avatar</label>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div className="relative group aspect-square bg-white/5 rounded-2xl border border-white/10 overflow-hidden flex flex-col items-center justify-center p-4">
+                        {formData.avatar ? (
+                          <>
+                            <img src={formData.avatar} className="absolute inset-0 w-full h-full object-cover opacity-50" alt="Preview" />
+                            <div className="relative z-10 text-center">
+                              <Check className="w-8 h-8 text-green-500 mx-auto mb-2" />
+                              <p className="text-[10px] font-bold text-white uppercase tracking-widest">Ready</p>
+                            </div>
+                          </>
+                        ) : (
+                          <>
+                            <Upload className="w-8 h-8 text-white/20 mb-2" />
+                            <p className="text-[10px] font-bold text-white/40 uppercase tracking-widest">Upload Photo</p>
+                          </>
+                        )}
+                        <input 
+                          type="file" 
+                          accept="image/*"
+                          className="absolute inset-0 opacity-0 cursor-pointer z-20"
+                          onChange={handleAvatarUpload}
+                          disabled={isUploadingAvatar}
+                        />
+                        {isUploadingAvatar && (
+                          <div className="absolute inset-0 bg-black/60 flex items-center justify-center z-30">
+                            <Loader2 className="w-6 h-6 text-secondary animate-spin" />
+                          </div>
+                        )}
+                      </div>
+                      
+                      <div className="flex flex-col justify-center space-y-2">
+                        <label className="text-[10px] font-black uppercase tracking-widest text-white/20 ml-2">Or Use Image Link</label>
+                        <input 
+                          type="url" 
+                          placeholder="https://..."
+                          className="w-full bg-white/5 border border-white/10 rounded-2xl py-4 px-6 text-white focus:border-secondary outline-none transition-all font-sans text-xs"
+                          value={formData.avatar}
+                          onChange={(e) => setFormData({...formData, avatar: e.target.value})}
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="space-y-4">
+                    <h3 className="text-[10px] font-black uppercase tracking-widest text-white/40 ml-2 pt-4 border-t border-white/5">Social Accounts</h3>
+                    <div className="grid grid-cols-2 gap-4">
+                      <div className="space-y-2">
+                        <div className="flex items-center gap-2 ml-2">
+                          <Instagram className="w-3 h-3 text-white/20" />
+                          <label className="text-[10px] font-black uppercase tracking-widest text-white/40">Instagram</label>
+                        </div>
+                        <input 
+                          type="url" 
+                          placeholder="Link"
+                          className="w-full bg-white/5 border border-white/10 rounded-2xl py-3 px-4 text-white focus:border-secondary outline-none transition-all font-sans text-xs"
+                          value={formData.instagramUrl}
+                          onChange={(e) => setFormData({...formData, instagramUrl: e.target.value})}
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <div className="flex items-center gap-2 ml-2">
+                          <Disc className="w-3 h-3 text-white/20" />
+                          <label className="text-[10px] font-black uppercase tracking-widest text-white/40">Spotify</label>
+                        </div>
+                        <input 
+                          type="url" 
+                          placeholder="Link"
+                          className="w-full bg-white/5 border border-white/10 rounded-2xl py-3 px-4 text-white focus:border-secondary outline-none transition-all font-sans text-xs"
+                          value={formData.spotifyUrl}
+                          onChange={(e) => setFormData({...formData, spotifyUrl: e.target.value})}
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <div className="flex items-center gap-2 ml-2">
+                          <Youtube className="w-3 h-3 text-white/20" />
+                          <label className="text-[10px] font-black uppercase tracking-widest text-white/40">YouTube</label>
+                        </div>
+                        <input 
+                          type="url" 
+                          placeholder="Link"
+                          className="w-full bg-white/5 border border-white/10 rounded-2xl py-3 px-4 text-white focus:border-secondary outline-none transition-all font-sans text-xs"
+                          value={formData.youtubeUrl}
+                          onChange={(e) => setFormData({...formData, youtubeUrl: e.target.value})}
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <div className="flex items-center gap-2 ml-2">
+                          <Twitter className="w-3 h-3 text-white/20" />
+                          <label className="text-[10px] font-black uppercase tracking-widest text-white/40">Twitter</label>
+                        </div>
+                        <input 
+                          type="url" 
+                          placeholder="Link"
+                          className="w-full bg-white/5 border border-white/10 rounded-2xl py-3 px-4 text-white focus:border-secondary outline-none transition-all font-sans text-xs"
+                          value={formData.twitterUrl}
+                          onChange={(e) => setFormData({...formData, twitterUrl: e.target.value})}
+                        />
+                      </div>
+                    </div>
                   </div>
 
                   <div className="space-y-2">
@@ -348,10 +492,16 @@ export default function ArtistsPage() {
 
                   <button 
                     type="submit" 
-                    disabled={isSubmitting}
+                    disabled={isSubmitting || isUploadingAvatar}
                     className="w-full btn-gradient py-5 rounded-2xl font-black font-display text-sm tracking-widest uppercase flex items-center justify-center gap-2 disabled:opacity-50"
                   >
-                    {isSubmitting ? <Loader2 className="w-5 h-5 animate-spin" /> : <><Check className="w-5 h-5" /> PUBLISH TO PAGE</>}
+                    {isSubmitting ? (
+                      <Loader2 className="w-5 h-5 animate-spin" />
+                    ) : isUploadingAvatar ? (
+                      <><Loader2 className="w-5 h-5 animate-spin" /> UPLOADING PHOTO...</>
+                    ) : (
+                      <><Check className="w-5 h-5" /> PUBLISH TO PAGE</>
+                    )}
                   </button>
                 </form>
               </motion.div>

@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
-import { getServerSession } from "next-auth";
+import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/lib/auth";
 
 export async function POST(req: Request) {
@@ -11,7 +11,7 @@ export async function POST(req: Request) {
     }
 
     const body = await req.json();
-    const { name, genre, avatar, followers, slug } = body;
+    const { name, genre, avatar, followers, slug, instagramUrl, spotifyUrl, youtubeUrl, twitterUrl } = body;
 
     const artist = await prisma.publicArtist.create({
       data: {
@@ -20,6 +20,10 @@ export async function POST(req: Request) {
         avatar,
         followers: followers || "10K+",
         slug: slug || name.toLowerCase().replace(/ /g, '-'),
+        instagramUrl,
+        spotifyUrl,
+        youtubeUrl,
+        twitterUrl,
         isVerified: true
       }
     });

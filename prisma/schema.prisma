@@ -369,6 +369,10 @@ model PublicArtist {
   followers   String   @default("10K+")
   isVerified  Boolean  @default(true)
   slug        String?  @unique
+  instagramUrl String?
+  spotifyUrl   String?
+  youtubeUrl   String?
+  twitterUrl   String?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }
