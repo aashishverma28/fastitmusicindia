@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
@@ -9,9 +9,28 @@ import { MOCK_RELEASES } from "@/data/mock";
 import { useAudioStore } from "@/lib/store/useAudioStore";
 
 export default function ReleasesPage() {
+  const [realReleases, setRealReleases] = useState<any[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedGenre, setSelectedGenre] = useState("All");
   const { setTrack } = useAudioStore();
+
+  useEffect(() => {
+    const fetchReleases = async () => {
+      try {
+        const res = await fetch("/api/releases/public");
+        const data = await res.json();
+        if (data.releases) {
+          setRealReleases(data.releases);
+        }
+      } catch (err) {
+        console.error("Error fetching releases:", err);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchReleases();
+  }, []);
 
   const handlePlay = (e: React.MouseEvent, rel: any) => {
     e.preventDefault();
@@ -21,17 +40,17 @@ export default function ReleasesPage() {
       title: rel.title,
       artist: rel.artist,
       cover: rel.cover,
-      url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"
+      url: rel.audioUrl || "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"
     });
   };
 
-  const genres = ["All", "Pop", "Rock", "Hip Hop", "Electronic", "Folk", "Lo-Fi"];
+  const genres = ["All", "Pop", "Rock", "Hip Hop", "Electronic", "Folk", "Lo-Fi", "Classical", "Jazz", "Devotional"];
 
-  const filteredReleases = MOCK_RELEASES.filter((rel: any) => {
+  const filteredReleases = realReleases.filter((rel: any) => {
     const matchesSearch = 
       rel.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
       rel.artist.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesGenre = selectedGenre === "All" || rel.genre.includes(selectedGenre);
+    const matchesGenre = selectedGenre === "All" || (rel.genre && rel.genre.includes(selectedGenre));
     return matchesSearch && matchesGenre;
   });
 

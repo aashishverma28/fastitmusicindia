@@ -1,6 +1,6 @@
 "use client";
 
-import { use } from "react";
+import React, { use, useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
@@ -14,43 +14,64 @@ import {
   Disc, 
   Mic2,
   ListMusic,
-  ExternalLink,
-  Plus
+  Plus,
+  Loader2
 } from "lucide-react";
-import { MOCK_RELEASES } from "@/data/mock";
 import { useAudioStore } from "@/lib/store/useAudioStore";
 import { notFound } from "next/navigation";
 
 export default function ReleaseDetailPage({ params }: { params: Promise<{ slug: string }> }) {
-  const { slug } = use(params);
-  const release = MOCK_RELEASES.find(r => r.slug === slug);
+  const { slug: id } = use(params);
+  const [release, setRelease] = useState<any>(null);
+  const [isLoading, setIsLoading] = useState(true);
   const { setTrack } = useAudioStore();
+
+  useEffect(() => {
+    const fetchRelease = async () => {
+      try {
+        const res = await fetch(`/api/releases/public/${id}`);
+        const data = await res.json();
+        if (data.release) {
+          setRelease(data.release);
+        } else {
+          setRelease(null);
+        }
+      } catch (err) {
+        console.error("Error fetching release detail:", err);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchRelease();
+  }, [id]);
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-background">
+        <Loader2 className="w-12 h-12 text-primary animate-spin" />
+      </div>
+    );
+  }
 
   if (!release) {
     notFound();
   }
 
-  const handlePlay = () => {
+  const handlePlay = (trackUrl?: string, trackTitle?: string) => {
     setTrack({
       id: release.id,
-      title: release.title,
+      title: trackTitle || release.title,
       artist: release.artist,
       cover: release.cover,
-      url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" // Demo URL
+      url: trackUrl || release.tracks[0]?.audioUrl || "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"
     });
   };
 
   const streamingLinks = [
-    { name: "Spotify", url: (release as any).links?.spotify || "#", icon: <Globe className="w-5 h-5" /> },
-    { name: "Apple Music", url: (release as any).links?.apple || "#", icon: <Disc className="w-5 h-5" /> },
-    { name: "YouTube Music", url: (release as any).links?.youtube || "#", icon: <Mic2 className="w-5 h-5" /> },
-    { name: "JioSaavn", url: (release as any).links?.jiosaavn || "#", icon: <ListMusic className="w-5 h-5" /> },
-  ];
-
-  const tracklist = [
-    { number: 1, title: release.title, duration: "03:45" },
-    { number: 2, title: "Midnight Echo", duration: "04:12" },
-    { number: 3, title: "Range of Soul", duration: "02:58" },
+    { name: "Spotify", url: "#", icon: <Globe className="w-5 h-5" /> },
+    { name: "Apple Music", url: "#", icon: <Disc className="w-5 h-5" /> },
+    { name: "YouTube Music", url: "#", icon: <Mic2 className="w-5 h-5" /> },
+    { name: "JioSaavn", url: "#", icon: <ListMusic className="w-5 h-5" /> },
   ];
 
   return (
@@ -86,7 +107,7 @@ export default function ReleaseDetailPage({ params }: { params: Promise<{ slug: 
             
             <div className="mt-10 flex gap-4">
                <button 
-                  onClick={handlePlay}
+                  onClick={() => handlePlay()}
                   className="flex-grow btn-gradient py-5 rounded-2xl font-black font-display text-xl flex items-center justify-center gap-3 hover:scale-[1.02] active:scale-[0.98] transition-all"
                >
                   <Play className="fill-current w-6 h-6" /> PLAY PREVIEW
@@ -118,7 +139,7 @@ export default function ReleaseDetailPage({ params }: { params: Promise<{ slug: 
                </h1>
                
                <p className="text-2xl font-bold font-display text-white/60">
-                 by <Link href={`/artists/${release.artist.toLowerCase().replace(/ & /g, '-').replace(/ /g, '-')}`} className="text-primary hover:underline">{release.artist}</Link>
+                 by <span className="text-primary">{release.artist}</span>
                </p>
             </div>
 
@@ -145,13 +166,14 @@ export default function ReleaseDetailPage({ params }: { params: Promise<{ slug: 
             <div className="space-y-6">
                <div className="flex justify-between items-center">
                   <h3 className="text-sm font-black uppercase tracking-[0.2em] text-white/30">Tracklist</h3>
-                  <span className="text-white/20 text-[10px] font-bold uppercase">{tracklist.length} Tracks</span>
+                  <span className="text-white/20 text-[10px] font-bold uppercase">{release.tracks.length} Tracks</span>
                </div>
                <div className="space-y-2">
-                  {tracklist.map((track) => (
+                  {release.tracks.map((track: any) => (
                     <div 
                       key={track.number}
-                      className="group flex items-center justify-between p-5 rounded-xl border border-white/0 hover:border-white/5 hover:bg-white/5 transition-all text-white/60 hover:text-white"
+                      onClick={() => handlePlay(track.audioUrl, track.title)}
+                      className="group flex items-center justify-between p-5 rounded-xl border border-white/0 hover:border-white/5 hover:bg-white/5 transition-all text-white/60 hover:text-white cursor-pointer"
                     >
                        <div className="flex items-center gap-6">
                           <span className="w-4 text-[10px] font-black text-white/20 group-hover:text-primary transition-colors">{track.number}</span>
@@ -170,26 +192,11 @@ export default function ReleaseDetailPage({ params }: { params: Promise<{ slug: 
 
             {/* Meta Info */}
             <div className="pt-10 border-t border-white/5 text-[10px] font-bold text-white/20 uppercase tracking-[0.2em] flex flex-wrap gap-x-12 gap-y-4">
-               <div className="flex gap-2"><span className="text-white/40">Label:</span> Fastit Music India</div>
-               <div className="flex gap-2"><span className="text-white/40">Copyright:</span> © 2024 Fastit</div>
-               <div className="flex gap-2"><span className="text-white/40">UPC:</span> 890352431627</div>
+               <div className="flex gap-2"><span className="text-white/40">Label:</span> {release.labelName}</div>
+               <div className="flex gap-2"><span className="text-white/40">Copyright:</span> © {new Date(release.releaseDate).getFullYear()} {release.copyrightHolder || "Fastit"}</div>
+               {release.upc && <div className="flex gap-2"><span className="text-white/40">UPC:</span> {release.upc}</div>}
             </div>
           </motion.div>
-        </div>
-
-        {/* Similar Releases Placeholder */}
-        <div className="mt-40 pt-24 border-t border-white/5">
-           <h3 className="text-4xl font-black font-display text-white mb-12">More from <span className="text-primary">{release.artist}</span></h3>
-           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-              {MOCK_RELEASES.filter(r => r.id !== release.id).slice(0, 4).map((r) => (
-                 <Link key={r.id} href={`/releases/${r.slug}`} className="group">
-                    <div className="relative aspect-square rounded-2xl overflow-hidden mb-4 border border-white/5">
-                      <Image src={r.cover} alt={r.title} fill className="object-cover group-hover:scale-105 transition-transform duration-500" />
-                    </div>
-                    <h4 className="font-bold text-white group-hover:text-primary transition-colors truncate">{r.title}</h4>
-                 </Link>
-              ))}
-           </div>
         </div>
       </div>
     </div>
