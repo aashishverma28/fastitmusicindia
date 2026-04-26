@@ -24,7 +24,7 @@ export async function GET(
     }
 
     // Also fetch their manual releases
-    const releases = await prisma.publicRelease.findMany({
+    const releases = await (prisma as any).publicRelease.findMany({
       where: {
         artistName: artist.name
       },
@@ -46,7 +46,7 @@ export async function GET(
         youtube: artist.youtubeUrl || null,
         twitter: artist.twitterUrl || null
       },
-      releases: releases.map(rel => ({
+      releases: releases.map((rel: any) => ({
         id: rel.id,
         title: rel.title,
         cover: rel.coverArtUrl || "https://images.unsplash.com/photo-1614613535308-eb5fbd3d2c17?w=800&q=80",
