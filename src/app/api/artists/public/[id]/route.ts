@@ -24,6 +24,7 @@ export async function GET(
     }
 
     // Also fetch their manual releases
+    // @ts-ignore
     const releases = await (prisma as any).publicRelease.findMany({
       where: {
         artistName: artist.name
