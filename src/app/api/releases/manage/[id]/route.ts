@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
-import { getServerSession } from "next-auth";
+import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/lib/auth";
 
 export async function DELETE(
@@ -30,6 +30,9 @@ export async function DELETE(
     return NextResponse.json({ message: "Release deleted from public list" });
   } catch (error: any) {
     console.error("Release management delete error:", error);
-    return NextResponse.json({ error: "Failed to delete release" }, { status: 500 });
+    return NextResponse.json({ 
+      error: "Failed to delete release", 
+      details: error.message || String(error) 
+    }, { status: 500 });
   }
 }

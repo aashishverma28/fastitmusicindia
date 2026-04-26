@@ -84,7 +84,7 @@ export default function ReleasesPage() {
         setRealReleases(prev => prev.filter(r => r.id !== id));
       } else {
         const errorData = await res.json();
-        alert(`Failed to remove release: ${errorData.error || "Unknown error"}`);
+        alert(`Failed to remove release: ${errorData.error || "Unknown error"}\nDetails: ${errorData.details || "None"}`);
       }
     } catch (err) {
       console.error("Error removing release:", err);
