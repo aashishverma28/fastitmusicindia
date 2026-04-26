@@ -45,7 +45,9 @@ export default function ArtistsPage() {
     }
   };
 
-  const handleRemoveArtist = async (id: string) => {
+  const handleRemoveArtist = async (e: React.MouseEvent, id: string) => {
+    e.preventDefault();
+    e.stopPropagation();
     if (!confirm("Are you sure you want to remove this artist from the public list?")) return;
     
     try {
@@ -109,7 +111,7 @@ export default function ArtistsPage() {
           <div className="flex flex-col items-end gap-4 w-full md:w-auto">
             {isAdminOrStaff && (
               <Link 
-                href="/sysadmin/users" 
+                href={session?.user?.role === "ADMIN" ? "/dashboard/admin/artists" : "/dashboard/employee/artists"} 
                 className="btn-gradient px-6 py-3 rounded-full flex items-center gap-2 font-black text-xs tracking-widest uppercase hover:scale-105 transition-all"
               >
                 <UserPlus className="w-4 h-4" /> Add Artist
@@ -155,7 +157,7 @@ export default function ArtistsPage() {
               >
                 {isAdminOrStaff && (
                   <button 
-                    onClick={() => handleRemoveArtist(artist.id)}
+                    onClick={(e) => handleRemoveArtist(e, artist.id)}
                     className="absolute top-0 right-0 z-20 p-3 bg-red-500/10 border border-red-500/20 text-red-500 rounded-full hover:bg-red-500 hover:text-white transition-all shadow-xl backdrop-blur-md opacity-0 group-hover:opacity-100"
                     title="Remove Artist"
                   >

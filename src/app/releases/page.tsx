@@ -47,7 +47,9 @@ export default function ReleasesPage() {
     }
   };
 
-  const handleRemoveRelease = async (id: string) => {
+  const handleRemoveRelease = async (e: React.MouseEvent, id: string) => {
+    e.preventDefault();
+    e.stopPropagation();
     if (!confirm("Are you sure you want to remove this release from the public catalog?")) return;
     
     try {
@@ -128,7 +130,7 @@ export default function ReleasesPage() {
           <div className="flex flex-col items-end gap-4 w-full md:w-auto">
             {isAdminOrStaff && (
               <Link 
-                href="/sysadmin/releases" 
+                href={session?.user?.role === "ADMIN" ? "/dashboard/admin/releases" : "/dashboard/employee/releases"} 
                 className="btn-gradient px-6 py-3 rounded-full flex items-center gap-2 font-black text-xs tracking-widest uppercase hover:scale-105 transition-all"
               >
                 <PlusCircle className="w-4 h-4" /> Manage Releases
@@ -184,7 +186,7 @@ export default function ReleasesPage() {
               >
                 {isAdminOrStaff && (
                   <button 
-                    onClick={() => handleRemoveRelease(rel.id)}
+                    onClick={(e) => handleRemoveRelease(e, rel.id)}
                     className="absolute top-2 right-2 z-20 p-2 bg-red-500/20 border border-red-500/30 text-red-400 rounded-lg hover:bg-red-500 hover:text-white transition-all backdrop-blur-md opacity-0 group-hover:opacity-100"
                     title="Remove Release"
                   >
