@@ -21,6 +21,8 @@ import {
 } from "lucide-react";
 import { useAudioStore } from "@/lib/store/useAudioStore";
 import { useSession } from "next-auth/react";
+import { uploadFile } from "@/lib/supabase";
+import { Image as ImageIcon } from "lucide-react";
 
 export default function ReleasesPage() {
   const { data: session } = useSession();
@@ -42,6 +44,8 @@ export default function ReleasesPage() {
     audioFileUrl: "",
     slug: ""
   });
+  const [isUploadingArtwork, setIsUploadingArtwork] = useState(false);
+  const [artworkFile, setArtworkFile] = useState<File | null>(null);
 
   const isAdminOrStaff = session?.user?.role === "ADMIN" || session?.user?.role === "EMPLOYEE";
 
@@ -67,19 +71,40 @@ export default function ReleasesPage() {
   const handleRemoveRelease = async (e: React.MouseEvent, id: string) => {
     e.preventDefault();
     e.stopPropagation();
+    
     if (!confirm("Are you sure you want to remove this release from the public catalog?")) return;
     
     try {
+      console.log(`Attempting to delete release: ${id}`);
       const res = await fetch(`/api/releases/manage/${id}`, {
         method: "DELETE",
       });
+      
       if (res.ok) {
         setRealReleases(prev => prev.filter(r => r.id !== id));
       } else {
-        alert("Failed to remove release.");
+        const errorData = await res.json();
+        alert(`Failed to remove release: ${errorData.error || "Unknown error"}`);
       }
     } catch (err) {
       console.error("Error removing release:", err);
+      alert("An error occurred while removing the release.");
+    }
+  };
+
+  const handleArtworkUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setIsUploadingArtwork(true);
+    try {
+      const url = await uploadFile(file, "releases", "artwork");
+      setFormData(prev => ({ ...prev, coverArtUrl: url }));
+    } catch (err: any) {
+      console.error("Artwork upload failed:", err);
+      alert(`Upload failed: ${err.message}`);
+    } finally {
+      setIsUploadingArtwork(false);
     }
   };
 
@@ -236,15 +261,7 @@ export default function ReleasesPage() {
                 variants={itemVariants}
                 className="group relative"
               >
-                {isAdminOrStaff && (
-                  <button 
-                    onClick={(e) => handleRemoveRelease(e, rel.id)}
-                    className="absolute top-2 right-2 z-20 p-2 bg-red-500/20 border border-red-500/30 text-red-400 rounded-lg hover:bg-red-500 hover:text-white transition-all backdrop-blur-md opacity-0 group-hover:opacity-100"
-                    title="Remove Release"
-                  >
-                    <Trash2 className="w-4 h-4" />
-                  </button>
-                )}
+                {/* Removed delete button from here to move it to the end of the container */}
                 
                 <Link href={`/releases/${rel.slug}`} className="block">
                   <div className="relative aspect-square rounded-2xl overflow-hidden mb-4 bg-surface-container-highest shadow-xl">
@@ -292,6 +309,16 @@ export default function ReleasesPage() {
                     </span>
                   </div>
                 </Link>
+
+                {isAdminOrStaff && (
+                  <button 
+                    onClick={(e) => handleRemoveRelease(e, rel.id)}
+                    className="absolute top-4 right-4 z-[50] p-3 bg-red-500/90 border border-red-500/50 text-white rounded-xl hover:bg-red-600 hover:scale-110 transition-all backdrop-blur-md shadow-xl opacity-0 group-hover:opacity-100 flex items-center justify-center cursor-pointer"
+                    title="Remove Release"
+                  >
+                    <Trash2 className="w-5 h-5" />
+                  </button>
+                )}
               </motion.div>
             ))}
           </motion.div>
@@ -345,10 +372,11 @@ export default function ReleasesPage() {
                       />
                     </div>
                     <div className="space-y-2">
-                      <label className="text-[10px] font-black uppercase tracking-widest text-white/40 ml-2">Artist Name</label>
+                      <label className="text-[10px] font-black uppercase tracking-widest text-white/40 ml-2">Artist Name(s)</label>
                       <input 
                         type="text" 
                         required
+                        placeholder="e.g. Artist A, Artist B"
                         className="w-full bg-white/5 border border-white/10 rounded-2xl py-4 px-6 text-white focus:border-primary outline-none transition-all font-sans"
                         value={formData.artistName}
                         onChange={(e) => setFormData({...formData, artistName: e.target.value})}
@@ -378,16 +406,50 @@ export default function ReleasesPage() {
                     </div>
                   </div>
 
-                  <div className="space-y-2">
-                    <label className="text-[10px] font-black uppercase tracking-widest text-white/40 ml-2">Cover Art URL (Image2URL)</label>
-                    <input 
-                      type="url" 
-                      required
-                      placeholder="https://..."
-                      className="w-full bg-white/5 border border-white/10 rounded-2xl py-4 px-6 text-white focus:border-primary outline-none transition-all font-sans"
-                      value={formData.coverArtUrl}
-                      onChange={(e) => setFormData({...formData, coverArtUrl: e.target.value})}
-                    />
+                  <div className="space-y-4">
+                    <label className="text-[10px] font-black uppercase tracking-widest text-white/40 ml-2">Track Artwork</label>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div className="relative group aspect-square bg-white/5 rounded-2xl border border-white/10 overflow-hidden flex flex-col items-center justify-center p-4">
+                        {formData.coverArtUrl ? (
+                          <>
+                            <img src={formData.coverArtUrl} className="absolute inset-0 w-full h-full object-cover opacity-50" alt="Preview" />
+                            <div className="relative z-10 text-center">
+                              <Check className="w-8 h-8 text-green-500 mx-auto mb-2" />
+                              <p className="text-[10px] font-bold text-white uppercase tracking-widest">Ready</p>
+                            </div>
+                          </>
+                        ) : (
+                          <>
+                            <Upload className="w-8 h-8 text-white/20 mb-2" />
+                            <p className="text-[10px] font-bold text-white/40 uppercase tracking-widest">Upload Image</p>
+                          </>
+                        )}
+                        <input 
+                          type="file" 
+                          accept="image/*"
+                          className="absolute inset-0 opacity-0 cursor-pointer z-20"
+                          onChange={handleArtworkUpload}
+                          disabled={isUploadingArtwork}
+                        />
+                        {isUploadingArtwork && (
+                          <div className="absolute inset-0 bg-black/60 flex items-center justify-center z-30">
+                            <Loader2 className="w-6 h-6 text-primary animate-spin" />
+                          </div>
+                        )}
+                      </div>
+                      
+                      <div className="flex flex-col justify-center space-y-2">
+                        <label className="text-[10px] font-black uppercase tracking-widest text-white/20 ml-2">Or Use Image Link</label>
+                        <input 
+                          type="url" 
+                          placeholder="https://..."
+                          className="w-full bg-white/5 border border-white/10 rounded-2xl py-4 px-6 text-white focus:border-primary outline-none transition-all font-sans text-xs"
+                          value={formData.coverArtUrl}
+                          onChange={(e) => setFormData({...formData, coverArtUrl: e.target.value})}
+                        />
+                        <p className="text-[9px] text-white/20 italic px-2">Image2URL or direct hosting link supported.</p>
+                      </div>
+                    </div>
                   </div>
 
                   <div className="space-y-2">
@@ -403,10 +465,16 @@ export default function ReleasesPage() {
 
                   <button 
                     type="submit" 
-                    disabled={isSubmitting}
+                    disabled={isSubmitting || isUploadingArtwork}
                     className="w-full btn-gradient py-5 rounded-2xl font-black font-display text-sm tracking-widest uppercase flex items-center justify-center gap-2 disabled:opacity-50"
                   >
-                    {isSubmitting ? <Loader2 className="w-5 h-5 animate-spin" /> : <><Check className="w-5 h-5" /> PUBLISH TRACK</>}
+                    {isSubmitting ? (
+                      <Loader2 className="w-5 h-5 animate-spin" />
+                    ) : isUploadingArtwork ? (
+                      <><Loader2 className="w-5 h-5 animate-spin" /> UPLOADING ARTWORK...</>
+                    ) : (
+                      <><Check className="w-5 h-5" /> PUBLISH TRACK</>
+                    )}
                   </button>
                 </form>
               </motion.div>

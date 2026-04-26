@@ -15,6 +15,14 @@ export async function DELETE(
 
     const { id } = params;
 
+    const existing = await prisma.publicRelease.findUnique({
+      where: { id }
+    });
+
+    if (!existing) {
+      return NextResponse.json({ error: "Release not found" }, { status: 404 });
+    }
+
     // Physically delete the curated entry
     await prisma.publicRelease.delete({
       where: { id }
