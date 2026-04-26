@@ -60,7 +60,7 @@ export default function ForgotPasswordPage() {
             <Link href="/login" className="inline-block mb-6">
               <div className="relative w-20 h-20 mx-auto mb-2">
                 <Image 
-                  src="/logo.jpg" 
+                  src="/logo.png" 
                   alt="Fastit Music India" 
                   fill 
                   className="object-contain" 

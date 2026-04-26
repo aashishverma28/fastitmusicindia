@@ -8,7 +8,7 @@ export default function Footer() {
         <div className="space-y-6">
           <Link href="/" className="flex items-center gap-3">
             <div className="relative w-10 h-10">
-              <Image src="/logo.jpg" alt="Fastit Music India" fill className="object-contain" />
+              <Image src="/logo.png" alt="Fastit Music India" fill className="object-contain" />
             </div>
             <span className="text-xl font-bold text-white font-display tracking-tighter">
               Fastit Music India

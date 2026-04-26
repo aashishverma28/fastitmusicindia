@@ -15,7 +15,7 @@ export default function Navbar() {
           >
             <div className="relative w-12 h-12">
               <Image 
-                src="/logo.jpg" 
+                src="/logo.png" 
                 alt="Fastit Music India" 
                 fill 
                 className="object-contain"

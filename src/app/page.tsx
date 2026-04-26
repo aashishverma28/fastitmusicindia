@@ -42,7 +42,7 @@ export default function Home() {
               className="flex items-center gap-3 mb-6"
             >
               <div className="relative w-16 h-16">
-                <Image src="/logo.jpg" alt="Fastit Logo" fill className="object-contain" />
+                <Image src="/logo.png" alt="Fastit Logo" fill className="object-contain" />
               </div>
               <div className="inline-block px-4 py-1.5 rounded-full bg-surface-container-high/50 border border-white/10 text-secondary font-bold text-sm tracking-widest uppercase font-sans">
                 India&apos;s Premier Distribution
