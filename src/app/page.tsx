@@ -197,8 +197,29 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Pop stripes division band */}
-      <div className="h-6 w-full pop-stripes border-y-3 border-white z-20" />
+      {/* Neubrutalist Marquee Ticker Banner */}
+      <div className="w-full overflow-hidden bg-secondary border-y-3 border-foreground py-4 select-none relative z-20 shadow-md">
+        <div className="animate-marquee flex gap-12 whitespace-nowrap">
+          <span className="font-display font-black text-sm md:text-xl text-[#080809] uppercase tracking-[0.18em] flex items-center gap-12">
+            <span>Fastit Music India</span> <span className="text-[#f00a88] text-2xl font-sans">•</span>
+            <span>Empowering Independent Artists</span> <span className="text-[#00b0fc] text-2xl font-sans">•</span>
+            <span>Distribute to 150+ Streaming Platforms</span> <span className="text-[#f00a88] text-2xl font-sans">•</span>
+            <span>Keep 90% of Your Earnings</span> <span className="text-[#00b0fc] text-2xl font-sans">•</span>
+            <span>Zero Annual Fees</span> <span className="text-[#f00a88] text-2xl font-sans">•</span>
+            <span>India&apos;s Indie Revolution</span> <span className="text-[#00b0fc] text-2xl font-sans">•</span>
+            <span>Transparent Analytics & Payouts</span> <span className="text-[#f00a88] text-2xl font-sans">•</span>
+          </span>
+          <span className="font-display font-black text-sm md:text-xl text-[#080809] uppercase tracking-[0.18em] flex items-center gap-12" aria-hidden="true">
+            <span>Fastit Music India</span> <span className="text-[#f00a88] text-2xl font-sans">•</span>
+            <span>Empowering Independent Artists</span> <span className="text-[#00b0fc] text-2xl font-sans">•</span>
+            <span>Distribute to 150+ Streaming Platforms</span> <span className="text-[#f00a88] text-2xl font-sans">•</span>
+            <span>Keep 90% of Your Earnings</span> <span className="text-[#00b0fc] text-2xl font-sans">•</span>
+            <span>Zero Annual Fees</span> <span className="text-[#f00a88] text-2xl font-sans">•</span>
+            <span>India&apos;s Indie Revolution</span> <span className="text-[#00b0fc] text-2xl font-sans">•</span>
+            <span>Transparent Analytics & Payouts</span> <span className="text-[#f00a88] text-2xl font-sans">•</span>
+          </span>
+        </div>
+      </div>
 
       {/* Stats Bar (Neubrutalist offset panels) */}
       <section className="py-24 relative overflow-hidden">
