@@ -43,18 +43,23 @@ export default function Footer() {
             <a href="https://x.com/fastitmusicind" target="_blank" className="text-white/40 hover:text-primary transition-colors text-lg">X</a>
             <a href="https://www.youtube.com/@FastitMusicIndia?sub_confirmation=1" target="_blank" className="text-white/40 hover:text-red-500 transition-colors text-lg">YouTube</a>
           </div>
-          <div className="mt-8">
-            <p className="text-white/20 text-xs font-bold uppercase tracking-[0.2em] mb-4">Newsletter</p>
+          <div className="mt-8 relative">
+            <p className="text-white/20 text-xs font-bold uppercase tracking-[0.2em] mb-4">
+              Newsletter 
+              <span className="font-handwriting text-primary text-lg lowercase tracking-normal font-normal ml-2 inline-block rotate-2">
+                * strictly zero spam!
+              </span>
+            </p>
             <div className="flex bg-surface-container-lowest rounded-full p-1 border border-white/10 focus-within:border-primary/50 transition-colors bg-black">
               <input 
                 suppressHydrationWarning
-                className="bg-transparent border-none focus:ring-0 text-white px-4 w-full text-sm outline-none" 
+                className="bg-transparent border-none focus:ring-0 text-white px-4 w-full text-sm outline-none font-sans" 
                 placeholder="Your email" 
                 type="email"
               />
               <button 
                 suppressHydrationWarning
-                className="bg-primary text-black font-bold px-4 py-2 rounded-full text-xs"
+                className="bg-primary text-black font-bold px-4 py-2 rounded-full text-xs hover:scale-105 active:scale-95 transition-all"
               >
                 Join
               </button>

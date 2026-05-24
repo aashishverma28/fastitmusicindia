@@ -11,18 +11,17 @@ import {
   Music, 
   UserPlus, 
   Trash2, 
-  Verified, 
-  Check,
+  Loader2,
   X,
+  Check,
   Upload,
   Instagram,
-  Youtube,
-  Twitter,
-  Loader2
+  Youtube
 } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { uploadFile } from "@/lib/supabase";
 import { Disc } from "lucide-react";
+import { ScribbleUnderline, ScribbleUnderlineDouble, CurlyArrow, BadgeStamp } from "@/components/shared/Doodles";
 
 export default function ArtistsPage() {
   const { data: session } = useSession();
@@ -156,14 +155,27 @@ export default function ArtistsPage() {
   };
 
   return (
-    <div className="min-h-screen pt-24 pb-20 px-8 relative overflow-hidden">
+    <div className="min-h-screen pt-24 pb-20 px-8 relative overflow-visible">
       {/* Background Decor */}
       <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-secondary/5 rounded-full blur-[100px] -z-10"></div>
       <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-primary/5 rounded-full blur-[100px] -z-10"></div>
 
-      <div className="max-w-7xl mx-auto">
+      <div className="max-w-7xl mx-auto relative">
+        {/* Stamp badge */}
+        <div className="absolute top-10 right-20 hidden lg:block z-20">
+          <BadgeStamp text="Fierce Talents" type="yellow" />
+        </div>
+
         {/* Header Section */}
-        <div className="flex flex-col md:flex-row justify-between items-end gap-8 mb-16">
+        <div className="flex flex-col md:flex-row justify-between items-end gap-8 mb-20 relative">
+          {/* Annotation doodle */}
+          <div className="absolute top-[-50px] left-[200px] hidden md:block">
+            <CurlyArrow direction="left" className="w-14 h-14 text-secondary rotate-12" />
+            <span className="absolute -left-32 top-8 font-handwriting text-secondary text-xl w-32 leading-none">
+              Meet our creators!
+            </span>
+          </div>
+
           <div className="space-y-4">
             <motion.div 
               initial={{ opacity: 0, x: -20 }}
@@ -175,16 +187,16 @@ export default function ArtistsPage() {
             <motion.h1 
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
-              className="text-5xl md:text-7xl font-black font-display text-white tracking-tighter"
+              className="text-5xl md:text-7xl font-black font-display text-white tracking-tighter leading-none"
             >
-              The <span className="gradient-text">Artists</span>
+              The <span className="relative inline-block pr-1">Artists.<ScribbleUnderlineDouble color="#ff88b6" /></span>
             </motion.h1>
-            <p className="text-white/60 text-lg max-w-xl font-sans">
-              Meet the creators who are defining the next era of Indian independent music. Distributed and powered by Fastit.
+            <p className="text-white/60 text-lg max-w-xl font-sans font-medium">
+              Meet the independent creators defining the next wave of Indian music. Distributed and supported by Fastit.
             </p>
           </div>
 
-          <div className="flex flex-col items-end gap-4 w-full md:w-auto">
+          <div className="flex flex-col items-end gap-4 w-full md:w-auto z-20 relative">
             {isAdminOrStaff && (
               <button 
                 onClick={() => setIsModalOpen(true)}
@@ -203,7 +215,7 @@ export default function ArtistsPage() {
                 <input 
                   type="text" 
                   placeholder="Search artists..."
-                  className="w-full sm:w-[300px] bg-surface-container/50 border border-white/5 rounded-full py-3 pl-12 pr-4 text-white focus:border-secondary/50 outline-none transition-all font-sans"
+                  className="w-full sm:w-[280px] bg-surface-container/50 border border-white/5 rounded-full py-3 pl-12 pr-4 text-white focus:border-secondary/50 outline-none transition-all font-sans text-sm font-medium"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                 />
@@ -211,18 +223,18 @@ export default function ArtistsPage() {
               <div className="flex items-center gap-2 bg-surface-container/50 border border-white/5 rounded-full px-4 py-2">
                 <Filter className="w-4 h-4 text-white/30" />
                 <select 
-                  className="bg-transparent text-white text-sm font-bold outline-none cursor-pointer pr-4"
+                  className="bg-transparent text-white text-xs font-bold outline-none cursor-pointer pr-4"
                   value={selectedGenre}
                   onChange={(e) => setSelectedGenre(e.target.value)}
                 >
-                  {genres.map(g => <option key={g} value={g} className="bg-[#0e0e0e]">{g}</option>)}
+                  {genres.map(g => <option key={g} value={g} className="bg-[#0b0b0c]">{g}</option>)}
                 </select>
               </div>
             </motion.div>
           </div>
         </div>
 
-        {/* Artists Grid */}
+        {/* Artists Grid (styled as scrapbook polaroids) */}
         {isLoading ? (
           <div className="py-40 flex flex-col items-center justify-center gap-4">
             <Loader2 className="w-12 h-12 text-secondary animate-spin" />
@@ -233,76 +245,78 @@ export default function ArtistsPage() {
             variants={containerVariants}
             initial="hidden"
             animate="visible"
-            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-12"
+            className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-12 lg:gap-14"
           >
-            {filteredArtists.map((artist: any) => (
-              <motion.div 
-                key={artist.id}
-                variants={itemVariants}
-                className="group"
-              >
-                <div className="relative aspect-square rounded-[40px] overflow-hidden mb-6 bg-surface-container-highest shadow-2xl">
+            {filteredArtists.map((artist: any, idx: number) => {
+              const tiltClass = idx % 2 === 0 ? "-rotate-1.5" : "rotate-1.5";
+              return (
+                <motion.div 
+                  key={artist.id}
+                  variants={itemVariants}
+                  className="flex flex-col items-center group relative"
+                >
                   {isAdminOrStaff && (
                     <button 
                       onClick={(e) => handleRemoveArtist(e, artist.id)}
-                      className="absolute top-0 right-0 z-20 p-3 bg-red-500/10 border border-red-500/20 text-red-500 rounded-full hover:bg-red-500 hover:text-white transition-all shadow-xl backdrop-blur-md opacity-0 group-hover:opacity-100"
+                      className="absolute -top-3 right-4 z-40 p-2 bg-red-600 border border-red-700 text-white rounded-xl hover:bg-red-700 transition-all shadow-xl opacity-0 group-hover:opacity-100"
                       title="Remove Artist"
                     >
-                      <Trash2 className="w-5 h-5" />
+                      <Trash2 className="w-4.5 h-4.5" />
                     </button>
                   )}
-                  
-                  <Link href={`/artists/${artist.slug}`} className="block w-full h-full">
-                    <Image 
-                      src={artist.avatar} 
-                      alt={artist.name} 
-                      fill 
-                      className="object-cover group-hover:scale-110 transition-transform duration-700 grayscale group-hover:grayscale-0" 
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent opacity-60 group-hover:opacity-40 transition-opacity"></div>
-                    <div className="absolute bottom-6 left-6 right-6 flex justify-between items-end">
-                      <div className="space-y-1">
-                        <div className="flex items-center gap-2">
-                           <h3 className="text-2xl font-black font-display text-white tracking-tight">{artist.name}</h3>
-                           {artist.isVerified && <Verified className="w-4 h-4 text-secondary fill-current" />}
-                        </div>
-                        <p className="text-white/60 text-xs font-bold uppercase tracking-widest">{artist.genre}</p>
-                      </div>
-                    </div>
-                  </Link>
-                </div>
 
-                <div className="flex justify-between items-center px-4">
-                  <div className="flex items-center gap-2">
-                    <Users className="w-4 h-4 text-white/20" />
-                    <span className="text-white/40 text-sm font-mono">{artist.followers}</span>
+                  {/* Polaroid Photo Frame */}
+                  <div className={`polaroid-card w-full max-w-[280px] ${tiltClass}`}>
+                    <Link href={`/artists/${artist.slug}`} className="block">
+                      <div className="relative aspect-square w-full rounded bg-zinc-800 border border-black/10 overflow-hidden mb-4">
+                        <Image 
+                          src={artist.avatar || "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=800&q=80"} 
+                          alt={artist.name} 
+                          fill 
+                          className="object-cover transition-transform duration-700 hover:scale-105 grayscale group-hover:grayscale-0" 
+                        />
+                      </div>
+                    </Link>
+                    <div className="flex items-center justify-between px-1">
+                      <Link href={`/artists/${artist.slug}`} className="block truncate max-w-[170px]">
+                        <span className="font-handwriting text-zinc-800 text-2.5xl leading-none truncate block">
+                          {artist.name}
+                        </span>
+                      </Link>
+                      <span className="text-[9px] font-black uppercase tracking-wider text-zinc-500 shrink-0">
+                        {artist.genre.split(" / ")[0]}
+                      </span>
+                    </div>
                   </div>
-                  <div className="flex gap-3">
-                    {artist.instagramUrl && (
-                      <a href={artist.instagramUrl} target="_blank" rel="noopener noreferrer" className="w-8 h-8 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white/40 hover:text-secondary hover:border-secondary/50 transition-all">
-                        <Instagram className="w-4 h-4" />
-                      </a>
-                    )}
-                    {artist.spotifyUrl && (
-                      <a href={artist.spotifyUrl} target="_blank" rel="noopener noreferrer" className="w-8 h-8 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white/40 hover:text-[#1DB954] hover:border-[#1DB954]/50 transition-all">
-                        <Disc className="w-4 h-4" />
-                      </a>
-                    )}
-                    {artist.youtubeUrl && (
-                      <a href={artist.youtubeUrl} target="_blank" rel="noopener noreferrer" className="w-8 h-8 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white/40 hover:text-[#FF0000] hover:border-[#FF0000]/50 transition-all">
-                        <Youtube className="w-4 h-4" />
-                      </a>
-                    )}
+
+                  {/* Polaroid Footer/Indicators */}
+                  <div className="flex justify-between items-center w-full max-w-[280px] px-3 mt-4 group-hover:-translate-y-1 transition-transform">
+                    <div className="flex items-center gap-1.5">
+                      <Users className="w-3.5 h-3.5 text-white/25" />
+                      <span className="text-white/45 text-xs font-mono">{artist.followers} fans</span>
+                    </div>
+                    <div className="flex gap-2">
+                      {artist.instagramUrl && (
+                        <a href={artist.instagramUrl} target="_blank" rel="noopener noreferrer" className="w-7 h-7 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white/40 hover:text-secondary hover:border-secondary/50 transition-all">
+                          <Instagram className="w-3.5 h-3.5" />
+                        </a>
+                      )}
+                      {artist.spotifyUrl && (
+                        <a href={artist.spotifyUrl} target="_blank" rel="noopener noreferrer" className="w-7 h-7 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white/40 hover:text-primary hover:border-primary/50 transition-all">
+                          <Disc className="w-3.5 h-3.5 animate-spin-slow" />
+                        </a>
+                      )}
+                    </div>
+                    <Link 
+                      href={`/artists/${artist.slug}`}
+                      className="w-7 h-7 rounded-full border border-white/10 flex items-center justify-center text-white/40 hover:text-secondary hover:border-secondary/50 transition-all"
+                    >
+                      <Music className="w-3.5 h-3.5" />
+                    </Link>
                   </div>
-                  <Link 
-                    href={`/artists/${artist.slug}`}
-                    className="w-10 h-10 rounded-full border border-white/5 flex items-center justify-center text-white/20 hover:text-secondary hover:border-secondary/50 transition-all"
-                  >
-                    <Music className="w-4 h-4" />
-                  </Link>
-                </div>
-              </motion.div>
-            ))}
+                </motion.div>
+              );
+            })}
           </motion.div>
         ) : (
           <div className="py-40 text-center space-y-4">
@@ -326,13 +340,13 @@ export default function ArtistsPage() {
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 onClick={() => setIsModalOpen(false)}
-                className="absolute inset-0 bg-black/80 backdrop-blur-sm"
+                className="absolute inset-0 bg-black/85 backdrop-blur-sm"
               />
               <motion.div 
                 initial={{ opacity: 0, scale: 0.9, y: 20 }}
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.9, y: 20 }}
-                className="relative w-full max-w-md bg-surface-container p-8 rounded-[32px] border border-white/10 shadow-2xl"
+                className="relative w-full max-w-md bg-surface-container p-8 rounded-[32px] border border-white/10 shadow-2xl z-10"
               >
                 <div className="flex justify-between items-center mb-8">
                   <h2 className="text-2xl font-black font-display text-white">Add <span className="text-secondary">Manual</span> Artist</h2>
@@ -451,32 +465,6 @@ export default function ArtistsPage() {
                           onChange={(e) => setFormData({...formData, spotifyUrl: e.target.value})}
                         />
                       </div>
-                      <div className="space-y-2">
-                        <div className="flex items-center gap-2 ml-2">
-                          <Youtube className="w-3 h-3 text-white/20" />
-                          <label className="text-[10px] font-black uppercase tracking-widest text-white/40">YouTube</label>
-                        </div>
-                        <input 
-                          type="url" 
-                          placeholder="Link"
-                          className="w-full bg-white/5 border border-white/10 rounded-2xl py-3 px-4 text-white focus:border-secondary outline-none transition-all font-sans text-xs"
-                          value={formData.youtubeUrl}
-                          onChange={(e) => setFormData({...formData, youtubeUrl: e.target.value})}
-                        />
-                      </div>
-                      <div className="space-y-2">
-                        <div className="flex items-center gap-2 ml-2">
-                          <Twitter className="w-3 h-3 text-white/20" />
-                          <label className="text-[10px] font-black uppercase tracking-widest text-white/40">Twitter</label>
-                        </div>
-                        <input 
-                          type="url" 
-                          placeholder="Link"
-                          className="w-full bg-white/5 border border-white/10 rounded-2xl py-3 px-4 text-white focus:border-secondary outline-none transition-all font-sans text-xs"
-                          value={formData.twitterUrl}
-                          onChange={(e) => setFormData({...formData, twitterUrl: e.target.value})}
-                        />
-                      </div>
                     </div>
                   </div>
 
@@ -484,7 +472,7 @@ export default function ArtistsPage() {
                     <label className="text-[10px] font-black uppercase tracking-widest text-white/40 ml-2">Custom Slug (Optional)</label>
                     <input 
                       type="text" 
-                      placeholder="artist-name"
+                      placeholder="artist-slug"
                       className="w-full bg-white/5 border border-white/10 rounded-2xl py-4 px-6 text-white focus:border-secondary outline-none transition-all font-sans"
                       value={formData.slug}
                       onChange={(e) => setFormData({...formData, slug: e.target.value})}
@@ -515,18 +503,17 @@ export default function ArtistsPage() {
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
-          className="mt-32 p-12 glass rounded-[40px] border border-white/10 relative overflow-hidden text-center md:text-left"
+          className="mt-32 p-12 glass rounded-[36px] border border-white/10 relative overflow-hidden text-center md:text-left"
         >
            <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-8">
               <div className="space-y-2">
-                <h2 className="text-3xl font-display font-black text-white">Join the <span className="gradient-text">Movement.</span></h2>
-                <p className="text-white/50 max-w-sm">Ready to take your music career to the next level? Join thousands of independent artists on Fastit.</p>
+                <h2 className="text-3xl font-display font-black text-white">Join the <span className="relative inline-block pr-1">Movement.<ScribbleUnderline color="#ffd709" /></span></h2>
+                <p className="text-white/50 max-w-sm font-sans font-medium text-sm">Ready to release your music globally? Join thousands of independent creators on Fastit.</p>
               </div>
-              <Link href="/apply" className="btn-gradient px-12 py-4 rounded-full font-black text-xs tracking-widest uppercase hover:scale-105 transition-all">
+              <Link href="/apply" className="btn-gradient px-12 py-4.5 rounded-2xl font-black text-xs tracking-widest uppercase hover:scale-105 transition-all">
                 Submit Your Music
               </Link>
            </div>
-           {/* Background Circles */}
            <div className="absolute top-[-50%] right-[-10%] w-[300px] h-[300px] bg-secondary/10 rounded-full blur-[80px]"></div>
         </motion.div>
       </div>

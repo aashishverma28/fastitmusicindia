@@ -43,7 +43,10 @@ export default function Navbar() {
             </Link>
           </div>
         </div>
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-6 relative">
+          <div className="hidden lg:block absolute left-[-100px] top-[32px] rotate-[-6deg] select-none pointer-events-none">
+            <span className="font-handwriting text-secondary text-lg">* 90% payout</span>
+          </div>
           <Link 
             href="/apply" 
             className="btn-gradient px-6 py-2 rounded-full font-bold hover:scale-105 transition-all active:scale-95 duration-300"

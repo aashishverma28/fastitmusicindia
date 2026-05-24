@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Epilogue, Manrope } from "next/font/google";
+import { Epilogue, Manrope, Caveat } from "next/font/google";
 import "./globals.css";
 
 const epilogue = Epilogue({
@@ -10,6 +10,12 @@ const epilogue = Epilogue({
 const manrope = Manrope({
   variable: "--font-manrope",
   subsets: ["latin"],
+});
+
+const caveat = Caveat({
+  variable: "--font-caveat",
+  subsets: ["latin"],
+  weight: ["400", "700"],
 });
 
 export const metadata: Metadata = {
@@ -32,9 +38,10 @@ export default function RootLayout({
     <html
       lang="en"
       suppressHydrationWarning
-      className={`${epilogue.variable} ${manrope.variable} h-full antialiased`}
+      className={`${epilogue.variable} ${manrope.variable} ${caveat.variable} h-full antialiased`}
     >
-      <body suppressHydrationWarning className="min-h-full flex flex-col bg-background text-foreground">
+      <body suppressHydrationWarning className="min-h-full flex flex-col bg-background text-foreground relative">
+        <div className="noise-bg" />
         <AuthProvider>
           <Navbar />
           <main className="flex-grow">
