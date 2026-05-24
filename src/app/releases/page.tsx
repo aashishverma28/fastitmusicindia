@@ -182,7 +182,7 @@ export default function ReleasesPage() {
         {/* Header Section */}
         <div className="flex flex-col md:flex-row justify-between items-end gap-8 mb-20 relative">
           {/* Annotation sketch note */}
-          <div className="absolute top-[-50px] left-[220px] hidden md:block">
+          <div className="absolute top-[-50px] left-[340px] hidden md:block">
             <CurlyArrow direction="left" className="w-14 h-14 text-secondary rotate-12" />
             <span className="absolute -left-32 top-8 font-handwriting text-secondary text-xl w-32 leading-none">
               Explore the library!
