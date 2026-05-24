@@ -14,8 +14,7 @@ export default function Home() {
   const { theme } = useTheme();
   const [realReleases, setRealReleases] = React.useState<any[]>([]);
   const [isLoading, setIsLoading] = React.useState(true);
-  const { currentTrack, isPlaying, setTrack, togglePlay, volume, setVolume } = useAudioStore();
-  const [consoleTrackIndex, setConsoleTrackIndex] = React.useState(0);
+  const { setTrack } = useAudioStore();
 
   const consoleTracks = [
     { 
@@ -40,38 +39,6 @@ export default function Home() {
       url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3" 
     }
   ];
-
-  const activeConsoleTrack = consoleTracks[consoleTrackIndex];
-  const isConsolePlaying = currentTrack?.id === activeConsoleTrack.id && isPlaying;
-
-  const handleToggleConsolePlay = () => {
-    if (currentTrack?.id === activeConsoleTrack.id) {
-      togglePlay();
-    } else {
-      setTrack({
-        id: activeConsoleTrack.id,
-        title: activeConsoleTrack.title,
-        artist: activeConsoleTrack.artist,
-        cover: activeConsoleTrack.cover,
-        url: activeConsoleTrack.url
-      });
-    }
-  };
-
-  const handleNextConsoleTrack = () => {
-    const nextIdx = (consoleTrackIndex + 1) % consoleTracks.length;
-    setConsoleTrackIndex(nextIdx);
-    if (isPlaying) {
-      const nextTrack = consoleTracks[nextIdx];
-      setTrack({
-        id: nextTrack.id,
-        title: nextTrack.title,
-        artist: nextTrack.artist,
-        cover: nextTrack.cover,
-        url: nextTrack.url
-      });
-    }
-  };
 
   React.useEffect(() => {
     const fetchReleases = async () => {
@@ -223,199 +190,192 @@ export default function Home() {
             </motion.div>
           </motion.div>
 
-          {/* Neubrutalist Turntable Console */}
+          {/* Tactile Record Crate Stack */}
           <motion.div 
-            initial={{ opacity: 0, scale: 0.95, rotate: 2 }}
-            animate={{ opacity: 1, scale: 1, rotate: -0.5 }}
+            initial={{ opacity: 0, x: 50 }}
+            animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, ease: "easeOut" }}
-            className="lg:col-span-5 relative w-full max-w-[460px] mx-auto lg:max-w-none z-10"
+            className="lg:col-span-5 relative w-full h-[450px] flex items-center justify-center select-none z-10"
           >
-            {/* 3D shadows under console */}
-            <div className="absolute top-3 left-3 w-full h-full bg-[#00b0fc] border-3 border-black -z-10" />
-            <div className="absolute top-6 left-6 w-full h-full bg-[#f00a88] border-3 border-black -z-20" />
+            {/* Background dashed border card */}
+            <div className="absolute inset-0 bg-black/5 border-2 border-dashed border-foreground/10 rounded-3xl -z-10" />
+
+            {/* Draggable Stickers */}
+            <motion.div 
+              drag
+              dragConstraints={{ left: -100, right: 100, top: -100, bottom: 100 }}
+              className="absolute -top-10 -left-6 z-30 cursor-grab active:cursor-grabbing"
+            >
+              <div className="tape-badge tape-badge-pink rotate-[-12deg] text-xs font-black shadow-md border-2 border-white select-none">
+                100% INDIE ★
+              </div>
+            </motion.div>
             
-            {/* Main Console Box */}
-            <div className="relative border-3 border-foreground bg-[#111113] p-6 text-white flex flex-col gap-6">
+            <motion.div 
+              drag
+              dragConstraints={{ left: -100, right: 100, top: -100, bottom: 100 }}
+              className="absolute bottom-6 -right-6 z-30 cursor-grab active:cursor-grabbing"
+            >
+              <div className="bg-[#00b0fc] text-black border-2 border-white px-3 py-1.5 font-bold text-xs uppercase tracking-widest shadow-[3px_3px_0px_0px_#000] rotate-12 select-none">
+                NO SUBSCRIPTION
+              </div>
+            </motion.div>
+
+            {/* Stack container */}
+            <div className="relative w-[320px] h-[320px]">
               
-              {/* Console Header Bar */}
-              <div className="flex justify-between items-center border-b-2 border-white/10 pb-4">
-                <div className="flex items-center gap-2">
-                  {/* Glowing LED status light */}
-                  <span className={`w-3.5 h-3.5 rounded-full border border-white/20 transition-all ${isConsolePlaying ? 'bg-green-500 animate-pulse shadow-[0_0_8px_#22c55e]' : 'bg-red-600'}`} />
-                  <span className="text-[10px] font-black uppercase tracking-widest text-white/40">FAST-DECK // INDIE PLAYER</span>
-                </div>
-                <div className="flex gap-1.5">
-                  <div className="w-2 h-2 rounded-full bg-white/20" />
-                  <div className="w-2 h-2 rounded-full bg-white/20" />
-                  <div className="w-2 h-2 rounded-full bg-white/20" />
-                </div>
-              </div>
-
-              {/* Main Deck Grid: Platter and Controls */}
-              <div className="grid grid-cols-12 gap-6 items-center">
-                {/* Platter & Vinyl (Col-span 8) */}
-                <div className="col-span-8 relative aspect-square flex items-center justify-center bg-black/40 border-2 border-white/10 rounded-full p-2 overflow-hidden group">
-                  {/* Turntable Platter Outer Ring */}
-                  <div className="absolute inset-0 border border-white/5 rounded-full" />
-                  
-                  {/* Spinning Vinyl Disc */}
-                  <div 
-                    className={`relative w-full h-full rounded-full bg-gradient-to-r from-[#18181b] via-[#09090b] to-[#18181b] border-2 border-white/20 flex items-center justify-center shadow-2xl transition-transform ${isConsolePlaying ? 'animate-spin' : ''}`}
-                    style={{ 
-                      animationDuration: '4.8s',
-                      animationTimingFunction: 'linear',
-                      animationIterationCount: 'infinite'
-                    }}
-                  >
-                    {/* Vinyl Grooves (SVG concentric circles) */}
-                    <svg viewBox="0 0 100 100" className="absolute inset-0 w-full h-full pointer-events-none opacity-20">
-                      <circle cx="50" cy="50" r="45" stroke="currentColor" strokeWidth="0.5" fill="none" strokeDasharray="3 3" />
-                      <circle cx="50" cy="50" r="38" stroke="currentColor" strokeWidth="0.5" fill="none" />
-                      <circle cx="50" cy="50" r="30" stroke="currentColor" strokeWidth="0.5" fill="none" strokeDasharray="5 2" />
-                      <circle cx="50" cy="50" r="22" stroke="currentColor" strokeWidth="0.5" fill="none" />
-                    </svg>
-
-                    {/* Album Art Label in the Center */}
-                    <div className="relative w-[34%] h-[34%] rounded-full overflow-hidden border-2 border-[#111] bg-[#ffc301] shadow-md flex items-center justify-center">
-                      <Image 
-                        src={activeConsoleTrack.cover} 
-                        alt={activeConsoleTrack.title}
-                        fill
-                        className="object-cover animate-spin-slow"
-                      />
-                      <div className="absolute inset-0 bg-black/10" />
-                      {/* Center Spindle Hole */}
-                      <div className="w-3.5 h-3.5 bg-black border border-white/40 rounded-full z-10" />
-                    </div>
-                  </div>
-
-                  {/* Tonearm/Stylus Arm overlaid on Platter */}
-                  <div 
-                    className="absolute top-1 right-8 w-16 h-28 pointer-events-none z-10"
-                    style={{
-                      transform: isConsolePlaying ? "rotate(18deg) translateX(-2px) translateY(4px)" : "rotate(-10deg)",
-                      transformOrigin: "top right",
-                      transition: "transform 0.8s cubic-bezier(0.25, 1, 0.5, 1)"
-                    }}
-                  >
-                    <svg viewBox="0 0 60 120" className="w-full h-full drop-shadow-[0_4px_6px_rgba(0,0,0,0.5)]">
-                      {/* Tonearm Base */}
-                      <circle cx="45" cy="15" r="10" fill="#27272a" stroke="#fff" strokeWidth="1" />
-                      <circle cx="45" cy="15" r="4" fill="#a1a1aa" />
-                      {/* Metal Arm */}
-                      <path d="M45,15 Q30,50 35,90 L22,105" fill="none" stroke="#e4e4e7" strokeWidth="3.5" strokeLinecap="round" />
-                      {/* Cartridge/Stylus head */}
-                      <rect x="15" y="100" width="10" height="15" fill="#f00a88" rx="1" transform="rotate(25 20 105)" />
-                    </svg>
-                  </div>
-                </div>
-
-                {/* Vertical Pitch Fader / Volume Control (Col-span 4) */}
-                <div className="col-span-4 flex flex-col items-center gap-3">
-                  <span className="text-[9px] font-black text-white/30 tracking-wider">VOL. GAIN</span>
-                  
-                  {/* Neubrutalist Vertical Slider Track */}
-                  <div className="relative w-4 h-36 bg-black border-2 border-white/20 rounded-none flex items-center justify-center">
-                    {/* Tick Marks */}
-                    <div className="absolute left-[-8px] h-full flex flex-col justify-between py-1 text-[8px] font-bold text-white/20 select-none">
-                      <span>+10</span>
-                      <span>0</span>
-                      <span>-10</span>
-                    </div>
-
-                    {/* Sliding knob (draggable / clickable) */}
-                    <input 
-                      type="range"
-                      min="0"
-                      max="1"
-                      step="0.05"
-                      value={volume}
-                      onChange={(e) => setVolume(parseFloat(e.target.value))}
-                      className="absolute inset-0 w-full h-full opacity-0 cursor-row-resize"
-                      style={{ writingMode: "bt-lr", WebkitAppearance: "slider-vertical" } as any}
-                    />
-
-                    {/* Visible knob representing volume */}
-                    <div 
-                      className="w-8 h-4 bg-[#ffc301] border-2 border-black shadow-[2px_2px_0px_0px_#f00a88] absolute left-[-8px] pointer-events-none transition-all duration-75 flex items-center justify-center text-[8px] font-black text-black"
-                      style={{ bottom: `${volume * 82}%` }}
-                    >
-                      <Volume2 className="w-3 h-3 stroke-[2.5]" />
-                    </div>
-                  </div>
-
-                  <span className="text-[10px] font-black text-white/60 tracking-wider">{Math.round(volume * 100)}%</span>
-                </div>
-              </div>
-
-              {/* Bouncing EQ Visualization Area */}
-              <div className="flex items-end gap-1 h-14 bg-black/60 border border-white/10 p-2.5 overflow-hidden">
-                {Array.from({ length: 22 }).map((_, idx) => (
-                  <motion.div
-                    key={idx}
-                    className="flex-1 w-1 bg-primary rounded-none"
-                    animate={isConsolePlaying ? {
-                      height: ["15%", "85%", "40%", "100%", "60%", "20%", "15%"]
-                    } : {
-                      height: "15%"
-                    }}
-                    transition={{
-                      duration: 0.8 + Math.random() * 0.6,
-                      repeat: Infinity,
-                      ease: "easeInOut",
-                      delay: idx * 0.04
-                    }}
-                    style={{
-                      backgroundColor: idx % 3 === 0 ? "#f00a88" : idx % 3 === 1 ? "#ffc301" : "#00b0fc"
-                    }}
+              {/* Record Item 1 (Back) */}
+              <motion.div 
+                whileHover={{ y: -20, rotate: -8, scale: 1.03 }}
+                className="absolute inset-0 z-10 transition-all duration-300"
+                style={{ transform: "rotate(-6deg) translate(-15px, -10px)" }}
+              >
+                {/* Vinyl sleeve */}
+                <div className="relative w-full h-full border-3 border-foreground shadow-[6px_6px_0px_0px_#00b0fc] bg-black overflow-hidden group">
+                  <Image 
+                    src={consoleTracks[2].cover} 
+                    alt={consoleTracks[2].title} 
+                    fill 
+                    className="object-cover opacity-80"
                   />
-                ))}
-              </div>
-
-              {/* Console Dashboard metadata and button controls */}
-              <div className="grid grid-cols-12 gap-4 items-center border-t-2 border-white/10 pt-4">
-                {/* Meta details (Col-span 7) */}
-                <div className="col-span-7 bg-black p-3 border border-white/10 overflow-hidden relative">
-                  <div className="absolute top-0 right-0 px-2 py-0.5 bg-[#f00a88] text-[7px] font-black uppercase text-white tracking-widest">
-                    NOW PLAYING
+                  {/* Backdrop shading */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/40 to-transparent" />
+                  
+                  {/* Genre badge */}
+                  <div className="absolute top-4 left-4 bg-[#00b0fc] border-2 border-black text-black px-2 py-0.5 text-[8px] font-black uppercase">
+                    HIP HOP / AMBIENT
                   </div>
-                  <p className="font-display font-black text-sm tracking-tight truncate text-white">
-                    {activeConsoleTrack.title}
-                  </p>
-                  <p className="text-[10px] font-black text-white/50 tracking-wide truncate">
-                    {activeConsoleTrack.artist}
-                  </p>
+
+                  {/* Album Info */}
+                  <div className="absolute bottom-4 left-4 right-4 text-white">
+                    <p className="font-display font-black text-sm truncate">{consoleTracks[2].title}</p>
+                    <p className="text-[10px] font-bold text-white/60 truncate">{consoleTracks[2].artist}</p>
+                  </div>
+                  
+                  {/* Play Button Overlay */}
+                  <button 
+                    onClick={(e) => { e.preventDefault(); setTrack(consoleTracks[2]); }}
+                    className="absolute right-4 bottom-4 w-9 h-9 bg-white hover:bg-[#00b0fc] text-black border-2 border-black flex items-center justify-center shadow-[2px_2px_0px_0px_#000] hover:scale-105 active:scale-95 transition-all"
+                  >
+                    <Play className="w-4 h-4 fill-current ml-0.5" />
+                  </button>
                 </div>
+              </motion.div>
 
-                {/* Control Action Buttons (Col-span 5) */}
-                <div className="col-span-5 flex gap-2 justify-end">
-                  {/* Play/Pause Button */}
-                  <button 
-                    onClick={handleToggleConsolePlay}
-                    className="w-12 h-12 flex items-center justify-center bg-[#ffc301] border-2 border-white text-black shadow-[3px_3px_0px_0px_#f00a88] active:translate-x-0.5 active:translate-y-0.5 active:shadow-[1px_1px_0px_0px_#f00a88] transition-all hover:bg-white"
-                  >
-                    {isConsolePlaying ? (
-                      <Pause className="w-5 h-5 fill-current stroke-[2.5]" />
-                    ) : (
-                      <Play className="w-5 h-5 fill-current ml-0.5 stroke-[2.5]" />
-                    )}
-                  </button>
+              {/* Record Item 2 (Middle) */}
+              <motion.div 
+                whileHover={{ y: -25, rotate: 6, scale: 1.03 }}
+                className="absolute inset-0 z-15 transition-all duration-300"
+                style={{ transform: "rotate(4deg) translate(15px, -5px)" }}
+              >
+                {/* Vinyl sleeve */}
+                <div className="relative w-full h-full border-3 border-foreground shadow-[6px_6px_0px_0px_#f00a88] bg-black overflow-hidden group">
+                  <Image 
+                    src={consoleTracks[1].cover} 
+                    alt={consoleTracks[1].title} 
+                    fill 
+                    className="object-cover opacity-85"
+                  />
+                  {/* Backdrop shading */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/40 to-transparent" />
+                  
+                  {/* Genre badge */}
+                  <div className="absolute top-4 left-4 bg-[#f00a88] border-2 border-black text-white px-2 py-0.5 text-[8px] font-black uppercase">
+                    ELECTRO FOLK
+                  </div>
 
-                  {/* Skip to Next Track */}
+                  {/* Album Info */}
+                  <div className="absolute bottom-4 left-4 right-4 text-white">
+                    <p className="font-display font-black text-sm truncate">{consoleTracks[1].title}</p>
+                    <p className="text-[10px] font-bold text-white/60 truncate">{consoleTracks[1].artist}</p>
+                  </div>
+
+                  {/* Play Button Overlay */}
                   <button 
-                    onClick={handleNextConsoleTrack}
-                    className="w-12 h-12 flex items-center justify-center bg-black border-2 border-white text-white shadow-[3px_3px_0px_0px_#00b0fc] active:translate-x-0.5 active:translate-y-0.5 active:shadow-[1px_1px_0px_0px_#00b0fc] transition-all hover:bg-[#1f2937]"
+                    onClick={(e) => { e.preventDefault(); setTrack(consoleTracks[1]); }}
+                    className="absolute right-4 bottom-4 w-9 h-9 bg-white hover:bg-[#f00a88] hover:text-white text-black border-2 border-black flex items-center justify-center shadow-[2px_2px_0px_0px_#000] hover:scale-105 active:scale-95 transition-all"
                   >
-                    <SkipForward className="w-5 h-5 stroke-[2.5]" />
+                    <Play className="w-4 h-4 fill-current ml-0.5" />
                   </button>
+                </div>
+              </motion.div>
+
+              {/* Record Item 3 (Front) - Tactile Slideout vinyl */}
+              <div 
+                className="absolute inset-0 z-20 transition-all duration-500 hover:z-25"
+                style={{ transform: "rotate(-1deg) translate(0px, 15px)" }}
+              >
+                {/* Vinyl container with record sliding out */}
+                <div className="relative w-full h-full group/sleeve">
+                  
+                  {/* Disc (sliding out on hover) */}
+                  <div 
+                    className="absolute top-4 left-4 w-[90%] h-[90%] rounded-full bg-[#18181b] border-2 border-white/10 -z-10 flex items-center justify-center transition-all duration-500 ease-out group-hover/sleeve:translate-x-[48%] group-hover/sleeve:rotate-[180deg]"
+                    style={{
+                      background: "repeating-radial-gradient(circle, #18181b, #18181b 2px, #0f0f11 3px, #27272a 4px)"
+                    }}
+                  >
+                    <div className="relative w-[32%] h-[32%] rounded-full bg-[#ffc301] border-2 border-[#111] overflow-hidden relative flex items-center justify-center">
+                      <Image 
+                        src={consoleTracks[0].cover} 
+                        alt="label" 
+                        fill 
+                        className="object-cover"
+                      />
+                      <div className="w-2.5 h-2.5 bg-black border border-white/20 rounded-full z-10" />
+                    </div>
+                  </div>
+
+                  {/* Sleeve */}
+                  <div className="w-full h-full border-3 border-foreground shadow-[6px_6px_0px_0px_#ffc301] bg-[#111113] overflow-hidden relative flex flex-col justify-between p-5">
+                    {/* Background album cover */}
+                    <div className="absolute inset-0 -z-10 opacity-70">
+                      <Image 
+                        src={consoleTracks[0].cover} 
+                        alt={consoleTracks[0].title} 
+                        fill 
+                        className="object-cover"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-[#111113] via-[#111113]/30 to-transparent" />
+                    </div>
+
+                    {/* Spine / Tape line */}
+                    <div className="absolute left-0 top-0 bottom-0 w-2.5 bg-black/40 border-r border-white/5" />
+
+                    {/* Header: Status Sticker */}
+                    <div className="flex justify-between items-start z-10">
+                      <div className="bg-[#ffc301] border-2 border-black text-black px-2 py-0.5 text-[8px] font-black uppercase">
+                        POP INDIE
+                      </div>
+                      <span className="text-[10px] font-black uppercase text-[#ffc301] tracking-widest animate-pulse">
+                        HOT RELEASE
+                      </span>
+                    </div>
+
+                    {/* Footer: Album Metadata & Play Action */}
+                    <div className="flex justify-between items-end z-10">
+                      <div className="text-white space-y-0.5 pr-2 truncate">
+                        <p className="font-display font-black text-base tracking-tight truncate leading-none mb-1">{consoleTracks[0].title}</p>
+                        <p className="text-[10px] font-bold text-white/60 truncate leading-none">{consoleTracks[0].artist}</p>
+                      </div>
+                      
+                      <button 
+                        onClick={(e) => { e.preventDefault(); setTrack(consoleTracks[0]); }}
+                        className="w-10 h-10 bg-[#ffc301] hover:bg-white text-black border-2 border-black flex items-center justify-center shadow-[2px_2px_0px_0px_#000] hover:scale-105 active:scale-95 transition-all flex-shrink-0"
+                      >
+                        <Play className="w-5 h-5 fill-current ml-0.5" />
+                      </button>
+                    </div>
+                  </div>
+
                 </div>
               </div>
 
             </div>
 
-            {/* Handwriting sticker labels */}
-            <div className="absolute -bottom-10 left-4 font-handwriting text-accent-blue text-2xl hidden sm:block rotate-2">
-              * Tap deck knobs to cue!
+            {/* Doodle annotation */}
+            <div className="absolute -bottom-10 right-4 font-handwriting text-accent-blue text-2xl hidden sm:block rotate-2">
+              * Hover sleeves to slide out vinyl!
             </div>
             
             {/* Doodle arrow pointing back to buttons */}
