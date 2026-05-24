@@ -56,15 +56,15 @@ export default function LabelDashboardLayout({
   ];
 
   return (
-    <div className="min-h-screen bg-[#070707] flex text-white font-sans">
+    <div className="min-h-screen bg-background flex text-foreground font-sans transition-colors duration-200">
       {/* Sidebar */}
       <aside 
         className={`${
           isSidebarOpen ? "w-64" : "w-18"
-        } border-r border-white/5 bg-black/40 backdrop-blur-xl transition-all duration-300 flex flex-col z-50`}
+        } border-r border-foreground/5 bg-foreground/[0.01] backdrop-blur-xl transition-all duration-300 flex flex-col z-50`}
       >
         <div className="p-6 flex items-center gap-3">
-          <div className="w-8 h-8 bg-secondary rounded-lg flex items-center justify-center font-black italic">l</div>
+          <div className="w-8 h-8 bg-secondary rounded-lg flex items-center justify-center font-black italic text-black">l</div>
           {isSidebarOpen && <span className="font-display font-black text-xl tracking-tighter">FASTIT <span className="text-secondary">LABEL</span></span>}
         </div>
 
@@ -73,22 +73,22 @@ export default function LabelDashboardLayout({
             <Link 
               key={item.name}
               href={item.href}
-              className="flex items-center gap-3 p-3 rounded-xl hover:bg-white/5 transition-all group"
+              className="flex items-center gap-3 p-3 rounded-xl hover:bg-foreground/5 transition-all group"
             >
-              <item.icon className="w-5 h-5 text-white/40 group-hover:text-secondary transition-colors" />
-              {isSidebarOpen && <span className="font-bold text-sm text-white/60 group-hover:text-white">{item.name}</span>}
+              <item.icon className="w-5 h-5 text-foreground/40 group-hover:text-secondary transition-colors" />
+              {isSidebarOpen && <span className="font-bold text-sm text-foreground/60 group-hover:text-white">{item.name}</span>}
             </Link>
           ))}
         </nav>
 
-        <div className="p-4 border-t border-white/5 space-y-2">
-           <Link href="/dashboard/label/settings" className="flex items-center gap-3 p-3 rounded-xl hover:bg-white/5 transition-all group">
-             <Settings className="w-5 h-5 text-white/40 group-hover:text-white" />
-             {isSidebarOpen && <span className="font-bold text-sm text-white/60 group-hover:text-white">Settings</span>}
+        <div className="p-4 border-t border-foreground/5 space-y-2">
+           <Link href="/dashboard/label/settings" className="flex items-center gap-3 p-3 rounded-xl hover:bg-foreground/5 transition-all group">
+             <Settings className="w-5 h-5 text-foreground/40 group-hover:text-foreground" />
+             {isSidebarOpen && <span className="font-bold text-sm text-foreground/60 group-hover:text-foreground">Settings</span>}
           </Link>
           <button className="flex items-center gap-3 p-3 w-full rounded-xl hover:bg-red-500/10 group transition-all">
-            <LogOut className="w-5 h-5 text-white/40 group-hover:text-red-500" />
-            {isSidebarOpen && <span className="font-bold text-sm text-white/60 group-hover:text-white">Logout</span>}
+            <LogOut className="w-5 h-5 text-foreground/40 group-hover:text-red-500" />
+            {isSidebarOpen && <span className="font-bold text-sm text-foreground/60 group-hover:text-foreground">Logout</span>}
           </button>
         </div>
       </aside>
@@ -96,16 +96,16 @@ export default function LabelDashboardLayout({
       {/* Main Content */}
       <main className="flex-grow flex flex-col h-screen overflow-hidden">
         {/* Header */}
-        <header className="h-16 border-b border-white/5 flex items-center justify-between px-8 bg-black/20 backdrop-blur-md">
+        <header className="h-16 border-b border-foreground/5 flex items-center justify-between px-8 bg-background/50 backdrop-blur-md">
            <div className="flex items-center gap-4">
-             <button onClick={() => setIsSidebarOpen(!isSidebarOpen)} className="p-2 hover:bg-white/5 rounded-lg text-white/40">
+             <button onClick={() => setIsSidebarOpen(!isSidebarOpen)} className="p-2 hover:bg-foreground/5 rounded-lg text-foreground/40">
                 <Menu className="w-5 h-5" />
              </button>
              <div className="hidden md:flex items-center gap-3">
                 <p className="text-[10px] font-black uppercase tracking-widest text-secondary bg-secondary/10 px-3 py-1 rounded-full border border-secondary/20">Label Suite</p>
-                <div className="h-4 w-px bg-white/10"></div>
+                <div className="h-4 w-px bg-foreground/10"></div>
                 <div className="flex items-center gap-3">
-                   <p className="text-[10px] font-black text-white/40 uppercase tracking-widest">
+                   <p className="text-[10px] font-black text-foreground/40 uppercase tracking-widest">
                      {artistCount !== null ? `${artistCount} Active ${artistCount === 1 ? 'Artist' : 'Artists'}` : 'Loading Roster...'}
                    </p>
                 </div>
@@ -116,10 +116,10 @@ export default function LabelDashboardLayout({
              <NotificationBell />
              <div className="flex items-center gap-3 group cursor-pointer">
                 <div className="text-right hidden sm:block">
-                   <p className="text-xs font-bold text-white group-hover:text-secondary transition-colors">{session.user.username || "Label Account"}</p>
-                   <p className="text-[10px] text-white/30 font-black uppercase tracking-widest">Verified Distribution</p>
+                   <p className="text-xs font-bold text-foreground group-hover:text-secondary transition-colors">{session.user.username || "Label Account"}</p>
+                   <p className="text-[10px] text-foreground/30 font-black uppercase tracking-widest">Verified Distribution</p>
                 </div>
-                <div className="w-10 h-10 rounded-full bg-surface border border-white/10 flex items-center justify-center font-black text-xs text-secondary group-hover:border-secondary/50 transition-all">
+                <div className="w-10 h-10 rounded-full bg-background border border-foreground/10 flex items-center justify-center font-black text-xs text-secondary group-hover:border-secondary/50 transition-all">
                    {session.user.username?.[0].toUpperCase() || "L"}
                 </div>
              </div>
