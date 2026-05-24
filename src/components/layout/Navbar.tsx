@@ -27,11 +27,10 @@ export default function Navbar() {
                 className="object-contain p-0.5"
               />
             </div>
-            <div className="hidden sm:flex flex-col leading-none select-none">
-              <span className="text-2xl font-black tracking-tighter font-display bg-gradient-to-r from-[#f00a88] to-[#00b0fc] bg-clip-text text-transparent uppercase">
-                Fastit
-              </span>
-              <span className="text-[9px] font-black tracking-[0.28em] text-[#ffc301] uppercase font-sans mt-0.5">
+            <div className="hidden sm:flex items-center gap-1 select-none">
+              <span className="logo-title-f text-3xl text-foreground">F</span>
+              <span className="logo-title-astit text-3xl -ml-0.5">astit</span>
+              <span className="logo-badge-music text-[9px] px-2 py-0.5 ml-1.5 inline-block">
                 Music India
               </span>
             </div>

@@ -65,11 +65,10 @@ export default function LoginPage() {
                   priority
                 />
               </div>
-              <div className="flex flex-col items-center leading-none select-none">
-                <span className="text-3xl font-black tracking-tighter font-display bg-gradient-to-r from-[#f00a88] to-[#00b0fc] bg-clip-text text-transparent uppercase">
-                  Fastit
-                </span>
-                <span className="text-[10px] font-black tracking-[0.28em] text-[#ffc301] uppercase font-sans mt-1">
+              <div className="flex items-center justify-center gap-1.5 select-none mb-6">
+                <span className="logo-title-f text-5xl text-foreground">F</span>
+                <span className="logo-title-astit text-5xl -ml-1">astit</span>
+                <span className="logo-badge-music text-[11px] px-2.5 py-1 ml-2 inline-block">
                   Music India
                 </span>
               </div>
