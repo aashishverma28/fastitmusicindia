@@ -65,12 +65,10 @@ export default function LoginPage() {
                   priority
                 />
               </div>
-              <div className="flex items-center justify-center gap-1.5 select-none mb-6">
-                <span className="logo-title-f text-5xl text-foreground">F</span>
-                <span className="logo-title-astit text-5xl -ml-1">astit</span>
-                <span className="logo-badge-music text-[11px] px-2.5 py-1 ml-2 inline-block">
-                  Music India
-                </span>
+              <div className="flex items-center justify-center gap-2 select-none font-display tracking-tighter mb-6">
+                <span className="text-4xl font-black text-foreground">Fastit</span>
+                <span className="text-3xl font-medium text-white/70">Music India</span>
+                <span className="text-primary font-black text-4xl -ml-1">.</span>
               </div>
             </Link>
             <h1 className="text-2xl font-display font-bold text-white mb-2">Welcome Back</h1>

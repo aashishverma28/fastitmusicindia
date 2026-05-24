@@ -27,12 +27,10 @@ export default function Navbar() {
                 className="object-contain p-0.5"
               />
             </div>
-            <div className="hidden sm:flex items-center gap-1 select-none">
-              <span className="logo-title-f text-3xl text-foreground">F</span>
-              <span className="logo-title-astit text-3xl -ml-0.5">astit</span>
-              <span className="logo-badge-music text-[9px] px-2 py-0.5 ml-1.5 inline-block">
-                Music India
-              </span>
+            <div className="hidden sm:flex items-center gap-1.5 select-none font-display tracking-tighter">
+              <span className="text-2xl font-black text-foreground">Fastit</span>
+              <span className="text-lg font-medium text-white/70">Music India</span>
+              <span className="text-primary font-black text-2xl -ml-0.5">.</span>
             </div>
           </Link>
           <div className="hidden md:flex items-center gap-6">
