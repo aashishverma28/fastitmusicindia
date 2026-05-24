@@ -15,8 +15,7 @@ import {
   X,
   Check,
   Upload,
-  Instagram,
-  Youtube
+  Instagram
 } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { uploadFile } from "@/lib/supabase";
@@ -146,11 +145,11 @@ export default function ArtistsPage() {
 
   const containerVariants = {
     hidden: { opacity: 0 },
-    visible: { opacity: 1, transition: { staggerChildren: 0.1 } }
+    visible: { opacity: 1, transition: { staggerChildren: 0.08 } }
   };
 
   const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
+    hidden: { opacity: 0, y: 15 },
     visible: { opacity: 1, y: 0 }
   };
 
@@ -163,7 +162,7 @@ export default function ArtistsPage() {
       <div className="max-w-7xl mx-auto relative">
         {/* Stamp badge */}
         <div className="absolute top-10 right-20 hidden lg:block z-20">
-          <BadgeStamp text="Fierce Talents" type="yellow" />
+          <BadgeStamp text="Fierce Talents" type="pink" />
         </div>
 
         {/* Header Section */}
@@ -180,7 +179,7 @@ export default function ArtistsPage() {
             <motion.div 
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
-              className="inline-block px-4 py-1 rounded-full bg-secondary/10 border border-secondary/20 text-secondary font-bold text-xs tracking-widest uppercase"
+              className="inline-block px-4 py-1.5 border-2 border-white text-secondary font-bold text-xs tracking-widest uppercase bg-black shadow-[3px_3px_0px_0px_#ffc301]"
             >
               Independent & Global
             </motion.div>
@@ -189,9 +188,9 @@ export default function ArtistsPage() {
               animate={{ opacity: 1, scale: 1 }}
               className="text-5xl md:text-7xl font-black font-display text-white tracking-tighter leading-none"
             >
-              The <span className="relative inline-block pr-1">Artists.<ScribbleUnderlineDouble color="#ff88b6" /></span>
+              The <span className="relative inline-block pr-1 text-primary">Artists.<ScribbleUnderlineDouble color="#00b0fc" /></span>
             </motion.h1>
-            <p className="text-white/60 text-lg max-w-xl font-sans font-medium">
+            <p className="text-white/70 text-lg max-w-xl font-sans font-semibold">
               Meet the independent creators defining the next wave of Indian music. Distributed and supported by Fastit.
             </p>
           </div>
@@ -200,7 +199,7 @@ export default function ArtistsPage() {
             {isAdminOrStaff && (
               <button 
                 onClick={() => setIsModalOpen(true)}
-                className="btn-gradient px-6 py-3 rounded-full flex items-center gap-2 font-black text-xs tracking-widest uppercase hover:scale-105 transition-all"
+                className="btn-neubrutalist px-6 py-3 rounded-none flex items-center gap-2 font-black text-xs tracking-widest uppercase hover:scale-105 transition-all shadow-md"
               >
                 <UserPlus className="w-4 h-4" /> Add Public Artist
               </button>
@@ -211,17 +210,17 @@ export default function ArtistsPage() {
               className="flex flex-col sm:flex-row gap-4 w-full"
             >
               <div className="relative">
-                <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-white/30" />
+                <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-white/40" />
                 <input 
                   type="text" 
                   placeholder="Search artists..."
-                  className="w-full sm:w-[280px] bg-surface-container/50 border border-white/5 rounded-full py-3 pl-12 pr-4 text-white focus:border-secondary/50 outline-none transition-all font-sans text-sm font-medium"
+                  className="w-full sm:w-[280px] bg-black border-2 border-white rounded-none py-3 pl-12 pr-4 text-white shadow-[3px_3px_0px_0px_#f00a88] outline-none transition-all font-sans text-sm font-semibold"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                 />
               </div>
-              <div className="flex items-center gap-2 bg-surface-container/50 border border-white/5 rounded-full px-4 py-2">
-                <Filter className="w-4 h-4 text-white/30" />
+              <div className="flex items-center gap-2 bg-black border-2 border-white rounded-none px-4 py-2 shadow-[3px_3px_0px_0px_#00b0fc]">
+                <Filter className="w-4 h-4 text-white/40" />
                 <select 
                   className="bg-transparent text-white text-xs font-bold outline-none cursor-pointer pr-4"
                   value={selectedGenre}
@@ -268,7 +267,7 @@ export default function ArtistsPage() {
                   {/* Polaroid Photo Frame */}
                   <div className={`polaroid-card w-full max-w-[280px] ${tiltClass}`}>
                     <Link href={`/artists/${artist.slug}`} className="block">
-                      <div className="relative aspect-square w-full rounded bg-zinc-800 border border-black/10 overflow-hidden mb-4">
+                      <div className="relative aspect-square w-full rounded-none bg-zinc-800 border-2 border-black/40 overflow-hidden mb-4">
                         <Image 
                           src={artist.avatar || "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=800&q=80"} 
                           alt={artist.name} 
@@ -279,7 +278,7 @@ export default function ArtistsPage() {
                     </Link>
                     <div className="flex items-center justify-between px-1">
                       <Link href={`/artists/${artist.slug}`} className="block truncate max-w-[170px]">
-                        <span className="font-handwriting text-zinc-800 text-2.5xl leading-none truncate block">
+                        <span className="font-handwriting text-zinc-900 text-2.5xl leading-none truncate block">
                           {artist.name}
                         </span>
                       </Link>
@@ -303,7 +302,7 @@ export default function ArtistsPage() {
                       )}
                       {artist.spotifyUrl && (
                         <a href={artist.spotifyUrl} target="_blank" rel="noopener noreferrer" className="w-7 h-7 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white/40 hover:text-primary hover:border-primary/50 transition-all">
-                          <Disc className="w-3.5 h-3.5 animate-spin-slow" />
+                          <Disc className="w-3.5 h-3.5" />
                         </a>
                       )}
                     </div>
@@ -331,7 +330,7 @@ export default function ArtistsPage() {
           </div>
         )}
 
-        {/* Add Artist Modal */}
+        {/* Add Artist Modal (Neubrutalist Pop style) */}
         <AnimatePresence>
           {isModalOpen && (
             <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
@@ -346,7 +345,7 @@ export default function ArtistsPage() {
                 initial={{ opacity: 0, scale: 0.9, y: 20 }}
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.9, y: 20 }}
-                className="relative w-full max-w-md bg-surface-container p-8 rounded-[32px] border border-white/10 shadow-2xl z-10"
+                className="relative w-full max-w-md bg-[#111113] p-8 rounded-none border-3 border-white shadow-[8px_8px_0px_0px_#ffc301] z-10"
               >
                 <div className="flex justify-between items-center mb-8">
                   <h2 className="text-2xl font-black font-display text-white">Add <span className="text-secondary">Manual</span> Artist</h2>
@@ -362,7 +361,7 @@ export default function ArtistsPage() {
                       type="text" 
                       required
                       placeholder="e.g. Aashish Verma"
-                      className="w-full bg-white/5 border border-white/10 rounded-2xl py-4 px-6 text-white focus:border-secondary outline-none transition-all font-sans"
+                      className="w-full bg-black border-2 border-white rounded-none py-4 px-6 text-white focus:border-secondary outline-none transition-all font-sans"
                       value={formData.name}
                       onChange={(e) => setFormData({...formData, name: e.target.value})}
                     />
@@ -372,7 +371,7 @@ export default function ArtistsPage() {
                     <div className="space-y-2">
                       <label className="text-[10px] font-black uppercase tracking-widest text-white/40 ml-2">Genre</label>
                       <select 
-                        className="w-full bg-white/5 border border-white/10 rounded-2xl py-4 px-6 text-white focus:border-secondary outline-none transition-all font-sans appearance-none"
+                        className="w-full bg-black border-2 border-white rounded-none py-4 px-6 text-white focus:border-secondary outline-none transition-all font-sans appearance-none"
                         value={formData.genre}
                         onChange={(e) => setFormData({...formData, genre: e.target.value})}
                       >
@@ -384,7 +383,7 @@ export default function ArtistsPage() {
                       <input 
                         type="text" 
                         placeholder="1.2M+"
-                        className="w-full bg-white/5 border border-white/10 rounded-2xl py-4 px-6 text-white focus:border-secondary outline-none transition-all font-sans"
+                        className="w-full bg-black border-2 border-white rounded-none py-4 px-6 text-white focus:border-secondary outline-none transition-all font-sans"
                         value={formData.followers}
                         onChange={(e) => setFormData({...formData, followers: e.target.value})}
                       />
@@ -394,7 +393,7 @@ export default function ArtistsPage() {
                   <div className="space-y-4">
                     <label className="text-[10px] font-black uppercase tracking-widest text-white/40 ml-2">Artist Avatar</label>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <div className="relative group aspect-square bg-white/5 rounded-2xl border border-white/10 overflow-hidden flex flex-col items-center justify-center p-4">
+                      <div className="relative group aspect-square bg-black border-2 border-white rounded-none overflow-hidden flex flex-col items-center justify-center p-4">
                         {formData.avatar ? (
                           <>
                             <img src={formData.avatar} className="absolute inset-0 w-full h-full object-cover opacity-50" alt="Preview" />
@@ -428,7 +427,7 @@ export default function ArtistsPage() {
                         <input 
                           type="url" 
                           placeholder="https://..."
-                          className="w-full bg-white/5 border border-white/10 rounded-2xl py-4 px-6 text-white focus:border-secondary outline-none transition-all font-sans text-xs"
+                          className="w-full bg-black border-2 border-white rounded-none py-4 px-6 text-white focus:border-secondary outline-none transition-all font-sans text-xs"
                           value={formData.avatar}
                           onChange={(e) => setFormData({...formData, avatar: e.target.value})}
                         />
@@ -447,7 +446,7 @@ export default function ArtistsPage() {
                         <input 
                           type="url" 
                           placeholder="Link"
-                          className="w-full bg-white/5 border border-white/10 rounded-2xl py-3 px-4 text-white focus:border-secondary outline-none transition-all font-sans text-xs"
+                          className="w-full bg-black border-2 border-white rounded-none py-3 px-4 text-white focus:border-secondary outline-none transition-all font-sans text-xs"
                           value={formData.instagramUrl}
                           onChange={(e) => setFormData({...formData, instagramUrl: e.target.value})}
                         />
@@ -460,7 +459,7 @@ export default function ArtistsPage() {
                         <input 
                           type="url" 
                           placeholder="Link"
-                          className="w-full bg-white/5 border border-white/10 rounded-2xl py-3 px-4 text-white focus:border-secondary outline-none transition-all font-sans text-xs"
+                          className="w-full bg-black border-2 border-white rounded-none py-3 px-4 text-white focus:border-secondary outline-none transition-all font-sans text-xs"
                           value={formData.spotifyUrl}
                           onChange={(e) => setFormData({...formData, spotifyUrl: e.target.value})}
                         />
@@ -473,7 +472,7 @@ export default function ArtistsPage() {
                     <input 
                       type="text" 
                       placeholder="artist-slug"
-                      className="w-full bg-white/5 border border-white/10 rounded-2xl py-4 px-6 text-white focus:border-secondary outline-none transition-all font-sans"
+                      className="w-full bg-black border-2 border-white rounded-none py-4 px-6 text-white focus:border-secondary outline-none transition-all font-sans"
                       value={formData.slug}
                       onChange={(e) => setFormData({...formData, slug: e.target.value})}
                     />
@@ -482,7 +481,7 @@ export default function ArtistsPage() {
                   <button 
                     type="submit" 
                     disabled={isSubmitting || isUploadingAvatar}
-                    className="w-full btn-gradient py-5 rounded-2xl font-black font-display text-sm tracking-widest uppercase flex items-center justify-center gap-2 disabled:opacity-50"
+                    className="w-full btn-neubrutalist py-5 rounded-none font-black font-display text-sm tracking-widest uppercase flex items-center justify-center gap-2 disabled:opacity-50"
                   >
                     {isSubmitting ? (
                       <Loader2 className="w-5 h-5 animate-spin" />
@@ -503,14 +502,14 @@ export default function ArtistsPage() {
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
-          className="mt-32 p-12 glass rounded-[36px] border border-white/10 relative overflow-hidden text-center md:text-left"
+          className="mt-32 p-12 border-3 border-white bg-[#111113] shadow-[6px_6px_0px_0px_#f00a88] relative overflow-hidden text-center md:text-left rounded-none"
         >
            <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-8">
               <div className="space-y-2">
-                <h2 className="text-3xl font-display font-black text-white">Join the <span className="relative inline-block pr-1">Movement.<ScribbleUnderline color="#ffd709" /></span></h2>
-                <p className="text-white/50 max-w-sm font-sans font-medium text-sm">Ready to release your music globally? Join thousands of independent creators on Fastit.</p>
+                <h2 className="text-3xl font-display font-black text-white">Join the <span className="relative inline-block pr-1 text-secondary">Movement.<ScribbleUnderline color="#ffc301" /></span></h2>
+                <p className="text-white/70 max-w-sm font-sans font-semibold text-sm">Ready to release your music globally? Join thousands of independent creators on Fastit.</p>
               </div>
-              <Link href="/apply" className="btn-gradient px-12 py-4.5 rounded-2xl font-black text-xs tracking-widest uppercase hover:scale-105 transition-all">
+              <Link href="/apply" className="btn-neubrutalist px-12 py-4.5 rounded-none font-black text-xs tracking-widest uppercase hover:scale-105 transition-all block text-center">
                 Submit Your Music
               </Link>
            </div>

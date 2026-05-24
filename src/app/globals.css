@@ -1,15 +1,16 @@
 @import "tailwindcss";
 
 @theme inline {
-  --color-background: #0b0b0c;
+  --color-background: #080809;
   --color-foreground: #ffffff;
   
-  --color-primary: #ff88b6;
-  --color-secondary: #ffd709;
-  --color-tertiary: #9b9cff;
+  --color-primary: #f00a88;
+  --color-secondary: #ffc301;
+  --color-tertiary: #ffab00;
+  --color-accent-blue: #00b0fc;
   
-  --color-obsidian: #0b0b0c;
-  --color-glass: rgba(11, 11, 12, 0.75);
+  --color-obsidian: #080809;
+  --color-glass: rgba(8, 8, 9, 0.8);
   
   --font-sans: var(--font-manrope);
   --font-display: var(--font-epilogue);
@@ -28,7 +29,7 @@
 }
 
 :root {
-  --background: #0b0b0c;
+  --background: #080809;
   --foreground: #ffffff;
 }
 
@@ -44,37 +45,131 @@ h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-epilogue), ui-sans-serif, system-ui, sans-serif;
 }
 
+/* Neubrutalist pop stripes stop gradient */
+.pop-stripes {
+  background: linear-gradient(to right, #f00a88 0% 30%, #ffc301 30% 50%, #ffffff 50% 80%, #ffab00 80% 90%, #00b0fc 90% 100%);
+}
+
+.pop-stripes-vertical {
+  background: linear-gradient(to bottom, #f00a88 0% 30%, #ffc301 30% 50%, #ffffff 50% 80%, #ffab00 80% 90%, #00b0fc 90% 100%);
+}
+
 /* Glassmorphism Utilities */
 .glass {
-  background: rgba(22, 22, 24, 0.7);
+  background: rgba(14, 14, 16, 0.7);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
   border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .glass-pink {
-  background: rgba(255, 136, 182, 0.07);
+  background: rgba(240, 10, 136, 0.07);
   backdrop-filter: blur(14px);
-  border: 1px solid rgba(255, 136, 182, 0.15);
+  border: 1px solid rgba(240, 10, 136, 0.15);
 }
 
 .gradient-text {
-  background: linear-gradient(135deg, #ffd709, #ff88b6, #9b9cff);
+  background: linear-gradient(135deg, #f00a88 0% 35%, #ffc301 35% 65%, #00b0fc 65% 100%);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
-.btn-gradient {
-  background: linear-gradient(135deg, #ffd709, #ff88b6);
-  color: #0b0b0c;
-  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-  box-shadow: 0 4px 20px -6px rgba(255, 136, 182, 0.3);
+/* Bold Neubrutalist Buttons */
+.btn-neubrutalist {
+  background: #ffc301;
+  color: #080809;
+  border: 3px solid #ffffff;
+  box-shadow: 4px 4px 0px 0px #f00a88;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.btn-gradient:hover {
-  box-shadow: 0 0 24px rgba(255, 136, 182, 0.5);
-  transform: translateY(-2px) scale(1.02);
+.btn-neubrutalist:hover {
+  transform: translate(-3px, -3px);
+  box-shadow: 7px 7px 0px 0px #f00a88;
+  background: #f00a88;
+  color: #ffffff;
+}
+
+.btn-neubrutalist-secondary {
+  background: #080809;
+  color: #ffffff;
+  border: 3px solid #ffffff;
+  box-shadow: 4px 4px 0px 0px #00b0fc;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.btn-neubrutalist-secondary:hover {
+  transform: translate(-3px, -3px);
+  box-shadow: 7px 7px 0px 0px #00b0fc;
+  background: #00b0fc;
+  color: #080809;
+}
+
+/* Neubrutalist Offset Cards */
+.neubrutalist-card-pink {
+  background: #111113;
+  border: 2px solid #ffffff;
+  box-shadow: 5px 5px 0px 0px #f00a88;
+  transition: all 0.2s ease;
+}
+
+.neubrutalist-card-pink:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 7px 7px 0px 0px #f00a88;
+}
+
+.neubrutalist-card-yellow {
+  background: #111113;
+  border: 2px solid #ffffff;
+  box-shadow: 5px 5px 0px 0px #ffc301;
+  transition: all 0.2s ease;
+}
+
+.neubrutalist-card-yellow:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 7px 7px 0px 0px #ffc301;
+}
+
+.neubrutalist-card-blue {
+  background: #111113;
+  border: 2px solid #ffffff;
+  box-shadow: 5px 5px 0px 0px #00b0fc;
+  transition: all 0.2s ease;
+}
+
+.neubrutalist-card-blue:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 7px 7px 0px 0px #00b0fc;
+}
+
+/* Duct Tape Badge */
+.tape-badge {
+  background: #ffc301;
+  color: #080809;
+  border: 2px solid #ffffff;
+  font-family: var(--font-epilogue), sans-serif;
+  font-weight: 900;
+  padding: 5px 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  transform: rotate(-3deg);
+  display: inline-block;
+  box-shadow: 3px 3px 0px 0px #080809;
+  font-size: 0.75rem;
+}
+
+.tape-badge-pink {
+  background: #f00a88;
+  color: #ffffff;
+  border-color: #ffffff;
+  box-shadow: 3px 3px 0px 0px #000000;
 }
 
 /* Noise overlay for tactile grain texture */
@@ -85,7 +180,7 @@ h1, h2, h3, h4, h5, h6 {
   width: 100%;
   height: 100%;
   content: "";
-  opacity: 0.04;
+  opacity: 0.05;
   pointer-events: none;
   z-index: 9999;
   background-repeat: repeat;
@@ -108,6 +203,7 @@ h1, h2, h3, h4, h5, h6 {
   z-index: 10;
   box-shadow: 0 12px 36px rgba(0,0,0,0.5);
   transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  border: 2px solid #ffffff;
 }
 
 .vinyl-disc {
@@ -162,8 +258,9 @@ h1, h2, h3, h4, h5, h6 {
   background: #fbfbfb;
   color: #1c1a17;
   padding: 16px 16px 28px 16px;
-  box-shadow: 0 15px 35px rgba(0,0,0,0.4), 0 3px 10px rgba(0,0,0,0.2);
-  border-radius: 4px;
+  box-shadow: 5px 5px 0px 0px #f00a88;
+  border: 3px solid #1c1a17;
+  border-radius: 0px;
   transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
   position: relative;
 }
@@ -172,13 +269,13 @@ h1, h2, h3, h4, h5, h6 {
   content: "";
   position: absolute;
   inset: 0;
-  background-image: linear-gradient(135deg, rgba(255,255,255,0.15) 0%, rgba(0,0,0,0.02) 100%);
+  background-image: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(0,0,0,0.01) 100%);
   pointer-events: none;
 }
 
 .polaroid-card:hover {
-  transform: rotate(0deg) translateY(-8px) scale(1.03) !important;
-  box-shadow: 0 25px 45px rgba(0,0,0,0.6), 0 5px 15px rgba(0,0,0,0.3);
+  transform: rotate(0deg) translateY(-8px) scale(1.02) !important;
+  box-shadow: 8px 8px 0px 0px #f00a88;
   z-index: 30;
 }
 
@@ -201,13 +298,13 @@ h1, h2, h3, h4, h5, h6 {
 .retro-stamp-pink {
   color: var(--color-primary);
   border-color: var(--color-primary);
-  text-shadow: 0 0 8px rgba(255, 136, 182, 0.3);
+  text-shadow: 0 0 8px rgba(240, 10, 136, 0.3);
 }
 
 .retro-stamp-yellow {
   color: var(--color-secondary);
   border-color: var(--color-secondary);
-  text-shadow: 0 0 8px rgba(255, 215, 9, 0.3);
+  text-shadow: 0 0 8px rgba(255, 195, 1, 0.3);
 }
 
 /* Scribble overlay */
@@ -223,19 +320,19 @@ h1, h2, h3, h4, h5, h6 {
   bottom: -4px;
   width: 100%;
   height: 8px;
-  background: url("data:image/svg+xml,%3Csvg viewBox='0 0 100 10' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M3,7 Q30,2 60,6 T97,4' fill='none' stroke='%23ffd709' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat;
+  background: url("data:image/svg+xml,%3Csvg viewBox='0 0 100 10' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M3,7 Q30,2 60,6 T97,4' fill='none' stroke='%23ffc301' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat;
   background-size: 100% 100%;
   pointer-events: none;
 }
 
 .scribble-highlight-pink::after {
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 100 10' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M2,6 Q25,3 55,7 T98,4' fill='none' stroke='%23ff88b6' stroke-width='3.5' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 100 10' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M2,6 Q25,3 55,7 T98,4' fill='none' stroke='%23f00a88' stroke-width='3.5' stroke-linecap='round'/%3E%3C/svg%3E");
 }
 
 /* Vintage Paper Tear for Callout */
 .vintage-ticket {
-  background: #121214;
-  border: 2px dashed rgba(255, 136, 182, 0.3);
+  background: #111113;
+  border: 3px dashed #ffffff;
   position: relative;
   overflow: hidden;
 }
@@ -250,15 +347,15 @@ h1, h2, h3, h4, h5, h6 {
   top: 50%;
   transform: translateY(-50%);
   z-index: 10;
+  border: 3px dashed #ffffff;
 }
 
 .vintage-ticket::before {
-  left: -12px;
-  border-right: 2px dashed rgba(255, 136, 182, 0.3);
+  left: -14px;
 }
 
 .vintage-ticket::after {
-  right: -12px;
-  border-left: 2px dashed rgba(255, 136, 182, 0.3);
+  right: -14px;
 }
+
 
