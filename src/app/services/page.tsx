@@ -68,26 +68,28 @@ export default function ServicesPage() {
         </section>
       </div> {/* Close max-w-7xl */}
 
-      {/* Neubrutalist Marquee Ticker Banner */}
-      <div className="w-full overflow-hidden bg-secondary border-y-3 border-foreground py-4 select-none relative z-20 shadow-md my-12">
+      {/* Neubrutalist Marquee Ticker Banner — Services specific */}
+      <div className="w-full overflow-hidden bg-[#f00a88] border-y-3 border-foreground py-4 select-none relative z-20 shadow-md my-12">
         <div className="animate-marquee flex gap-12 whitespace-nowrap">
-          <span className="font-display font-black text-sm md:text-xl text-[#080809] uppercase tracking-[0.18em] flex items-center gap-12">
-            <span>Fastit Music India</span> <span className="text-[#f00a88] text-2xl font-sans">•</span>
-            <span>Empowering Independent Artists</span> <span className="text-[#00b0fc] text-2xl font-sans">•</span>
-            <span>Distribute to 150+ Streaming Platforms</span> <span className="text-[#f00a88] text-2xl font-sans">•</span>
-            <span>Keep 90% of Your Earnings</span> <span className="text-[#00b0fc] text-2xl font-sans">•</span>
-            <span>Zero Annual Fees</span> <span className="text-[#f00a88] text-2xl font-sans">•</span>
-            <span>India&apos;s Indie Revolution</span> <span className="text-[#00b0fc] text-2xl font-sans">•</span>
-            <span>Transparent Analytics & Payouts</span> <span className="text-[#f00a88] text-2xl font-sans">•</span>
+          <span className="font-display font-black text-sm md:text-xl text-white uppercase tracking-[0.18em] flex items-center gap-12">
+            <span>Global Distribution</span> <span className="text-[#ffc301] text-2xl font-sans">★</span>
+            <span>YouTube Content ID</span> <span className="text-[#080809] text-2xl font-sans">★</span>
+            <span>Spotify & Apple Music</span> <span className="text-[#ffc301] text-2xl font-sans">★</span>
+            <span>Playlist Pitching</span> <span className="text-[#080809] text-2xl font-sans">★</span>
+            <span>Live Analytics Dashboard</span> <span className="text-[#ffc301] text-2xl font-sans">★</span>
+            <span>Copyright Protection</span> <span className="text-[#080809] text-2xl font-sans">★</span>
+            <span>ISRC & UPC Codes Free</span> <span className="text-[#ffc301] text-2xl font-sans">★</span>
+            <span>Smart Links & Pre-Save</span> <span className="text-[#080809] text-2xl font-sans">★</span>
           </span>
-          <span className="font-display font-black text-sm md:text-xl text-[#080809] uppercase tracking-[0.18em] flex items-center gap-12" aria-hidden="true">
-            <span>Fastit Music India</span> <span className="text-[#f00a88] text-2xl font-sans">•</span>
-            <span>Empowering Independent Artists</span> <span className="text-[#00b0fc] text-2xl font-sans">•</span>
-            <span>Distribute to 150+ Streaming Platforms</span> <span className="text-[#f00a88] text-2xl font-sans">•</span>
-            <span>Keep 90% of Your Earnings</span> <span className="text-[#00b0fc] text-2xl font-sans">•</span>
-            <span>Zero Annual Fees</span> <span className="text-[#f00a88] text-2xl font-sans">•</span>
-            <span>India&apos;s Indie Revolution</span> <span className="text-[#00b0fc] text-2xl font-sans">•</span>
-            <span>Transparent Analytics & Payouts</span> <span className="text-[#f00a88] text-2xl font-sans">•</span>
+          <span className="font-display font-black text-sm md:text-xl text-white uppercase tracking-[0.18em] flex items-center gap-12" aria-hidden="true">
+            <span>Global Distribution</span> <span className="text-[#ffc301] text-2xl font-sans">★</span>
+            <span>YouTube Content ID</span> <span className="text-[#080809] text-2xl font-sans">★</span>
+            <span>Spotify & Apple Music</span> <span className="text-[#ffc301] text-2xl font-sans">★</span>
+            <span>Playlist Pitching</span> <span className="text-[#080809] text-2xl font-sans">★</span>
+            <span>Live Analytics Dashboard</span> <span className="text-[#ffc301] text-2xl font-sans">★</span>
+            <span>Copyright Protection</span> <span className="text-[#080809] text-2xl font-sans">★</span>
+            <span>ISRC & UPC Codes Free</span> <span className="text-[#ffc301] text-2xl font-sans">★</span>
+            <span>Smart Links & Pre-Save</span> <span className="text-[#080809] text-2xl font-sans">★</span>
           </span>
         </div>
       </div>

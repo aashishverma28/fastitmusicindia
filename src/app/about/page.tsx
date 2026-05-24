@@ -99,21 +99,21 @@ export default function AboutPage() {
         <div className="animate-marquee flex gap-12 whitespace-nowrap">
           <span className="font-display font-black text-sm md:text-xl text-[#080809] uppercase tracking-[0.18em] flex items-center gap-12">
             <span>Fastit Music India</span> <span className="text-[#f00a88] text-2xl font-sans">•</span>
-            <span>Empowering Independent Artists</span> <span className="text-[#00b0fc] text-2xl font-sans">•</span>
-            <span>Distribute to 150+ Streaming Platforms</span> <span className="text-[#f00a88] text-2xl font-sans">•</span>
-            <span>Keep 90% of Your Earnings</span> <span className="text-[#00b0fc] text-2xl font-sans">•</span>
-            <span>Zero Annual Fees</span> <span className="text-[#f00a88] text-2xl font-sans">•</span>
-            <span>India&apos;s Indie Revolution</span> <span className="text-[#00b0fc] text-2xl font-sans">•</span>
-            <span>Transparent Analytics & Payouts</span> <span className="text-[#f00a88] text-2xl font-sans">•</span>
+            <span>Founded by Visionaries</span> <span className="text-[#00b0fc] text-2xl font-sans">•</span>
+            <span>Blended Technology & Music</span> <span className="text-[#f00a88] text-2xl font-sans">•</span>
+            <span>100% Independent Since Day One</span> <span className="text-[#00b0fc] text-2xl font-sans">•</span>
+            <span>Based in beautiful Assam, India</span> <span className="text-[#f00a88] text-2xl font-sans">•</span>
+            <span>Empowering the Next Generation</span> <span className="text-[#00b0fc] text-2xl font-sans">•</span>
+            <span>Honoring Artist Ownership</span> <span className="text-[#f00a88] text-2xl font-sans">•</span>
           </span>
           <span className="font-display font-black text-sm md:text-xl text-[#080809] uppercase tracking-[0.18em] flex items-center gap-12" aria-hidden="true">
             <span>Fastit Music India</span> <span className="text-[#f00a88] text-2xl font-sans">•</span>
-            <span>Empowering Independent Artists</span> <span className="text-[#00b0fc] text-2xl font-sans">•</span>
-            <span>Distribute to 150+ Streaming Platforms</span> <span className="text-[#f00a88] text-2xl font-sans">•</span>
-            <span>Keep 90% of Your Earnings</span> <span className="text-[#00b0fc] text-2xl font-sans">•</span>
-            <span>Zero Annual Fees</span> <span className="text-[#f00a88] text-2xl font-sans">•</span>
-            <span>India&apos;s Indie Revolution</span> <span className="text-[#00b0fc] text-2xl font-sans">•</span>
-            <span>Transparent Analytics & Payouts</span> <span className="text-[#f00a88] text-2xl font-sans">•</span>
+            <span>Founded by Visionaries</span> <span className="text-[#00b0fc] text-2xl font-sans">•</span>
+            <span>Blended Technology & Music</span> <span className="text-[#f00a88] text-2xl font-sans">•</span>
+            <span>100% Independent Since Day One</span> <span className="text-[#00b0fc] text-2xl font-sans">•</span>
+            <span>Based in beautiful Assam, India</span> <span className="text-[#f00a88] text-2xl font-sans">•</span>
+            <span>Empowering the Next Generation</span> <span className="text-[#00b0fc] text-2xl font-sans">•</span>
+            <span>Honoring Artist Ownership</span> <span className="text-[#f00a88] text-2xl font-sans">•</span>
           </span>
         </div>
       </div>
