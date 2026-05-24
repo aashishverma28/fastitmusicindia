@@ -21,7 +21,7 @@ export default function Navbar() {
           >
             <div className="relative w-11 h-11 border-2 border-white p-1 bg-black shadow-[2px_2px_0px_0px_#f00a88]">
               <Image 
-                src="/logo.png" 
+                src={theme === "light" ? "/logo-light.png" : "/logo.png"} 
                 alt="Fastit Music India" 
                 fill 
                 className="object-contain p-0.5"

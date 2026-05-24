@@ -8,8 +8,10 @@ import { Play, ArrowRight, Activity, Headset } from "lucide-react";
 import { ScribbleUnderline, ScribbleUnderlineDouble, CurlyArrow, HandDrawnCircle, BadgeStamp } from "@/components/shared/Doodles";
 import { VinylCard } from "@/components/shared/VinylCard";
 import { useAudioStore } from "@/lib/store/useAudioStore";
+import { useTheme } from "@/components/providers/ThemeProvider";
 
 export default function Home() {
+  const { theme } = useTheme();
   const [realReleases, setRealReleases] = React.useState<any[]>([]);
   const [isLoading, setIsLoading] = React.useState(true);
   const { setTrack } = useAudioStore();
@@ -92,7 +94,7 @@ export default function Home() {
               className="flex items-center gap-3 mb-6"
             >
               <div className="relative w-14 h-14 bg-black border-2 border-white p-1.5 shadow-[3px_3px_0px_0px_#ffc301]">
-                <Image src="/logo.png" alt="Fastit Logo" fill className="object-contain p-1" />
+                <Image src={theme === "light" ? "/logo-light.png" : "/logo.png"} alt="Fastit Logo" fill className="object-contain p-1" />
               </div>
               <div className="inline-block px-4 py-1.5 border-2 border-white text-secondary font-bold text-xs tracking-widest uppercase bg-black shadow-[3px_3px_0px_0px_#f00a88]">
                 India&apos;s Indie Revolution

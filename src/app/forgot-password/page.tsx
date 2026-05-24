@@ -5,8 +5,10 @@ import Link from "next/link";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { Mail, AlertCircle, CheckCircle2, Activity, ArrowLeft } from "lucide-react";
+import { useTheme } from "@/components/providers/ThemeProvider";
 
 export default function ForgotPasswordPage() {
+  const { theme } = useTheme();
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
   const [status, setStatus] = useState<"idle" | "success" | "error">("idle");
@@ -60,7 +62,7 @@ export default function ForgotPasswordPage() {
             <Link href="/login" className="inline-block mb-6">
               <div className="relative w-20 h-20 mx-auto mb-2">
                 <Image 
-                  src="/logo.png" 
+                  src={theme === "light" ? "/logo-light.png" : "/logo.png"} 
                   alt="Fastit Music India" 
                   fill 
                   className="object-contain" 

@@ -1,7 +1,12 @@
+"use client";
+
 import Link from "next/link";
 import Image from "next/image";
+import { useTheme } from "@/components/providers/ThemeProvider";
 
 export default function Footer() {
+  const { theme } = useTheme();
+
   return (
     <footer className="bg-[#080809] w-full relative overflow-visible border-t-3 border-white">
       {/* Top stripes line divider */}
@@ -11,7 +16,12 @@ export default function Footer() {
         <div className="space-y-6">
           <Link href="/" className="flex items-center gap-3">
             <div className="relative w-10 h-10 border border-white/20 p-0.5 bg-black">
-              <Image src="/logo.png" alt="Fastit Music India" fill className="object-contain p-0.5" />
+              <Image 
+                src={theme === "light" ? "/logo-light.png" : "/logo.png"} 
+                alt="Fastit Music India" 
+                fill 
+                className="object-contain p-0.5" 
+              />
             </div>
             <div className="flex items-center gap-1.5 select-none font-display tracking-tighter">
               <span className="text-xl font-black text-foreground">Fastit</span>

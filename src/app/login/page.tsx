@@ -7,8 +7,10 @@ import Link from "next/link";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { Music, Eye, EyeOff, Lock, Mail, AlertCircle, Activity } from "lucide-react";
+import { useTheme } from "@/components/providers/ThemeProvider";
 
 export default function LoginPage() {
+  const { theme } = useTheme();
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -58,7 +60,7 @@ export default function LoginPage() {
             <Link href="/" className="inline-block mb-6">
               <div className="relative w-20 h-20 mx-auto mb-2">
                 <Image 
-                  src="/logo.png" 
+                  src={theme === "light" ? "/logo-light.png" : "/logo.png"} 
                   alt="Fastit Music India" 
                   fill 
                   className="object-contain" 
