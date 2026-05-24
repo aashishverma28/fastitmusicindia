@@ -1,16 +1,16 @@
 @import "tailwindcss";
 
 @theme inline {
-  --color-background: #080809;
-  --color-foreground: #ffffff;
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
   
   --color-primary: #f00a88;
   --color-secondary: #ffc301;
   --color-tertiary: #ffab00;
   --color-accent-blue: #00b0fc;
   
-  --color-obsidian: #080809;
-  --color-glass: rgba(8, 8, 9, 0.8);
+  --color-obsidian: var(--obsidian);
+  --color-glass: var(--glass);
   
   --font-sans: var(--font-manrope);
   --font-display: var(--font-epilogue);
@@ -29,8 +29,21 @@
 }
 
 :root {
+  --background: #faf9f6;
+  --foreground: #080809;
+  --obsidian: #080809;
+  --glass: rgba(255, 255, 255, 0.7);
+  --glass-border: rgba(8, 8, 9, 0.1);
+  --card-bg: #ffffff;
+}
+
+.dark {
   --background: #080809;
   --foreground: #ffffff;
+  --obsidian: #080809;
+  --glass: rgba(8, 8, 9, 0.8);
+  --glass-border: rgba(255, 255, 255, 0.08);
+  --card-bg: #111113;
 }
 
 body {
@@ -56,10 +69,10 @@ h1, h2, h3, h4, h5, h6 {
 
 /* Glassmorphism Utilities */
 .glass {
-  background: rgba(14, 14, 16, 0.7);
+  background: var(--glass);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid var(--glass-border);
 }
 
 .glass-pink {
@@ -79,7 +92,7 @@ h1, h2, h3, h4, h5, h6 {
 .btn-neubrutalist {
   background: #ffc301;
   color: #080809;
-  border: 3px solid #ffffff;
+  border: 3px solid var(--foreground);
   box-shadow: 4px 4px 0px 0px #f00a88;
   font-weight: 900;
   text-transform: uppercase;
@@ -95,9 +108,9 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .btn-neubrutalist-secondary {
-  background: #080809;
-  color: #ffffff;
-  border: 3px solid #ffffff;
+  background: var(--btn-sec-bg, #080809);
+  color: var(--btn-sec-fg, #ffffff);
+  border: 3px solid var(--foreground);
   box-shadow: 4px 4px 0px 0px #00b0fc;
   font-weight: 900;
   text-transform: uppercase;
@@ -114,8 +127,8 @@ h1, h2, h3, h4, h5, h6 {
 
 /* Neubrutalist Offset Cards */
 .neubrutalist-card-pink {
-  background: #111113;
-  border: 2px solid #ffffff;
+  background: var(--card-bg);
+  border: 2px solid var(--foreground);
   box-shadow: 5px 5px 0px 0px #f00a88;
   transition: all 0.2s ease;
 }
@@ -126,8 +139,8 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .neubrutalist-card-yellow {
-  background: #111113;
-  border: 2px solid #ffffff;
+  background: var(--card-bg);
+  border: 2px solid var(--foreground);
   box-shadow: 5px 5px 0px 0px #ffc301;
   transition: all 0.2s ease;
 }
@@ -138,8 +151,8 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .neubrutalist-card-blue {
-  background: #111113;
-  border: 2px solid #ffffff;
+  background: var(--card-bg);
+  border: 2px solid var(--foreground);
   box-shadow: 5px 5px 0px 0px #00b0fc;
   transition: all 0.2s ease;
 }
@@ -153,7 +166,7 @@ h1, h2, h3, h4, h5, h6 {
 .tape-badge {
   background: #ffc301;
   color: #080809;
-  border: 2px solid #ffffff;
+  border: 2px solid var(--foreground);
   font-family: var(--font-epilogue), sans-serif;
   font-weight: 900;
   padding: 5px 14px;
@@ -161,15 +174,15 @@ h1, h2, h3, h4, h5, h6 {
   letter-spacing: 0.12em;
   transform: rotate(-3deg);
   display: inline-block;
-  box-shadow: 3px 3px 0px 0px #080809;
+  box-shadow: 3px 3px 0px 0px var(--foreground);
   font-size: 0.75rem;
 }
 
 .tape-badge-pink {
   background: #f00a88;
   color: #ffffff;
-  border-color: #ffffff;
-  box-shadow: 3px 3px 0px 0px #000000;
+  border-color: var(--foreground);
+  box-shadow: 3px 3px 0px 0px var(--foreground);
 }
 
 /* Noise overlay for tactile grain texture */
@@ -203,7 +216,7 @@ h1, h2, h3, h4, h5, h6 {
   z-index: 10;
   box-shadow: 0 12px 36px rgba(0,0,0,0.5);
   transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-  border: 2px solid #ffffff;
+  border: 2px solid var(--foreground);
 }
 
 .vinyl-disc {
@@ -331,8 +344,8 @@ h1, h2, h3, h4, h5, h6 {
 
 /* Vintage Paper Tear for Callout */
 .vintage-ticket {
-  background: #111113;
-  border: 3px dashed #ffffff;
+  background: var(--card-bg);
+  border: 3px dashed var(--foreground);
   position: relative;
   overflow: hidden;
 }
@@ -347,7 +360,7 @@ h1, h2, h3, h4, h5, h6 {
   top: 50%;
   transform: translateY(-50%);
   z-index: 10;
-  border: 3px dashed #ffffff;
+  border: 3px dashed var(--foreground);
 }
 
 .vintage-ticket::before {
@@ -356,6 +369,97 @@ h1, h2, h3, h4, h5, h6 {
 
 .vintage-ticket::after {
   right: -14px;
+}
+
+/* Add configuration variables for the secondary button */
+:root {
+  --btn-sec-bg: #ffffff;
+  --btn-sec-fg: #080809;
+  --btn-sec-border: #080809;
+}
+
+.dark {
+  --btn-sec-bg: #080809;
+  --btn-sec-fg: #ffffff;
+  --btn-sec-border: #ffffff;
+}
+
+/* ==========================================
+   LIGHT MODE OVERRIDES FOR TAILWIND UTILITIES
+   ========================================== */
+html.light,
+html:not(.dark) {
+  /* Dynamic Background updates */
+  .bg-black,
+  .bg-\[\#080809\] {
+    background-color: var(--background) !important;
+  }
+
+  /* Form controls / inputs should have a solid white background in light mode */
+  input.bg-black,
+  select.bg-black,
+  textarea.bg-black,
+  input.bg-\[\#080809\],
+  select.bg-\[\#080809\],
+  textarea.bg-\[\#080809\],
+  form .bg-black,
+  form .bg-\[\#111113\],
+  .bg-\[\#111113\],
+  .bg-black\/40 {
+    background-color: var(--card-bg) !important;
+  }
+
+  /* Text & Border Swaps */
+  .text-white {
+    color: var(--foreground) !important;
+  }
+
+  .border-white {
+    border-color: var(--foreground) !important;
+  }
+
+  /* Text opacity overrides */
+  .text-white\/90 { color: rgba(8, 8, 9, 0.9) !important; }
+  .text-white\/80 { color: rgba(8, 8, 9, 0.8) !important; }
+  .text-white\/70 { color: rgba(8, 8, 9, 0.7) !important; }
+  .text-white\/60 { color: rgba(8, 8, 9, 0.6) !important; }
+  .text-white\/50 { color: rgba(8, 8, 9, 0.5) !important; }
+  .text-white\/40 { color: rgba(8, 8, 9, 0.4) !important; }
+  .text-white\/30 { color: rgba(8, 8, 9, 0.3) !important; }
+  .text-white\/20 { color: rgba(8, 8, 9, 0.2) !important; }
+  .text-white\/10 { color: rgba(8, 8, 9, 0.1) !important; }
+
+  /* Border opacity overrides */
+  .border-white\/20 { border-color: rgba(8, 8, 9, 0.2) !important; }
+  .border-white\/15 { border-color: rgba(8, 8, 9, 0.15) !important; }
+  .border-white\/10 { border-color: rgba(8, 8, 9, 0.10) !important; }
+  .border-white\/5  { border-color: rgba(8, 8, 9, 0.05) !important; }
+
+  /* Bg opacity overrides */
+  .bg-white\/10 { background-color: rgba(8, 8, 9, 0.08) !important; }
+  .bg-white\/5  { background-color: rgba(8, 8, 9, 0.04) !important; }
+
+  /* Preserves white text inside overlays and buttons that should remain dark/colored */
+  .bg-black\/85 .text-white,
+  .bg-black\/80 .text-white,
+  .bg-black\/60 .text-white,
+  .bg-black\/50 .text-white,
+  .bg-black\/90 .text-white,
+  .bg-black\/90 .text-white\/70,
+  .vinyl-sleeve .text-white,
+  .btn-neubrutalist .text-white,
+  .btn-neubrutalist:hover,
+  .btn-neubrutalist-secondary:hover {
+    color: #ffffff !important;
+  }
+
+  /* Special elements adjustments */
+  .w-14.h-14.bg-white\/5,
+  .w-7.h-7.bg-white\/5,
+  .w-10.h-10.bg-white\/5 {
+    background-color: rgba(8, 8, 9, 0.05) !important;
+    border-color: rgba(8, 8, 9, 0.1) !important;
+  }
 }
 
 

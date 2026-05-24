@@ -28,6 +28,7 @@ import Footer from "@/components/layout/Footer";
 import AudioPlayer from "@/components/audio/AudioPlayer";
 
 import { AuthProvider } from "@/components/providers/AuthProvider";
+import { ThemeProvider } from "@/components/providers/ThemeProvider";
 
 export default function RootLayout({
   children,
@@ -40,16 +41,38 @@ export default function RootLayout({
       suppressHydrationWarning
       className={`${epilogue.variable} ${manrope.variable} ${caveat.variable} h-full antialiased`}
     >
-      <body suppressHydrationWarning className="min-h-full flex flex-col bg-background text-foreground relative">
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                try {
+                  var saved = localStorage.getItem('theme');
+                  if (saved === 'dark') {
+                    document.documentElement.classList.add('dark');
+                    document.documentElement.classList.remove('light');
+                  } else {
+                    document.documentElement.classList.add('light');
+                    document.documentElement.classList.remove('dark');
+                  }
+                } catch (e) {}
+              })();
+            `,
+          }}
+        />
+      </head>
+      <body suppressHydrationWarning className="min-h-full flex flex-col bg-background text-foreground relative transition-colors duration-200">
         <div className="noise-bg" />
-        <AuthProvider>
-          <Navbar />
-          <main className="flex-grow">
-            {children}
-          </main>
-          <Footer />
-          <AudioPlayer />
-        </AuthProvider>
+        <ThemeProvider>
+          <AuthProvider>
+            <Navbar />
+            <main className="flex-grow">
+              {children}
+            </main>
+            <Footer />
+            <AudioPlayer />
+          </AuthProvider>
+        </ThemeProvider>
       </body>
     </html>
   );
