@@ -82,6 +82,33 @@ export default function PricingPage() {
             We believe music distribution should be accessible to all. That&apos;s why every feature we offer is completely free — for artists and labels alike.
           </motion.p>
         </div>
+      </div> {/* Close max-w-7xl */}
+
+      {/* Neubrutalist Marquee Ticker Banner */}
+      <div className="w-full overflow-hidden bg-secondary border-y-3 border-foreground py-4 select-none relative z-20 shadow-md my-12">
+        <div className="animate-marquee flex gap-12 whitespace-nowrap">
+          <span className="font-display font-black text-sm md:text-xl text-[#080809] uppercase tracking-[0.18em] flex items-center gap-12">
+            <span>Fastit Music India</span> <span className="text-[#f00a88] text-2xl font-sans">•</span>
+            <span>Empowering Independent Artists</span> <span className="text-[#00b0fc] text-2xl font-sans">•</span>
+            <span>Distribute to 150+ Streaming Platforms</span> <span className="text-[#f00a88] text-2xl font-sans">•</span>
+            <span>Keep 90% of Your Earnings</span> <span className="text-[#00b0fc] text-2xl font-sans">•</span>
+            <span>Zero Annual Fees</span> <span className="text-[#f00a88] text-2xl font-sans">•</span>
+            <span>India&apos;s Indie Revolution</span> <span className="text-[#00b0fc] text-2xl font-sans">•</span>
+            <span>Transparent Analytics & Payouts</span> <span className="text-[#f00a88] text-2xl font-sans">•</span>
+          </span>
+          <span className="font-display font-black text-sm md:text-xl text-[#080809] uppercase tracking-[0.18em] flex items-center gap-12" aria-hidden="true">
+            <span>Fastit Music India</span> <span className="text-[#f00a88] text-2xl font-sans">•</span>
+            <span>Empowering Independent Artists</span> <span className="text-[#00b0fc] text-2xl font-sans">•</span>
+            <span>Distribute to 150+ Streaming Platforms</span> <span className="text-[#f00a88] text-2xl font-sans">•</span>
+            <span>Keep 90% of Your Earnings</span> <span className="text-[#00b0fc] text-2xl font-sans">•</span>
+            <span>Zero Annual Fees</span> <span className="text-[#f00a88] text-2xl font-sans">•</span>
+            <span>India&apos;s Indie Revolution</span> <span className="text-[#00b0fc] text-2xl font-sans">•</span>
+            <span>Transparent Analytics & Payouts</span> <span className="text-[#f00a88] text-2xl font-sans">•</span>
+          </span>
+        </div>
+      </div>
+
+      <div className="max-w-7xl mx-auto px-8">
 
         {/* Free Badge Banner */}
         <motion.div
