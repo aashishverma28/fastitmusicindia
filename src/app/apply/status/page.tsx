@@ -51,19 +51,19 @@ export default function ApplicationStatusPage() {
     switch (status) {
       case "NEW":
         return { 
-          icon: <Clock className="w-12 h-12 text-blue-400" />, 
+          icon: <Clock className="w-12 h-12 text-blue-500" />, 
           title: "Received", 
           desc: "Your application has been received and is waiting for our A&R team to start the initial review.",
-          color: "text-blue-400",
-          bg: "bg-blue-400/10"
+          color: "text-blue-500",
+          bg: "bg-blue-500/10"
         };
       case "UNDER_REVIEW":
         return { 
-          icon: <ShieldCheck className="w-12 h-12 text-yellow-500" />, 
+          icon: <ShieldCheck className="w-12 h-12 text-yellow-600" />, 
           title: "Under Review", 
           desc: "Our team is currently verifying your identity and musical credentials. This typically takes 3-5 business days.",
-          color: "text-yellow-500",
-          bg: "bg-yellow-500/10"
+          color: "text-yellow-600",
+          bg: "bg-yellow-600/10"
         };
       case "APPROVED":
         return { 
@@ -83,17 +83,17 @@ export default function ApplicationStatusPage() {
         };
       default:
         return { 
-          icon: <AlertCircle className="w-12 h-12 text-white/40" />, 
+          icon: <AlertCircle className="w-12 h-12 text-foreground/40" />, 
           title: "Unknown", 
           desc: "We couldn't determine your status. Please contact support.",
-          color: "text-white/40",
-          bg: "bg-white/5"
+          color: "text-foreground/40",
+          bg: "bg-foreground/5"
         };
     }
   };
 
   return (
-    <div className="min-h-screen py-32 px-8 relative overflow-hidden bg-[#050505]">
+    <div className="min-h-screen py-32 px-8 relative overflow-hidden bg-background">
       {/* Background Decor */}
       <div className="absolute top-[-20%] right-[-10%] w-[800px] h-[800px] bg-primary/10 rounded-full blur-[150px]"></div>
       <div className="absolute bottom-[-10%] left-[-5%] w-[600px] h-[600px] bg-secondary/10 rounded-full blur-[120px]"></div>
@@ -103,7 +103,7 @@ export default function ApplicationStatusPage() {
           <motion.h1 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="text-5xl md:text-7xl font-black font-display text-white tracking-tighter"
+            className="text-5xl md:text-7xl font-black font-display text-foreground tracking-tighter"
           >
             Track Your <span className="gradient-text">Application</span>
           </motion.h1>
@@ -111,7 +111,7 @@ export default function ApplicationStatusPage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="text-white/40 text-lg md:text-xl font-sans max-w-2xl mx-auto font-medium"
+            className="text-foreground/60 text-lg md:text-xl font-sans max-w-2xl mx-auto font-medium"
           >
             Enter your unique tracking ID provided during submission to check your real-time status.
           </motion.p>
@@ -121,14 +121,14 @@ export default function ApplicationStatusPage() {
         <div className="max-w-xl mx-auto">
           <form onSubmit={handleSearch} className="relative group">
              <div className="absolute -inset-1 bg-gradient-to-r from-primary to-secondary rounded-2xl blur opacity-20 group-hover:opacity-40 transition-all duration-500"></div>
-             <div className="relative glass p-2 rounded-2xl border border-white/10 flex items-center gap-2">
+             <div className="relative glass p-2 rounded-2xl border border-foreground/10 flex items-center gap-2">
                 <div className="pl-4">
-                  <Search className="w-5 h-5 text-white/20" />
+                  <Search className="w-5 h-5 text-foreground/30" />
                 </div>
                 <input 
                   type="text" 
                   placeholder="e.g. FMI-ART-XXXXXX"
-                  className="bg-transparent border-none outline-none text-white font-mono uppercase tracking-widest text-lg w-full p-4 placeholder:text-white/10 placeholder:font-sans"
+                  className="bg-transparent border-none outline-none text-foreground font-mono uppercase tracking-widest text-lg w-full p-4 placeholder:text-foreground/30 placeholder:font-sans"
                   value={trackingId}
                   onChange={(e) => setTrackingId(e.target.value.toUpperCase())}
                   required
@@ -136,7 +136,7 @@ export default function ApplicationStatusPage() {
                 <button 
                   type="submit"
                   disabled={isSearching}
-                  className="bg-white text-black px-8 py-4 rounded-xl font-black text-sm uppercase tracking-widest hover:bg-neutral-200 active:scale-95 transition-all flex items-center gap-2"
+                  className="bg-foreground text-background px-8 py-4 rounded-xl font-black text-sm uppercase tracking-widest hover:bg-foreground/90 active:scale-95 transition-all flex items-center gap-2 cursor-pointer"
                 >
                   {isSearching ? <Loader2 className="w-5 h-5 animate-spin" /> : "Check"}
                 </button>
@@ -160,37 +160,37 @@ export default function ApplicationStatusPage() {
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
-              className="glass p-10 md:p-16 rounded-[3rem] border border-white/10 shadow-3xl text-center space-y-10"
+              className="glass p-10 md:p-16 rounded-[3rem] border border-foreground/10 shadow-3xl text-center space-y-10"
             >
               <div className="flex flex-col items-center gap-6">
-                <div className={`p-8 rounded-[2rem] ${getStatusConfig(result.status).bg} border border-white/5`}>
+                <div className={`p-8 rounded-[2rem] ${getStatusConfig(result.status).bg} border border-foreground/5`}>
                   {getStatusConfig(result.status).icon}
                 </div>
                 <div className="space-y-4">
                   <h2 className={`text-4xl md:text-5xl font-black font-display tracking-tight ${getStatusConfig(result.status).color}`}>
                     {getStatusConfig(result.status).title}
                   </h2>
-                  <p className="text-white/60 text-lg font-sans max-w-xl mx-auto leading-relaxed">
+                  <p className="text-foreground/60 text-lg font-sans max-w-xl mx-auto leading-relaxed">
                     {getStatusConfig(result.status).desc}
                   </p>
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-10 border-t border-white/5">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-10 border-t border-foreground/10">
                 <div className="space-y-1">
-                   <p className="text-[10px] font-black uppercase tracking-widest text-white/20">Application Type</p>
-                   <div className="flex items-center justify-center gap-2 text-white font-bold">
+                   <p className="text-[10px] font-black uppercase tracking-widest text-foreground/45">Application Type</p>
+                   <div className="flex items-center justify-center gap-2 text-foreground font-bold">
                       {result.type === "ARTIST" ? <Music className="w-4 h-4 text-primary" /> : <Building2 className="w-4 h-4 text-secondary" />}
                       {result.type}
                    </div>
                 </div>
                 <div className="space-y-1">
-                   <p className="text-[10px] font-black uppercase tracking-widest text-white/20">Submitted On</p>
-                   <p className="text-white font-bold">{new Date(result.createdAt).toLocaleDateString()}</p>
+                   <p className="text-[10px] font-black uppercase tracking-widest text-foreground/45">Submitted On</p>
+                   <p className="text-foreground font-bold">{new Date(result.createdAt).toLocaleDateString()}</p>
                 </div>
                 <div className="space-y-1">
-                   <p className="text-[10px] font-black uppercase tracking-widest text-white/20">Tracking ID</p>
-                   <p className="text-white font-mono font-bold">{result.applicationId}</p>
+                   <p className="text-[10px] font-black uppercase tracking-widest text-foreground/45">Tracking ID</p>
+                   <p className="text-foreground font-mono font-bold">{result.applicationId}</p>
                 </div>
               </div>
 
@@ -198,7 +198,7 @@ export default function ApplicationStatusPage() {
                 <div className="pt-6">
                    <Link 
                     href="/login" 
-                    className="btn-gradient px-10 py-5 rounded-2xl font-black text-sm uppercase tracking-widest flex items-center justify-center gap-3 w-fit mx-auto hover:scale-105 active:scale-95 transition-all shadow-xl shadow-primary/20"
+                    className="btn-gradient px-10 py-5 rounded-2xl font-black text-sm uppercase tracking-widest flex items-center justify-center gap-3 w-fit mx-auto shadow-xl"
                    >
                      Proceed to Dashboard <ArrowRight className="w-5 h-5" />
                    </Link>
@@ -209,7 +209,7 @@ export default function ApplicationStatusPage() {
                 <div className="pt-6">
                    <Link 
                     href="/apply" 
-                    className="inline-flex items-center gap-3 bg-white/5 px-8 py-4 rounded-xl text-white/60 hover:text-white transition-all font-bold"
+                    className="inline-flex items-center gap-3 bg-foreground/5 px-8 py-4 rounded-xl text-foreground/60 hover:text-foreground transition-all font-bold border border-foreground/10"
                    >
                      Submit New Application <ArrowRight className="w-5 h-5" />
                    </Link>
@@ -221,7 +221,7 @@ export default function ApplicationStatusPage() {
 
         {/* Floating Help */}
         <div className="text-center">
-           <p className="text-white/20 text-sm font-medium">
+           <p className="text-foreground/45 text-sm font-medium">
              Lost your tracking ID? Check your registration email or <Link href="/contact" className="text-primary hover:underline">Contact Support</Link>.
            </p>
         </div>

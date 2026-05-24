@@ -125,6 +125,30 @@ h1, h2, h3, h4, h5, h6 {
   color: #080809;
 }
 
+/* Premium Neubrutalist Gradient Button */
+.btn-gradient {
+  background: linear-gradient(135deg, #f00a88 0%, #ffc301 50%, #00b0fc 100%) !important;
+  color: #080809 !important;
+  border: 3px solid var(--foreground) !important;
+  box-shadow: 4px 4px 0px 0px var(--foreground) !important;
+  font-weight: 900 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.05em !important;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+.btn-gradient:hover {
+  transform: translate(-3px, -3px) !important;
+  box-shadow: 7px 7px 0px 0px var(--foreground) !important;
+  filter: brightness(1.08) !important;
+}
+
+.btn-gradient:active {
+  transform: translate(1px, 1px) !important;
+  box-shadow: 2px 2px 0px 0px var(--foreground) !important;
+}
+
+
 /* Neubrutalist Offset Cards */
 .neubrutalist-card-pink {
   background: var(--card-bg);

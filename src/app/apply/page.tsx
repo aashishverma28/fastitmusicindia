@@ -30,7 +30,7 @@ export default function ApplyPage() {
         "Official Artist Channel support"
       ],
       color: "from-primary/20",
-      btnClass: "btn-gradient text-black"
+      btnClass: "btn-gradient"
     },
     {
       title: "Record Label Portal",
@@ -46,12 +46,12 @@ export default function ApplyPage() {
         "Priority distribution & support"
       ],
       color: "from-secondary/20",
-      btnClass: "bg-white text-black hover:bg-white/90"
+      btnClass: "btn-neubrutalist-secondary text-sm uppercase py-4"
     }
   ];
 
   return (
-    <div className="min-h-screen py-24 px-8 relative overflow-hidden">
+    <div className="min-h-screen py-24 px-8 relative overflow-hidden bg-background">
       {/* Background Decor */}
       <div className="absolute top-[-10%] right-[-5%] w-[600px] h-[600px] bg-primary/10 rounded-full blur-[120px]"></div>
       <div className="absolute bottom-[-10%] left-[-5%] w-[600px] h-[600px] bg-secondary/5 rounded-full blur-[120px]"></div>
@@ -62,10 +62,10 @@ export default function ApplyPage() {
           animate={{ opacity: 1, y: 0 }}
           className="text-center mb-20"
         >
-          <h1 className="text-5xl md:text-7xl font-black font-display text-white mb-6 tracking-tighter">
+          <h1 className="text-5xl md:text-7xl font-black font-display text-foreground mb-6 tracking-tighter">
             Join the <span className="gradient-text">Fastit Family</span>
           </h1>
-          <p className="text-white/60 text-xl max-w-2xl mx-auto font-sans">
+          <p className="text-foreground/60 text-xl max-w-2xl mx-auto font-sans">
             Choose your path and start your journey with India&apos;s most transparent music distribution partner.
           </p>
         </motion.div>
@@ -81,24 +81,24 @@ export default function ApplyPage() {
               key={portal.type}
               variants={itemVariants}
               whileHover={{ y: -10 }}
-              className={`glass p-10 rounded-2xl border border-white/10 flex flex-col justify-between relative overflow-hidden group`}
+              className={`glass p-10 rounded-2xl border border-foreground/10 flex flex-col justify-between relative overflow-hidden group`}
             >
               {/* Card Background Gradient */}
               <div className={`absolute inset-0 bg-gradient-to-br ${portal.color} to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500`}></div>
 
               <div className="relative z-10">
-                <div className="mb-8 p-4 bg-white/5 inline-block rounded-2xl">
+                <div className="mb-8 p-4 bg-foreground/5 inline-block rounded-2xl">
                   {portal.icon}
                 </div>
-                <h2 className="text-4xl font-black font-display text-white mb-4 tracking-tight">{portal.title}</h2>
-                <p className="text-white/60 mb-10 text-lg leading-relaxed font-sans">
+                <h2 className="text-4xl font-black font-display text-foreground mb-4 tracking-tight">{portal.title}</h2>
+                <p className="text-foreground/60 mb-10 text-lg leading-relaxed font-sans">
                   {portal.description}
                 </p>
 
                 <div className="space-y-4 mb-12">
                   {portal.features.map((feature, i) => (
-                    <div key={i} className="flex items-center gap-3 text-white/80 font-sans">
-                      <CheckCircle2 className="w-5 h-5 text-green-400 flex-shrink-0" />
+                    <div key={i} className="flex items-center gap-3 text-foreground/80 font-sans">
+                      <CheckCircle2 className="w-5 h-5 text-green-500 flex-shrink-0" />
                       <span>{feature}</span>
                     </div>
                   ))}
@@ -124,7 +124,7 @@ export default function ApplyPage() {
           transition={{ delay: 0.8 }}
           className="mt-20 text-center space-y-4"
         >
-          <div className="flex justify-center gap-8 text-white/40">
+          <div className="flex justify-center gap-8 text-foreground/40">
             <div className="flex items-center gap-2">
               <ShieldCheck className="w-5 h-5" />
               <span className="text-sm">Verified Distribution</span>
@@ -138,7 +138,7 @@ export default function ApplyPage() {
               <span className="text-sm">90% Royalties</span>
             </div>
           </div>
-          <p className="text-white/30 text-sm font-sans">
+          <p className="text-foreground/45 text-sm font-sans">
             Already have an application? <Link href="/apply/status" className="text-primary hover:underline font-bold">Check Status</Link>
           </p>
         </motion.div>
