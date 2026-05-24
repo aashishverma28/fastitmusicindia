@@ -65,7 +65,14 @@ export default function LoginPage() {
                   priority
                 />
               </div>
-              <span className="text-2xl font-black italic gradient-text font-display">Fastit Music India</span>
+              <div className="flex flex-col items-center leading-none select-none">
+                <span className="text-3xl font-black tracking-tighter font-display bg-gradient-to-r from-[#f00a88] to-[#00b0fc] bg-clip-text text-transparent uppercase">
+                  Fastit
+                </span>
+                <span className="text-[10px] font-black tracking-[0.28em] text-[#ffc301] uppercase font-sans mt-1">
+                  Music India
+                </span>
+              </div>
             </Link>
             <h1 className="text-2xl font-display font-bold text-white mb-2">Welcome Back</h1>
             <p className="text-white/60 font-sans">Log in to your artist or label portal</p>

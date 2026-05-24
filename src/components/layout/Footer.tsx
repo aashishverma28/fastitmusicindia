@@ -13,9 +13,14 @@ export default function Footer() {
             <div className="relative w-10 h-10 border border-white/20 p-0.5 bg-black">
               <Image src="/logo.png" alt="Fastit Music India" fill className="object-contain p-0.5" />
             </div>
-            <span className="text-xl font-bold text-white font-display tracking-tighter">
-              Fastit Music India
-            </span>
+            <div className="flex flex-col leading-none select-none">
+              <span className="text-xl font-black tracking-tighter font-display bg-gradient-to-r from-[#f00a88] to-[#00b0fc] bg-clip-text text-transparent uppercase">
+                Fastit
+              </span>
+              <span className="text-[8px] font-black tracking-[0.28em] text-[#ffc301] uppercase font-sans mt-0.5">
+                Music India
+              </span>
+            </div>
           </Link>
           <p className="text-white/60 leading-relaxed font-sans font-medium text-sm">
             The sonic heartbeat of India's independent music movement. We don't just distribute; we accelerate careers.

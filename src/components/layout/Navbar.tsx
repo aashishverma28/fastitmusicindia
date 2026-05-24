@@ -27,9 +27,14 @@ export default function Navbar() {
                 className="object-contain p-0.5"
               />
             </div>
-            <span className="hidden sm:inline-block text-xl font-black italic bg-gradient-to-r from-[#ffc301] to-[#f00a88] bg-clip-text text-transparent font-display tracking-tighter">
-              Fastit Music India
-            </span>
+            <div className="hidden sm:flex flex-col leading-none select-none">
+              <span className="text-2xl font-black tracking-tighter font-display bg-gradient-to-r from-[#f00a88] to-[#00b0fc] bg-clip-text text-transparent uppercase">
+                Fastit
+              </span>
+              <span className="text-[9px] font-black tracking-[0.28em] text-[#ffc301] uppercase font-sans mt-0.5">
+                Music India
+              </span>
+            </div>
           </Link>
           <div className="hidden md:flex items-center gap-6">
             <Link className="text-primary font-bold border-b-2 border-primary pb-1 font-display tracking-tighter transition-all duration-300" href="/">
