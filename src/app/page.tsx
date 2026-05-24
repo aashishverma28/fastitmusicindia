@@ -15,30 +15,8 @@ export default function Home() {
   const [realReleases, setRealReleases] = React.useState<any[]>([]);
   const [isLoading, setIsLoading] = React.useState(true);
   const { setTrack } = useAudioStore();
-
-  const consoleTracks = [
-    { 
-      id: "hero-1", 
-      title: "Midnight Desires", 
-      artist: "Arjun S.", 
-      cover: "https://lh3.googleusercontent.com/aida-public/AB6AXuAFlNkEmsHw0DPmGPAhtqrGUoVZZFRKzEUJVrCmMMPFMOdkaPk1EyMl0WKrNc2OFBw52JiFh5MpBMoVUPJuAyfB5os4xLG7yMX09HkaxRpQRqhbsCYZglPhlxqRVDQewTtsBXqPhKUqKWT2CCZLD1dY2ZNyIBnt4ze13scDTdgMJpap0y1nsV33zYrfyQ_Ws6191SzDDPh09up8qZQRtob-VJ7KSmu0z_jslRwqYjblsZ9BHNH_M8vEhTKAQy4OjppX0AIWRmUY31w", 
-      url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" 
-    },
-    { 
-      id: "hero-2", 
-      title: "Electric Monsoon", 
-      artist: "Kabir & The Beats", 
-      cover: "https://lh3.googleusercontent.com/aida-public/AB6AXuBaNQ0rW5whJD1Ur7I5bu2pifZJq8ZjiHt-IPYQLCbIu-iKGiif9b-zUxzCoCYUqpQXkidbL2llv-XmmbOCyqFje_Xi9tE5x4MZOF4i9x6AKAhERMDiTD9cP1_PbO0B2eEA507SdGqeJFXgR4ZZyxep22IPPyuoGKMVfDRzSUWQTymVmARMbdcDpN3bqlfxSB32ADqqw7JrO2bORXDV0IHLrtsf-veLhQ8miVx71yfb8R0NiO9P69bt-7pRWLl5_4XUTz67QcZ6wIA", 
-      url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3" 
-    },
-    { 
-      id: "hero-3", 
-      title: "Urban Nomad", 
-      artist: "Anya Khurana", 
-      cover: "https://lh3.googleusercontent.com/aida-public/AB6AXuCKcgXtXi95QaGrNPrz929mxy7nS7izaOT3Y16aWt_54HF4M7Ob9Me0Y33M_AM9va0BSpibM2DIANqp7RAQTehHHcOChYPDnHm9G2_YZhsgk2aIJK6q4U7eLEjmZIndP_qa3BEzaUt4WBt9r9rNEmtD88EnIIuj3PNnx6BE36_VtzUmVnebpkZSnlfYdKhg8JRdSHA3_gAGemaLVRo3sJ4-ukgXKlrFTkT-573dWEyD3vVwg1bjw33XcbhGyLDwPuBmCppoBFt3dG4", 
-      url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3" 
-    }
-  ];
+  const [splitSliderVal, setSplitSliderVal] = React.useState(90);
+  const [streamsVal, setStreamsVal] = React.useState(500000);
 
   React.useEffect(() => {
     const fetchReleases = async () => {
@@ -190,12 +168,12 @@ export default function Home() {
             </motion.div>
           </motion.div>
 
-          {/* Tactile Record Crate Stack */}
+          {/* Interactive Neubrutalist Studio & Earnings Collage */}
           <motion.div 
             initial={{ opacity: 0, x: 50 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, ease: "easeOut" }}
-            className="lg:col-span-5 relative w-full h-[450px] flex items-center justify-center select-none z-10"
+            className="lg:col-span-5 relative w-full flex flex-col gap-8 z-10"
           >
             {/* Background dashed border card */}
             <div className="absolute inset-0 bg-black/5 border-2 border-dashed border-foreground/10 rounded-3xl -z-10" />
@@ -203,189 +181,143 @@ export default function Home() {
             {/* Draggable Stickers */}
             <motion.div 
               drag
-              dragConstraints={{ left: -100, right: 100, top: -100, bottom: 100 }}
-              className="absolute -top-10 -left-6 z-30 cursor-grab active:cursor-grabbing"
+              dragConstraints={{ left: -120, right: 120, top: -120, bottom: 120 }}
+              className="absolute -top-12 -left-6 z-30 cursor-grab active:cursor-grabbing hidden xl:block"
             >
               <div className="tape-badge tape-badge-pink rotate-[-12deg] text-xs font-black shadow-md border-2 border-white select-none">
                 100% INDIE ★
               </div>
             </motion.div>
-            
+
             <motion.div 
               drag
               dragConstraints={{ left: -100, right: 100, top: -100, bottom: 100 }}
-              className="absolute bottom-6 -right-6 z-30 cursor-grab active:cursor-grabbing"
+              className="absolute top-[45%] -right-10 z-30 cursor-grab active:cursor-grabbing hidden xl:block"
             >
               <div className="bg-[#00b0fc] text-black border-2 border-white px-3 py-1.5 font-bold text-xs uppercase tracking-widest shadow-[3px_3px_0px_0px_#000] rotate-12 select-none">
-                NO SUBSCRIPTION
+                NO FEES
               </div>
             </motion.div>
 
-            {/* Stack container */}
-            <div className="relative w-[320px] h-[320px]">
-              
-              {/* Record Item 1 (Back) */}
-              <motion.div 
-                whileHover={{ y: -20, rotate: -8, scale: 1.03 }}
-                className="absolute inset-0 z-10 transition-all duration-300"
-                style={{ transform: "rotate(-6deg) translate(-15px, -10px)" }}
-              >
-                {/* Vinyl sleeve */}
-                <div className="relative w-full h-full border-3 border-foreground shadow-[6px_6px_0px_0px_#00b0fc] bg-black overflow-hidden group">
-                  <Image 
-                    src={consoleTracks[2].cover} 
-                    alt={consoleTracks[2].title} 
-                    fill 
-                    className="object-cover opacity-80"
-                  />
-                  {/* Backdrop shading */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/40 to-transparent" />
-                  
-                  {/* Genre badge */}
-                  <div className="absolute top-4 left-4 bg-[#00b0fc] border-2 border-black text-black px-2 py-0.5 text-[8px] font-black uppercase">
-                    HIP HOP / AMBIENT
-                  </div>
-
-                  {/* Album Info */}
-                  <div className="absolute bottom-4 left-4 right-4 text-white">
-                    <p className="font-display font-black text-sm truncate">{consoleTracks[2].title}</p>
-                    <p className="text-[10px] font-bold text-white/60 truncate">{consoleTracks[2].artist}</p>
-                  </div>
-                  
-                  {/* Play Button Overlay */}
-                  <button 
-                    onClick={(e) => { e.preventDefault(); setTrack(consoleTracks[2]); }}
-                    className="absolute right-4 bottom-4 w-9 h-9 bg-white hover:bg-[#00b0fc] text-black border-2 border-black flex items-center justify-center shadow-[2px_2px_0px_0px_#000] hover:scale-105 active:scale-95 transition-all"
-                  >
-                    <Play className="w-4 h-4 fill-current ml-0.5" />
-                  </button>
-                </div>
-              </motion.div>
-
-              {/* Record Item 2 (Middle) */}
-              <motion.div 
-                whileHover={{ y: -25, rotate: 6, scale: 1.03 }}
-                className="absolute inset-0 z-15 transition-all duration-300"
-                style={{ transform: "rotate(4deg) translate(15px, -5px)" }}
-              >
-                {/* Vinyl sleeve */}
-                <div className="relative w-full h-full border-3 border-foreground shadow-[6px_6px_0px_0px_#f00a88] bg-black overflow-hidden group">
-                  <Image 
-                    src={consoleTracks[1].cover} 
-                    alt={consoleTracks[1].title} 
-                    fill 
-                    className="object-cover opacity-85"
-                  />
-                  {/* Backdrop shading */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/40 to-transparent" />
-                  
-                  {/* Genre badge */}
-                  <div className="absolute top-4 left-4 bg-[#f00a88] border-2 border-black text-white px-2 py-0.5 text-[8px] font-black uppercase">
-                    ELECTRO FOLK
-                  </div>
-
-                  {/* Album Info */}
-                  <div className="absolute bottom-4 left-4 right-4 text-white">
-                    <p className="font-display font-black text-sm truncate">{consoleTracks[1].title}</p>
-                    <p className="text-[10px] font-bold text-white/60 truncate">{consoleTracks[1].artist}</p>
-                  </div>
-
-                  {/* Play Button Overlay */}
-                  <button 
-                    onClick={(e) => { e.preventDefault(); setTrack(consoleTracks[1]); }}
-                    className="absolute right-4 bottom-4 w-9 h-9 bg-white hover:bg-[#f00a88] hover:text-white text-black border-2 border-black flex items-center justify-center shadow-[2px_2px_0px_0px_#000] hover:scale-105 active:scale-95 transition-all"
-                  >
-                    <Play className="w-4 h-4 fill-current ml-0.5" />
-                  </button>
-                </div>
-              </motion.div>
-
-              {/* Record Item 3 (Front) - Tactile Slideout vinyl */}
-              <div 
-                className="absolute inset-0 z-20 transition-all duration-500 hover:z-25"
-                style={{ transform: "rotate(-1deg) translate(0px, 15px)" }}
-              >
-                {/* Vinyl container with record sliding out */}
-                <div className="relative w-full h-full group/sleeve">
-                  
-                  {/* Disc (sliding out on hover) */}
-                  <div 
-                    className="absolute top-4 left-4 w-[90%] h-[90%] rounded-full bg-[#18181b] border-2 border-white/10 -z-10 flex items-center justify-center transition-all duration-500 ease-out group-hover/sleeve:translate-x-[48%] group-hover/sleeve:rotate-[180deg]"
-                    style={{
-                      background: "repeating-radial-gradient(circle, #18181b, #18181b 2px, #0f0f11 3px, #27272a 4px)"
-                    }}
-                  >
-                    <div className="relative w-[32%] h-[32%] rounded-full bg-[#ffc301] border-2 border-[#111] overflow-hidden relative flex items-center justify-center">
-                      <Image 
-                        src={consoleTracks[0].cover} 
-                        alt="label" 
-                        fill 
-                        className="object-cover"
-                      />
-                      <div className="w-2.5 h-2.5 bg-black border border-white/20 rounded-full z-10" />
-                    </div>
-                  </div>
-
-                  {/* Sleeve */}
-                  <div className="w-full h-full border-3 border-foreground shadow-[6px_6px_0px_0px_#ffc301] bg-[#111113] overflow-hidden relative flex flex-col justify-between p-5">
-                    {/* Background album cover */}
-                    <div className="absolute inset-0 -z-10 opacity-70">
-                      <Image 
-                        src={consoleTracks[0].cover} 
-                        alt={consoleTracks[0].title} 
-                        fill 
-                        className="object-cover"
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-[#111113] via-[#111113]/30 to-transparent" />
-                    </div>
-
-                    {/* Spine / Tape line */}
-                    <div className="absolute left-0 top-0 bottom-0 w-2.5 bg-black/40 border-r border-white/5" />
-
-                    {/* Header: Status Sticker */}
-                    <div className="flex justify-between items-start z-10">
-                      <div className="bg-[#ffc301] border-2 border-black text-black px-2 py-0.5 text-[8px] font-black uppercase">
-                        POP INDIE
-                      </div>
-                      <span className="text-[10px] font-black uppercase text-[#ffc301] tracking-widest animate-pulse">
-                        HOT RELEASE
-                      </span>
-                    </div>
-
-                    {/* Footer: Album Metadata & Play Action */}
-                    <div className="flex justify-between items-end z-10">
-                      <div className="text-white space-y-0.5 pr-2 truncate">
-                        <p className="font-display font-black text-base tracking-tight truncate leading-none mb-1">{consoleTracks[0].title}</p>
-                        <p className="text-[10px] font-bold text-white/60 truncate leading-none">{consoleTracks[0].artist}</p>
-                      </div>
-                      
-                      <button 
-                        onClick={(e) => { e.preventDefault(); setTrack(consoleTracks[0]); }}
-                        className="w-10 h-10 bg-[#ffc301] hover:bg-white text-black border-2 border-black flex items-center justify-center shadow-[2px_2px_0px_0px_#000] hover:scale-105 active:scale-95 transition-all flex-shrink-0"
-                      >
-                        <Play className="w-5 h-5 fill-current ml-0.5" />
-                      </button>
-                    </div>
-                  </div>
-
-                </div>
+            {/* Widget 1: Interactive Royalty Split Slider */}
+            <div className="relative bg-[#111113] border-3 border-foreground p-6 shadow-[6px_6px_0px_0px_#ffc301] text-white flex flex-col gap-4">
+              <div className="flex justify-between items-center border-b border-white/10 pb-3">
+                <span className="text-[10px] font-black uppercase tracking-wider text-white/40">INTERACTIVE // SPLITS</span>
+                <span className="bg-primary/20 text-primary border border-primary/30 px-2 py-0.5 text-[8px] font-black uppercase">
+                  ROYALTY METER
+                </span>
               </div>
 
+              <div className="space-y-1">
+                <div className="flex justify-between font-display font-black text-xl">
+                  <span>Artist: <span className="text-secondary">{splitSliderVal}%</span></span>
+                  <span className="text-white/40">Fastit: {100 - splitSliderVal}%</span>
+                </div>
+                <input 
+                  type="range"
+                  min="50"
+                  max="100"
+                  value={splitSliderVal}
+                  onChange={(e) => {
+                    const val = parseInt(e.target.value);
+                    setSplitSliderVal(val);
+                  }}
+                  className="w-full accent-secondary cursor-pointer h-2 bg-black rounded-lg appearance-none"
+                />
+              </div>
+
+              {/* Real-time reactive warning note */}
+              <div className="bg-black/60 border border-white/10 p-3 text-xs font-sans font-semibold min-h-[50px] flex items-center">
+                {splitSliderVal === 90 ? (
+                  <p className="text-secondary">✓ Default Deal: Keep 90% of everything you earn. Transparent & fair.</p>
+                ) : splitSliderVal > 90 ? (
+                  <p className="text-[#00b0fc]">★ Keeping {splitSliderVal}%: You keep almost everything! Fastit charges only a minimal fee.</p>
+                ) : splitSliderVal <= 65 ? (
+                  <p className="text-primary font-bold">⚠️ Warning: Traditional labels force you to keep {splitSliderVal}% or less. Don't sign away your masters!</p>
+                ) : (
+                  <p className="text-white/70">Configure your deal. Fastit ensures you keep the absolute lion share.</p>
+                )}
+              </div>
             </div>
 
-            {/* Doodle annotation */}
-            <div className="absolute -bottom-10 right-4 font-handwriting text-accent-blue text-2xl hidden sm:block rotate-2">
-              * Hover sleeves to slide out vinyl!
-            </div>
-            
-            {/* Doodle arrow pointing back to buttons */}
-            <div className="absolute -left-12 bottom-12 hidden xl:block rotate-[-20deg]">
-              <CurlyArrow direction="left" className="w-14 h-14 text-primary" />
-              <span className="absolute -top-6 -left-20 font-handwriting text-primary text-xl w-32 leading-none">
-                Support for 150+ DSPs
-              </span>
+            {/* Widget 2: Dynamic Streaming Earnings Calculator */}
+            <div className="relative bg-[#111113] border-3 border-foreground p-6 shadow-[6px_6px_0px_0px_#00b0fc] text-white flex flex-col gap-4">
+              <div className="flex justify-between items-center border-b border-white/10 pb-3">
+                <span className="text-[10px] font-black uppercase tracking-wider text-white/40">INTERACTIVE // ESTIMATOR</span>
+                <span className="bg-accent-blue/20 text-[#00b0fc] border border-accent-blue/30 px-2 py-0.5 text-[8px] font-black uppercase">
+                  EARNINGS POTENTIAL
+                </span>
+              </div>
+
+              <div className="space-y-1">
+                <div className="flex justify-between font-display font-black text-sm">
+                  <span>Annual Streams: <span className="text-accent-blue font-mono">{(streamsVal / 1000).toFixed(0)}k</span></span>
+                </div>
+                <input 
+                  type="range"
+                  min="100000"
+                  max="5000000"
+                  step="100000"
+                  value={streamsVal}
+                  onChange={(e) => setStreamsVal(parseInt(e.target.value))}
+                  className="w-full accent-[#00b0fc] cursor-pointer h-2 bg-black rounded-lg appearance-none"
+                />
+              </div>
+
+              {/* Dynamic bar charts comparing payout */}
+              <div className="space-y-3 pt-2">
+                <div className="space-y-1">
+                  <div className="flex justify-between text-xs font-bold text-white/80">
+                    <span>Keep with Fastit (90%):</span>
+                    <span className="text-secondary font-black">₹{Math.round(streamsVal * 0.25 * 0.9).toLocaleString('en-IN')}</span>
+                  </div>
+                  <div className="w-full h-3 bg-black border border-white/10 overflow-hidden">
+                    <motion.div 
+                      className="h-full bg-secondary"
+                      animate={{ width: "90%" }}
+                      transition={{ type: "spring", stiffness: 100 }}
+                    />
+                  </div>
+                </div>
+
+                <div className="space-y-1">
+                  <div className="flex justify-between text-xs font-bold text-white/50">
+                    <span>Traditional Labels (avg 50%):</span>
+                    <span className="text-white/40">₹{Math.round(streamsVal * 0.25 * 0.5).toLocaleString('en-IN')}</span>
+                  </div>
+                  <div className="w-full h-3 bg-black border border-white/10 overflow-hidden">
+                    <motion.div 
+                      className="h-full bg-white/20"
+                      animate={{ width: "50%" }}
+                      transition={{ type: "spring", stiffness: 100 }}
+                    />
+                  </div>
+                </div>
+              </div>
+              
+              <div className="text-[10px] text-white/30 text-center font-semibold italic">
+                * Based on average indie streams payout of ₹0.25 per play.
+              </div>
             </div>
 
+            {/* Widget 3: Polaroid Artist Photo Snapshot */}
+            <motion.div 
+              whileHover={{ rotate: 0, scale: 1.02 }}
+              className="polaroid-card w-[280px] self-center md:self-end rotate-3 z-20 cursor-default"
+            >
+              <div className="relative w-full aspect-[4/3] bg-zinc-800 border-2 border-black overflow-hidden">
+                <Image 
+                  src="https://images.unsplash.com/photo-1501386761578-eac5c94b800a?w=600&q=80"
+                  alt="Stage performance"
+                  fill
+                  className="object-cover"
+                  priority
+                />
+              </div>
+              <div className="pt-4 text-center font-handwriting text-foreground text-2xl tracking-wide select-none">
+                Live Gig, Indie Fest '26
+              </div>
+            </motion.div>
           </motion.div>
         </div>
       </section>
