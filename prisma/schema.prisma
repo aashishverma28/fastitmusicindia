@@ -390,3 +390,31 @@ model PublicRelease {
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
 }
+
+model Job {
+  id           String   @id @default(cuid())
+  title        String
+  department   String
+  location     String   @default("Assam / Remote")
+  type         String   @default("Full-Time")
+  experience   String
+  description  String   @db.Text
+  requirements String   @db.Text
+  accentColor  String   @default("#f00a88")
+  isActive     Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model JobApplication {
+  id           String   @id @default(cuid())
+  name         String
+  email        String
+  roleId       String?
+  roleTitle    String
+  portfolioUrl String
+  pitch        String   @db.Text
+  status       String   @default("PENDING")
+  createdAt    DateTime @default(now())
+}
+

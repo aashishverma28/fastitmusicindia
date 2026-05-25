@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { 
   Briefcase, 
@@ -16,11 +16,12 @@ import {
   Send,
   Sparkle,
   Clock,
-  ArrowUpRight
+  ArrowUpRight,
+  AlertTriangle
 } from "lucide-react";
 import { ScribbleUnderline, ScribbleUnderlineDouble, CurlyArrow, BadgeStamp } from "@/components/shared/Doodles";
 
-const OPEN_POSITIONS = [
+const FALLBACK_POSITIONS = [
   {
     id: "frontend-engineer",
     title: "Frontend Engineer (React/Next.js)",
@@ -35,8 +36,7 @@ const OPEN_POSITIONS = [
       "A sharp eye for modern web design, typography, and premium aesthetics.",
       "Familiarity with REST/GraphQL APIs and Git version control."
     ],
-    accent: "#f00a88", // Pink
-    cardClass: "neubrutalist-card-pink"
+    accentColor: "#f00a88", // Pink
   },
   {
     id: "artist-relations",
@@ -52,8 +52,7 @@ const OPEN_POSITIONS = [
       "Passionate about supporting independent/bedroom music acts.",
       "Fluent in English and regional languages."
     ],
-    accent: "#ffc301", // Yellow
-    cardClass: "neubrutalist-card-yellow"
+    accentColor: "#ffc301", // Yellow
   },
   {
     id: "backend-developer",
@@ -69,8 +68,7 @@ const OPEN_POSITIONS = [
       "Knowledge of media processing (audio transcoding, metadata mapping).",
       "Strong debugging skills and focus on database performance."
     ],
-    accent: "#00b0fc", // Blue
-    cardClass: "neubrutalist-card-blue"
+    accentColor: "#00b0fc", // Blue
   },
   {
     id: "marketing-strategist",
@@ -86,15 +84,17 @@ const OPEN_POSITIONS = [
       "Analytical mindset to monitor stream gains, CTRs, and conversion rates.",
       "Creative storytelling abilities and graphic design skills."
     ],
-    accent: "#f00a88", // Pink
-    cardClass: "neubrutalist-card-pink"
+    accentColor: "#f00a88", // Pink
   }
 ];
 
 export default function CareerPage() {
-  const [selectedRole, setSelectedRole] = useState("frontend-engineer");
+  const [positions, setPositions] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [selectedRole, setSelectedRole] = useState("");
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState("");
   const formRef = useRef<HTMLDivElement>(null);
 
   const [formData, setFormData] = useState({
@@ -104,21 +104,92 @@ export default function CareerPage() {
     pitch: ""
   });
 
+  const fetchJobs = async () => {
+    try {
+      const res = await fetch("/api/jobs/public");
+      if (res.ok) {
+        const data = await res.json();
+        const activeJobs = data.jobs || [];
+        setPositions(activeJobs);
+        if (activeJobs.length > 0) {
+          setSelectedRole(activeJobs[0].id);
+        } else {
+          setSelectedRole(FALLBACK_POSITIONS[0].id);
+        }
+      } else {
+        setSelectedRole(FALLBACK_POSITIONS[0].id);
+      }
+    } catch (err) {
+      console.error("Failed to load jobs:", err);
+      setSelectedRole(FALLBACK_POSITIONS[0].id);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchJobs();
+  }, []);
+
   const handleApplyClick = (roleId: string) => {
     setSelectedRole(roleId);
     formRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setSubmitting(true);
-    // Simulate API Submission
-    setTimeout(() => {
-      setSubmitting(false);
+    setError("");
+
+    const displayPositions = positions.length > 0 ? positions : FALLBACK_POSITIONS;
+    const selectedJob = displayPositions.find(p => p.id === selectedRole);
+    const roleTitle = selectedJob ? selectedJob.title : "General Application";
+    const roleId = positions.length > 0 ? selectedRole : "fallback";
+
+    try {
+      const res = await fetch("/api/jobs/apply", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          roleId,
+          roleTitle,
+          portfolioUrl: formData.portfolioUrl,
+          pitch: formData.pitch
+        }),
+      });
+
+      const data = await res.json();
+      if (!res.ok) {
+        setError(data.error || "Failed to submit application");
+        return;
+      }
+
       setIsSubmitted(true);
       setFormData({ name: "", email: "", portfolioUrl: "", pitch: "" });
-    }, 1500);
+    } catch (err) {
+      setError("Network error. Please try again later.");
+    } finally {
+      setSubmitting(false);
+    }
   };
+
+  const getCardClass = (color: string) => {
+    const c = color.toLowerCase();
+    if (c === "#ffc301" || c === "yellow") return "neubrutalist-card-yellow";
+    if (c === "#00b0fc" || c === "blue") return "neubrutalist-card-blue";
+    return "neubrutalist-card-pink"; // Default Pink
+  };
+
+  const getRequirementsArray = (requirements: any) => {
+    if (typeof requirements === "string") {
+      return requirements.split("\n").filter(Boolean);
+    }
+    return Array.isArray(requirements) ? requirements : [];
+  };
+
+  const displayPositions = positions.length > 0 ? positions : FALLBACK_POSITIONS;
 
   return (
     <div className="min-h-screen pt-24 pb-20 relative overflow-hidden">
@@ -213,66 +284,92 @@ export default function CareerPage() {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
-            {OPEN_POSITIONS.map((role) => (
-              <motion.div 
-                key={role.id}
-                whileHover={{ y: -4 }}
-                className={`${role.cardClass} p-8 rounded-none flex flex-col justify-between`}
-              >
-                <div className="space-y-6">
-                  {/* Job Header Info */}
-                  <div className="flex flex-wrap justify-between items-start gap-4 pb-4 border-b border-white/10">
-                    <div>
-                      <span className="text-[10px] font-black uppercase tracking-widest text-white/40 block mb-1">
-                        {role.department}
-                      </span>
-                      <h3 className="text-2xl font-black font-display text-white">{role.title}</h3>
+          {loading ? (
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
+              {[1, 2].map((i) => (
+                <div key={i} className="h-96 border-2 border-white/10 bg-white/5 animate-pulse" />
+              ))}
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
+              {displayPositions.map((role) => {
+                const cardClass = getCardClass(role.accentColor);
+                const requirements = getRequirementsArray(role.requirements);
+
+                return (
+                  <motion.div 
+                    key={role.id}
+                    whileHover={{ y: -4 }}
+                    className={`${cardClass} p-8 rounded-none flex flex-col justify-between`}
+                    style={{
+                      // Custom color shadow fallback if color isn't simple yellow/blue/pink
+                      boxShadow: !["yellow", "blue", "#ffc301", "#00b0fc"].includes((role.accentColor || "").toLowerCase())
+                        ? `5px 5px 0px 0px ${role.accentColor}`
+                        : undefined
+                    }}
+                  >
+                    <div className="space-y-6">
+                      {/* Job Header Info */}
+                      <div className="flex flex-wrap justify-between items-start gap-4 pb-4 border-b border-white/10">
+                        <div>
+                          <span className="text-[10px] font-black uppercase tracking-widest text-white/40 block mb-1">
+                            {role.department}
+                          </span>
+                          <h3 className="text-2xl font-black font-display text-white">{role.title}</h3>
+                        </div>
+                        <span 
+                          className="px-3 py-1 border-2 border-white text-xs font-black uppercase tracking-wider block bg-black text-white"
+                          style={{ boxShadow: `2px 2px 0px 0px ${role.accentColor || "#f00a88"}` }}
+                        >
+                          {role.type}
+                        </span>
+                      </div>
+
+                      {/* Metadata Chips */}
+                      <div className="flex flex-wrap gap-4 text-xs font-bold text-white/50 font-sans">
+                        <span className="flex items-center gap-1.5"><MapPin className="w-3.5 h-3.5" /> {role.location}</span>
+                        <span className="flex items-center gap-1.5"><Clock className="w-3.5 h-3.5" /> {role.experience}</span>
+                      </div>
+
+                      {/* Description */}
+                      <p className="text-white/70 text-sm leading-relaxed font-sans font-medium">
+                        {role.description}
+                      </p>
+
+                      {/* Requirements List */}
+                      {requirements.length > 0 && (
+                        <div className="space-y-2 pt-2">
+                          <p className="text-[10px] font-black uppercase tracking-widest text-white/40">Requirements</p>
+                          <ul className="space-y-2">
+                            {requirements.map((req: string, i: number) => (
+                              <li key={i} className="flex gap-2.5 items-start text-xs text-white/60 font-sans font-medium">
+                                <Check className="w-4 h-4 text-white shrink-0 mt-0.5" style={{ color: role.accentColor || "#f00a88" }} />
+                                <span>{req}</span>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      )}
                     </div>
-                    <span 
-                      className="px-3 py-1 border-2 border-white text-xs font-black uppercase tracking-wider block bg-black text-white shadow-[2px_2px_0px_0px_#000]"
-                      style={{ boxShadow: `2px 2px 0px 0px ${role.accent}` }}
+
+                    {/* Apply Button */}
+                    <button 
+                      onClick={() => handleApplyClick(role.id)}
+                      className="btn-neubrutalist-secondary w-full py-3.5 mt-8 font-black font-display text-sm tracking-widest uppercase flex items-center justify-center gap-2"
+                      style={{ 
+                        "--btn-sec-bg": "#000", 
+                        "--btn-sec-fg": "#fff", 
+                        "--btn-sec-border": "#fff", 
+                        boxShadow: `4px 4px 0px 0px ${role.accentColor || "#f00a88"}` 
+                      } as any}
                     >
-                      {role.type}
-                    </span>
-                  </div>
-
-                  {/* Metadata Chips */}
-                  <div className="flex flex-wrap gap-4 text-xs font-bold text-white/50 font-sans">
-                    <span className="flex items-center gap-1.5"><MapPin className="w-3.5 h-3.5" /> {role.location}</span>
-                    <span className="flex items-center gap-1.5"><Clock className="w-3.5 h-3.5" /> {role.experience}</span>
-                  </div>
-
-                  {/* Description */}
-                  <p className="text-white/70 text-sm leading-relaxed font-sans font-medium">
-                    {role.description}
-                  </p>
-
-                  {/* Requirements List */}
-                  <div className="space-y-2 pt-2">
-                    <p className="text-[10px] font-black uppercase tracking-widest text-white/40">Requirements</p>
-                    <ul className="space-y-2">
-                      {role.requirements.map((req, i) => (
-                        <li key={i} className="flex gap-2.5 items-start text-xs text-white/60 font-sans font-medium">
-                          <Check className="w-4 h-4 text-white shrink-0 mt-0.5" style={{ color: role.accent }} />
-                          <span>{req}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                </div>
-
-                {/* Apply Button */}
-                <button 
-                  onClick={() => handleApplyClick(role.id)}
-                  className="btn-neubrutalist-secondary w-full py-3.5 mt-8 font-black font-display text-sm tracking-widest uppercase flex items-center justify-center gap-2"
-                  style={{ "--btn-sec-bg": "#000", "--btn-sec-fg": "#fff", "--btn-sec-border": "#fff", boxShadow: `4px 4px 0px 0px ${role.accent}` } as any}
-                >
-                  Apply For Role <ArrowUpRight className="w-4 h-4" />
-                </button>
-              </motion.div>
-            ))}
-          </div>
+                      Apply For Role <ArrowUpRight className="w-4 h-4" />
+                    </button>
+                  </motion.div>
+                );
+              })}
+            </div>
+          )}
         </section>
 
         {/* Application Form Section */}
@@ -287,6 +384,15 @@ export default function CareerPage() {
                 Tell us about yourself and we will get back to you within 3-5 business days.
               </p>
             </div>
+
+            {error && (
+              <div 
+                className="mb-6 p-4 border-2 border-black flex items-center gap-3 bg-red-500/10 text-red-500 text-sm font-semibold font-sans shadow-[3px_3px_0px_0px_rgba(239,68,68,0.5)]"
+              >
+                <AlertTriangle className="w-5 h-5 flex-shrink-0" />
+                <span>{error}</span>
+              </div>
+            )}
 
             <form onSubmit={handleSubmit} className="space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -322,7 +428,7 @@ export default function CareerPage() {
                     value={selectedRole}
                     onChange={(e) => setSelectedRole(e.target.value)}
                   >
-                    {OPEN_POSITIONS.map((role) => (
+                    {displayPositions.map((role) => (
                       <option key={role.id} value={role.id} className="bg-[#1a1a1c]">{role.title}</option>
                     ))}
                   </select>

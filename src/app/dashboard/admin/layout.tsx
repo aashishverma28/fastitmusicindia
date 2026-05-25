@@ -14,7 +14,8 @@ import {
   Menu,
   X,
   Building2,
-  Search
+  Search,
+  Briefcase
 } from "lucide-react";
 import NotificationBell from "@/components/layout/NotificationBell";
 import { useState, useEffect } from "react";
@@ -55,6 +56,7 @@ export default function AdminDashboardLayout({
     { name: "Labels",        href: "/dashboard/admin/labels",       icon: Building2 },
     { name: "Payments",      href: "/dashboard/admin/payments",     icon: CreditCard },
     { name: "Staff Access",  href: "/dashboard/admin/staff",        icon: Settings },
+    { name: "Hiring / Jobs",  href: "/dashboard/admin/jobs",         icon: Briefcase },
   ];
 
   const handleLinkClick = () => {
