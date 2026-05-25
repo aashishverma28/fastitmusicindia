@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
@@ -10,7 +10,19 @@ import { useTheme } from "@/components/providers/ThemeProvider";
 export default function Navbar() {
   const { theme, toggleTheme } = useTheme();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [baseDomain, setBaseDomain] = useState("");
   const pathname = usePathname();
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const hostname = window.location.hostname;
+      if (hostname.startsWith("career.")) {
+        // We are on the subdomain. Point links to main domain.
+        const hostWithoutSubdomain = window.location.host.replace(/^career\./, "");
+        setBaseDomain(window.location.host.includes("localhost") ? `http://${hostWithoutSubdomain}` : "https://fastitmusic.in");
+      }
+    }
+  }, []);
 
   const isActive = (href: string) => {
     if (href === "/") {
@@ -27,7 +39,7 @@ export default function Navbar() {
       <nav className="flex justify-between items-center w-full px-8 py-4.5 max-w-[1920px] mx-auto">
         <div className="flex items-center gap-8">
           <Link 
-            href="/" 
+            href={baseDomain ? `${baseDomain}/` : "/"} 
             className="relative flex items-center gap-3.5"
             onClick={() => setIsMobileMenuOpen(false)}
           >
@@ -52,7 +64,7 @@ export default function Navbar() {
                   ? "text-primary font-bold border-primary" 
                   : "text-white/70 hover:text-white border-transparent hover:scale-105"
               }`} 
-              href="/"
+              href={baseDomain ? `${baseDomain}/` : "/"}
             >
               Home
             </Link>
@@ -62,7 +74,7 @@ export default function Navbar() {
                   ? "text-primary font-bold border-primary" 
                   : "text-white/70 hover:text-white border-transparent hover:scale-105"
               }`} 
-              href="/about"
+              href={baseDomain ? `${baseDomain}/about` : "/about"}
             >
               About
             </Link>
@@ -72,7 +84,7 @@ export default function Navbar() {
                   ? "text-primary font-bold border-primary" 
                   : "text-white/70 hover:text-white border-transparent hover:scale-105"
               }`} 
-              href="/services"
+              href={baseDomain ? `${baseDomain}/services` : "/services"}
             >
               Services
             </Link>
@@ -82,7 +94,7 @@ export default function Navbar() {
                   ? "text-primary font-bold border-primary" 
                   : "text-white/70 hover:text-white border-transparent hover:scale-105"
               }`} 
-              href="/artists"
+              href={baseDomain ? `${baseDomain}/artists` : "/artists"}
             >
               Artists
             </Link>
@@ -92,7 +104,7 @@ export default function Navbar() {
                   ? "text-primary font-bold border-primary" 
                   : "text-white/70 hover:text-white border-transparent hover:scale-105"
               }`} 
-              href="/releases"
+              href={baseDomain ? `${baseDomain}/releases` : "/releases"}
             >
               Releases
             </Link>
@@ -118,13 +130,13 @@ export default function Navbar() {
           </button>
 
           <Link 
-            href="/apply" 
+            href={baseDomain ? `${baseDomain}/apply` : "/apply"} 
             className="hidden md:inline-block btn-neubrutalist px-5 py-2 rounded-none font-bold hover:scale-105 transition-all active:scale-95 duration-300 text-sm"
           >
             Apply Now
           </Link>
           <Link 
-            href="/login" 
+            href={baseDomain ? `${baseDomain}/login` : "/login"} 
             className="hidden md:inline-block text-white/70 hover:text-white font-bold transition-colors"
           >
             Login
@@ -149,7 +161,7 @@ export default function Navbar() {
             className={`font-display text-xl transition-all ${
               isActive("/") ? "text-primary font-black" : "text-white/70 hover:text-white"
             }`}
-            href="/"
+            href={baseDomain ? `${baseDomain}/` : "/"}
           >
             Home
           </Link>
@@ -158,7 +170,7 @@ export default function Navbar() {
             className={`font-display text-xl transition-all ${
               isActive("/about") ? "text-primary font-black" : "text-white/70 hover:text-white"
             }`}
-            href="/about"
+            href={baseDomain ? `${baseDomain}/about` : "/about"}
           >
             About
           </Link>
@@ -167,7 +179,7 @@ export default function Navbar() {
             className={`font-display text-xl transition-all ${
               isActive("/services") ? "text-primary font-black" : "text-white/70 hover:text-white"
             }`}
-            href="/services"
+            href={baseDomain ? `${baseDomain}/services` : "/services"}
           >
             Services
           </Link>
@@ -176,7 +188,7 @@ export default function Navbar() {
             className={`font-display text-xl transition-all ${
               isActive("/artists") ? "text-primary font-black" : "text-white/70 hover:text-white"
             }`}
-            href="/artists"
+            href={baseDomain ? `${baseDomain}/artists` : "/artists"}
           >
             Artists
           </Link>
@@ -185,7 +197,7 @@ export default function Navbar() {
             className={`font-display text-xl transition-all ${
               isActive("/releases") ? "text-primary font-black" : "text-white/70 hover:text-white"
             }`}
-            href="/releases"
+            href={baseDomain ? `${baseDomain}/releases` : "/releases"}
           >
             Releases
           </Link>
@@ -195,14 +207,14 @@ export default function Navbar() {
           <div className="flex flex-col gap-4">
             <Link 
               onClick={() => setIsMobileMenuOpen(false)}
-              href="/login" 
+              href={baseDomain ? `${baseDomain}/login` : "/login"} 
               className="w-full text-center text-white/70 hover:text-white font-bold py-3 transition-colors border border-white/10"
             >
               Login
             </Link>
             <Link 
               onClick={() => setIsMobileMenuOpen(false)}
-              href="/apply" 
+              href={baseDomain ? `${baseDomain}/apply` : "/apply"} 
               className="w-full text-center btn-neubrutalist py-3 rounded-none font-bold block"
             >
               Apply Now
