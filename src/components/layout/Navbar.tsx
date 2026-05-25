@@ -3,12 +3,21 @@
 import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { usePathname } from "next/navigation";
 import { Sun, Moon, Menu, X } from "lucide-react";
 import { useTheme } from "@/components/providers/ThemeProvider";
 
 export default function Navbar() {
   const { theme, toggleTheme } = useTheme();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const pathname = usePathname();
+
+  const isActive = (href: string) => {
+    if (href === "/") {
+      return pathname === "/";
+    }
+    return pathname ? pathname.startsWith(href) : false;
+  };
 
   return (
     <header className="bg-[#080809] border-b-2 border-white/10 docked full-width top-0 sticky z-50 shadow-[0_10px_40px_-15px_rgba(240,10,136,0.08)] relative overflow-visible">
@@ -37,19 +46,54 @@ export default function Navbar() {
             </div>
           </Link>
           <div className="hidden md:flex items-center gap-6">
-            <Link className="text-primary font-bold border-b-2 border-primary pb-1 font-display tracking-tighter transition-all duration-300" href="/">
+            <Link 
+              className={`font-display tracking-tighter transition-all duration-300 border-b-2 pb-1 ${
+                isActive("/") 
+                  ? "text-primary font-bold border-primary" 
+                  : "text-white/70 hover:text-white border-transparent hover:scale-105"
+              }`} 
+              href="/"
+            >
               Home
             </Link>
-            <Link className="text-white/70 hover:text-white transition-colors font-display tracking-tighter hover:scale-105" href="/about">
+            <Link 
+              className={`font-display tracking-tighter transition-all duration-300 border-b-2 pb-1 ${
+                isActive("/about") 
+                  ? "text-primary font-bold border-primary" 
+                  : "text-white/70 hover:text-white border-transparent hover:scale-105"
+              }`} 
+              href="/about"
+            >
               About
             </Link>
-            <Link className="text-white/70 hover:text-white transition-colors font-display tracking-tighter hover:scale-105" href="/services">
+            <Link 
+              className={`font-display tracking-tighter transition-all duration-300 border-b-2 pb-1 ${
+                isActive("/services") 
+                  ? "text-primary font-bold border-primary" 
+                  : "text-white/70 hover:text-white border-transparent hover:scale-105"
+              }`} 
+              href="/services"
+            >
               Services
             </Link>
-            <Link className="text-white/70 hover:text-white transition-colors font-display tracking-tighter hover:scale-105" href="/artists">
+            <Link 
+              className={`font-display tracking-tighter transition-all duration-300 border-b-2 pb-1 ${
+                isActive("/artists") 
+                  ? "text-primary font-bold border-primary" 
+                  : "text-white/70 hover:text-white border-transparent hover:scale-105"
+              }`} 
+              href="/artists"
+            >
               Artists
             </Link>
-            <Link className="text-white/70 hover:text-white transition-colors font-display tracking-tighter hover:scale-105" href="/releases">
+            <Link 
+              className={`font-display tracking-tighter transition-all duration-300 border-b-2 pb-1 ${
+                isActive("/releases") 
+                  ? "text-primary font-bold border-primary" 
+                  : "text-white/70 hover:text-white border-transparent hover:scale-105"
+              }`} 
+              href="/releases"
+            >
               Releases
             </Link>
           </div>
@@ -102,35 +146,45 @@ export default function Navbar() {
         <div className="md:hidden absolute top-[calc(100%-2px)] left-0 w-full bg-[#080809] border-b-2 border-white/20 px-8 py-8 flex flex-col gap-6 z-40 shadow-[0_20px_50px_rgba(0,0,0,0.8)] border-x-2 border-white/10">
           <Link 
             onClick={() => setIsMobileMenuOpen(false)}
-            className="text-primary font-black font-display text-xl transition-all"
+            className={`font-display text-xl transition-all ${
+              isActive("/") ? "text-primary font-black" : "text-white/70 hover:text-white"
+            }`}
             href="/"
           >
             Home
           </Link>
           <Link 
             onClick={() => setIsMobileMenuOpen(false)}
-            className="text-white/70 hover:text-white font-black font-display text-xl transition-all"
+            className={`font-display text-xl transition-all ${
+              isActive("/about") ? "text-primary font-black" : "text-white/70 hover:text-white"
+            }`}
             href="/about"
           >
             About
           </Link>
           <Link 
             onClick={() => setIsMobileMenuOpen(false)}
-            className="text-white/70 hover:text-white font-black font-display text-xl transition-all"
+            className={`font-display text-xl transition-all ${
+              isActive("/services") ? "text-primary font-black" : "text-white/70 hover:text-white"
+            }`}
             href="/services"
           >
             Services
           </Link>
           <Link 
             onClick={() => setIsMobileMenuOpen(false)}
-            className="text-white/70 hover:text-white font-black font-display text-xl transition-all"
+            className={`font-display text-xl transition-all ${
+              isActive("/artists") ? "text-primary font-black" : "text-white/70 hover:text-white"
+            }`}
             href="/artists"
           >
             Artists
           </Link>
           <Link 
             onClick={() => setIsMobileMenuOpen(false)}
-            className="text-white/70 hover:text-white font-black font-display text-xl transition-all"
+            className={`font-display text-xl transition-all ${
+              isActive("/releases") ? "text-primary font-black" : "text-white/70 hover:text-white"
+            }`}
             href="/releases"
           >
             Releases
