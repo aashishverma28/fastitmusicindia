@@ -314,7 +314,7 @@ export default function Home() {
                   priority
                 />
               </div>
-              <div className="pt-4 text-center font-handwriting text-foreground text-2xl tracking-wide select-none">
+              <div className="pt-4 text-center font-handwriting text-[#1c1a17] text-2xl tracking-wide select-none">
                 Live Gig, Indie Fest '26
               </div>
             </motion.div>
