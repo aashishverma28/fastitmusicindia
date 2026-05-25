@@ -46,6 +46,7 @@ export default function Footer() {
           <h4 className="text-white font-black uppercase tracking-widest text-xs">Company</h4>
           <nav className="flex flex-col gap-3">
             <Link className="text-white/50 hover:text-secondary transition-colors hover:translate-x-1 font-semibold text-sm" href="/about">About Us</Link>
+            <Link className="text-white/50 hover:text-secondary transition-colors hover:translate-x-1 font-semibold text-sm" href="/career">Careers</Link>
             <Link className="text-white/50 hover:text-secondary transition-colors hover:translate-x-1 font-semibold text-sm" href="/privacy">Privacy Policy</Link>
             <Link className="text-white/50 hover:text-secondary transition-colors hover:translate-x-1 font-semibold text-sm" href="/terms">Terms of Service</Link>
             <span className="text-white/40 font-semibold text-sm">Office: Assam, India</span>
