@@ -271,7 +271,7 @@ export default function TeamMemberPage() {
             <div className="w-20 h-1.5 rounded-full bg-gradient-to-r from-primary to-secondary" />
 
             {/* Bio paragraphs */}
-            <div className="space-y-4 text-white/65 text-base leading-relaxed font-sans">
+            <div className="space-y-4 text-white/70 text-base leading-relaxed font-sans">
               {member.bio.map((para, i) => (
                 <p key={i}>{para}</p>
               ))}
