@@ -305,9 +305,9 @@ export default function ReleasesPage() {
                 initial={{ opacity: 0, scale: 0.9, y: 20 }}
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.9, y: 20 }}
-                className="relative w-full max-w-lg bg-[#111113] p-8 rounded-none border-3 border-white shadow-[8px_8px_0px_0px_#f00a88] overflow-y-auto max-h-[90vh] z-10"
+                className="relative w-full max-w-lg bg-[#111113] p-5 sm:p-8 rounded-none border-3 border-white shadow-[8px_8px_0px_0px_#f00a88] overflow-y-auto max-h-[90vh] z-10"
               >
-                <div className="flex justify-between items-center mb-8">
+                <div className="flex justify-between items-center mb-5 sm:mb-8">
                   <h2 className="text-2xl font-black font-display text-white">Add <span className="text-primary">Manual</span> Release</h2>
                   <button onClick={() => setIsModalOpen(false)} className="text-white/40 hover:text-white transition-colors">
                     <X className="w-6 h-6" />

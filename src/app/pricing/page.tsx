@@ -141,7 +141,7 @@ export default function PricingPage() {
             viewport={{ once: true }}
             className="glass rounded-[2.5rem] border border-white/10 overflow-hidden group hover:border-primary/30 transition-all"
           >
-            <div className="p-10 md:p-12">
+            <div className="p-6 sm:p-10 md:p-12">
               {/* Plan Header */}
               <div className="flex items-center gap-4 mb-8">
                 <div className="w-16 h-16 bg-primary/10 rounded-2xl flex items-center justify-center">
@@ -199,7 +199,7 @@ export default function PricingPage() {
               <Star className="w-3 h-3 fill-current" /> Most Popular
             </div>
 
-            <div className="p-10 md:p-12">
+            <div className="p-6 sm:p-10 md:p-12">
               {/* Plan Header */}
               <div className="flex items-center gap-4 mb-8">
                 <div className="w-16 h-16 bg-secondary/10 rounded-2xl flex items-center justify-center">

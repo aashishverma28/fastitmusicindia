@@ -1,12 +1,14 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { Sun, Moon } from "lucide-react";
+import { Sun, Moon, Menu, X } from "lucide-react";
 import { useTheme } from "@/components/providers/ThemeProvider";
 
 export default function Navbar() {
   const { theme, toggleTheme } = useTheme();
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   return (
     <header className="bg-[#080809] border-b-2 border-white/10 docked full-width top-0 sticky z-50 shadow-[0_10px_40px_-15px_rgba(240,10,136,0.08)] relative overflow-visible">
@@ -18,6 +20,7 @@ export default function Navbar() {
           <Link 
             href="/" 
             className="relative flex items-center gap-3.5"
+            onClick={() => setIsMobileMenuOpen(false)}
           >
             <div className="relative w-11 h-11 border-2 border-white p-1 bg-black shadow-[2px_2px_0px_0px_#f00a88]">
               <Image 
@@ -72,18 +75,87 @@ export default function Navbar() {
 
           <Link 
             href="/apply" 
-            className="btn-neubrutalist px-5 py-2 rounded-none font-bold hover:scale-105 transition-all active:scale-95 duration-300 text-sm"
+            className="hidden md:inline-block btn-neubrutalist px-5 py-2 rounded-none font-bold hover:scale-105 transition-all active:scale-95 duration-300 text-sm"
           >
             Apply Now
           </Link>
           <Link 
             href="/login" 
-            className="text-white/70 hover:text-white font-bold transition-colors"
+            className="hidden md:inline-block text-white/70 hover:text-white font-bold transition-colors"
           >
             Login
           </Link>
+
+          {/* Hamburger Menu Button */}
+          <button
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            className="md:hidden w-10 h-10 border-2 border-white text-white flex items-center justify-center bg-black hover:scale-105 hover:bg-white hover:text-black transition-all duration-200 active:scale-95 shadow-[2px_2px_0px_0px_#f00a88] cursor-pointer"
+            aria-label="Toggle menu"
+          >
+            {isMobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+          </button>
         </div>
       </nav>
+
+      {/* Mobile Menu Dropdown */}
+      {isMobileMenuOpen && (
+        <div className="md:hidden absolute top-[calc(100%-2px)] left-0 w-full bg-[#080809] border-b-2 border-white/20 px-8 py-8 flex flex-col gap-6 z-40 shadow-[0_20px_50px_rgba(0,0,0,0.8)] border-x-2 border-white/10">
+          <Link 
+            onClick={() => setIsMobileMenuOpen(false)}
+            className="text-primary font-black font-display text-xl transition-all"
+            href="/"
+          >
+            Home
+          </Link>
+          <Link 
+            onClick={() => setIsMobileMenuOpen(false)}
+            className="text-white/70 hover:text-white font-black font-display text-xl transition-all"
+            href="/about"
+          >
+            About
+          </Link>
+          <Link 
+            onClick={() => setIsMobileMenuOpen(false)}
+            className="text-white/70 hover:text-white font-black font-display text-xl transition-all"
+            href="/services"
+          >
+            Services
+          </Link>
+          <Link 
+            onClick={() => setIsMobileMenuOpen(false)}
+            className="text-white/70 hover:text-white font-black font-display text-xl transition-all"
+            href="/artists"
+          >
+            Artists
+          </Link>
+          <Link 
+            onClick={() => setIsMobileMenuOpen(false)}
+            className="text-white/70 hover:text-white font-black font-display text-xl transition-all"
+            href="/releases"
+          >
+            Releases
+          </Link>
+          
+          <hr className="border-white/10" />
+          
+          <div className="flex flex-col gap-4">
+            <Link 
+              onClick={() => setIsMobileMenuOpen(false)}
+              href="/login" 
+              className="w-full text-center text-white/70 hover:text-white font-bold py-3 transition-colors border border-white/10"
+            >
+              Login
+            </Link>
+            <Link 
+              onClick={() => setIsMobileMenuOpen(false)}
+              href="/apply" 
+              className="w-full text-center btn-neubrutalist py-3 rounded-none font-bold block"
+            >
+              Apply Now
+            </Link>
+          </div>
+        </div>
+      )}
     </header>
   );
 }

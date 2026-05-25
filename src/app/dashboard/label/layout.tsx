@@ -27,9 +27,21 @@ export default function LabelDashboardLayout({
   children: React.ReactNode;
 }) {
   const { data: session, status } = useSession();
-  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
-
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [artistCount, setArtistCount] = useState<number | null>(null);
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth < 768) {
+        setIsSidebarOpen(false);
+      } else {
+        setIsSidebarOpen(true);
+      }
+    };
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   useEffect(() => {
     if (session) {
@@ -55,16 +67,30 @@ export default function LabelDashboardLayout({
     { name: "Royalties", href: "/dashboard/label/royalties", icon: DollarSign },
   ];
 
+  const handleLinkClick = () => {
+    if (window.innerWidth < 768) {
+      setIsSidebarOpen(false);
+    }
+  };
+
   return (
-    <div className="min-h-screen bg-background flex text-foreground font-sans transition-colors duration-200">
+    <div className="min-h-screen bg-background flex text-foreground font-sans transition-colors duration-200 relative overflow-hidden">
+      {/* Backdrop for mobile */}
+      {isSidebarOpen && (
+        <div 
+          onClick={() => setIsSidebarOpen(false)}
+          className="md:hidden fixed inset-0 bg-black/60 backdrop-blur-sm z-40" 
+        />
+      )}
+
       {/* Sidebar */}
       <aside 
         className={`${
-          isSidebarOpen ? "w-64" : "w-18"
-        } border-r border-foreground/5 bg-foreground/[0.01] backdrop-blur-xl transition-all duration-300 flex flex-col z-50`}
+          isSidebarOpen ? "translate-x-0 w-64" : "-translate-x-full md:w-18 md:translate-x-0"
+        } border-r border-foreground/5 bg-[#080809]/95 md:bg-foreground/[0.01] backdrop-blur-xl transition-all duration-300 flex flex-col fixed md:relative h-screen top-0 left-0 z-50`}
       >
         <div className="p-6 flex items-center gap-3">
-          <div className="w-8 h-8 bg-secondary rounded-lg flex items-center justify-center font-black italic text-black">l</div>
+          <div className="w-8 h-8 bg-secondary rounded-lg flex items-center justify-center font-black italic text-black shrink-0">l</div>
           {isSidebarOpen && <span className="font-display font-black text-xl tracking-tighter">FASTIT <span className="text-secondary">LABEL</span></span>}
         </div>
 
@@ -73,6 +99,7 @@ export default function LabelDashboardLayout({
             <Link 
               key={item.name}
               href={item.href}
+              onClick={handleLinkClick}
               className="flex items-center gap-3 p-3 rounded-xl hover:bg-foreground/5 transition-all group"
             >
               <item.icon className="w-5 h-5 text-foreground/40 group-hover:text-secondary transition-colors" />
@@ -82,7 +109,11 @@ export default function LabelDashboardLayout({
         </nav>
 
         <div className="p-4 border-t border-foreground/5 space-y-2">
-           <Link href="/dashboard/label/settings" className="flex items-center gap-3 p-3 rounded-xl hover:bg-foreground/5 transition-all group">
+           <Link 
+            href="/dashboard/label/settings" 
+            onClick={handleLinkClick}
+            className="flex items-center gap-3 p-3 rounded-xl hover:bg-foreground/5 transition-all group"
+          >
              <Settings className="w-5 h-5 text-foreground/40 group-hover:text-foreground" />
              {isSidebarOpen && <span className="font-bold text-sm text-foreground/60 group-hover:text-foreground">Settings</span>}
           </Link>
@@ -127,7 +158,7 @@ export default function LabelDashboardLayout({
         </header>
 
         {/* Content Area */}
-        <div className="flex-grow overflow-y-auto p-8 custom-scrollbar">
+        <div className="flex-grow overflow-y-auto p-4 sm:p-8 custom-scrollbar">
           {children}
         </div>
       </main>

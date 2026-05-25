@@ -17,7 +17,7 @@ import {
   Search
 } from "lucide-react";
 import NotificationBell from "@/components/layout/NotificationBell";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export default function AdminDashboardLayout({
   children,
@@ -25,7 +25,20 @@ export default function AdminDashboardLayout({
   children: React.ReactNode;
 }) {
   const { data: session, status } = useSession();
-  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth < 768) {
+        setIsSidebarOpen(false);
+      } else {
+        setIsSidebarOpen(true);
+      }
+    };
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   if (status === "loading") return null;
 
@@ -44,16 +57,30 @@ export default function AdminDashboardLayout({
     { name: "Staff Access",  href: "/dashboard/admin/staff",        icon: Settings },
   ];
 
+  const handleLinkClick = () => {
+    if (window.innerWidth < 768) {
+      setIsSidebarOpen(false);
+    }
+  };
+
   return (
-    <div className="min-h-screen bg-background flex text-foreground font-sans transition-colors duration-200">
+    <div className="min-h-screen bg-background flex text-foreground font-sans transition-colors duration-200 relative overflow-hidden">
+      {/* Backdrop for mobile */}
+      {isSidebarOpen && (
+        <div 
+          onClick={() => setIsSidebarOpen(false)}
+          className="md:hidden fixed inset-0 bg-black/60 backdrop-blur-sm z-40" 
+        />
+      )}
+
       {/* Sidebar */}
       <aside 
         className={`${
-          isSidebarOpen ? "w-64" : "w-20"
-        } border-r border-foreground/5 bg-foreground/[0.01] backdrop-blur-xl transition-all duration-300 flex flex-col z-50`}
+          isSidebarOpen ? "translate-x-0 w-64" : "-translate-x-full md:w-20 md:translate-x-0"
+        } border-r border-foreground/5 bg-[#080809]/95 md:bg-foreground/[0.01] backdrop-blur-xl transition-all duration-300 flex flex-col fixed md:relative h-screen top-0 left-0 z-50`}
       >
         <div className="p-6 flex items-center gap-3">
-          <div className="w-8 h-8 bg-primary rounded-lg"></div>
+          <div className="w-8 h-8 bg-primary rounded-lg shrink-0"></div>
           {isSidebarOpen && <span className="font-display font-black text-xl tracking-tighter">FASTIT <span className="text-primary">ADMIN</span></span>}
         </div>
 
@@ -62,6 +89,7 @@ export default function AdminDashboardLayout({
             <Link 
               key={item.name}
               href={item.href}
+              onClick={handleLinkClick}
               className="flex items-center gap-3 p-3 rounded-xl hover:bg-foreground/5 transition-all group"
             >
               <item.icon className="w-5 h-5 text-foreground/40 group-hover:text-primary transition-colors" />
@@ -109,7 +137,7 @@ export default function AdminDashboardLayout({
         </header>
 
         {/* Content Area */}
-        <div className="flex-grow overflow-y-auto p-8 custom-scrollbar">
+        <div className="flex-grow overflow-y-auto p-4 sm:p-8 custom-scrollbar">
           {children}
         </div>
       </main>
