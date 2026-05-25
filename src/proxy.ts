@@ -37,6 +37,26 @@ const authMiddleware = withAuth(
   }
 );
 
+// Helpers to construct redirection base URLs
+const getMainDomain = (currentHost: string) => {
+  if (currentHost.includes('localhost')) {
+    const hostWithoutSubdomain = currentHost.replace(/^career\./, '');
+    return `http://${hostWithoutSubdomain}`;
+  }
+  return 'https://fastitmusic.in';
+};
+
+const getSubdomainDomain = (currentHost: string) => {
+  if (currentHost.includes('localhost')) {
+    // If it's already got career., keep it
+    if (currentHost.startsWith('career.')) {
+      return `http://${currentHost}`;
+    }
+    return `http://career.${currentHost}`;
+  }
+  return 'https://career.fastitmusic.in';
+};
+
 // Our custom proxy function that wraps next-auth and handles subdomain routing
 export default function proxy(req: NextRequest, event: any) {
   const url = req.nextUrl.clone();
@@ -45,19 +65,45 @@ export default function proxy(req: NextRequest, event: any) {
   // Detect subdomain for career: career.fastitmusic.in or career.localhost:3000
   const isCareerSubdomain = hostname.startsWith('career.fastitmusic.in') || hostname.startsWith('career.localhost');
 
+  // Static files and internal API requests bypass subdomain checks
+  if (
+    url.pathname.startsWith('/_next') || 
+    url.pathname.startsWith('/api') ||
+    url.pathname.includes('.')
+  ) {
+    return NextResponse.next();
+  }
+
   if (isCareerSubdomain) {
-    // If it's a static asset or generic API request, pass it through directly
-    if (
-      url.pathname.startsWith('/_next') || 
-      url.pathname.startsWith('/api') ||
-      url.pathname.includes('.')
-    ) {
-      return NextResponse.next();
+    // Subdomain ONLY hosts the career page.
+    if (url.pathname === '/') {
+      // Rewrite root to the Careers page
+      url.pathname = '/career';
+      return NextResponse.rewrite(url);
+    }
+    
+    if (url.pathname === '/career' || url.pathname === '/career/') {
+      // Clean URL: redirect career.fastitmusic.in/career to career.fastitmusic.in/
+      return NextResponse.redirect(new URL('/', getSubdomainDomain(hostname)));
     }
 
-    // Rewrite request internally to the /career page
-    url.pathname = `/career${url.pathname === '/' ? '' : url.pathname}`;
-    return NextResponse.rewrite(url);
+    if (url.pathname.startsWith('/career/')) {
+      // Clean URL: career.fastitmusic.in/career/xyz -> career.fastitmusic.in/xyz (if needed)
+      // Otherwise redirect other pages to the main domain
+      return NextResponse.redirect(new URL(url.pathname.replace(/^\/career/, ''), getSubdomainDomain(hostname)));
+    }
+
+    // Any other page requested on career subdomain (e.g. /about) is redirected to the main domain
+    return NextResponse.redirect(new URL(url.pathname, getMainDomain(hostname)));
+  } else {
+    // Main domain request: redirect /career paths to the subdomain
+    if (url.pathname === '/career' || url.pathname === '/career/') {
+      return NextResponse.redirect(new URL('/', getSubdomainDomain(hostname)));
+    }
+    if (url.pathname.startsWith('/career/')) {
+      const subPath = url.pathname.replace(/^\/career/, '');
+      return NextResponse.redirect(new URL(subPath, getSubdomainDomain(hostname)));
+    }
   }
 
   // For non-subdomain requests, check if it's a dashboard path
