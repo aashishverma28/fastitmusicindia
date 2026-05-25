@@ -45,7 +45,7 @@ const teamData: Record<
     role: "Founder & CEO",
     tagline: "Visionary. Technologist. Music Advocate.",
     image:
-      "https://kommodo.ai/i/oDa6BnVd5zaZhgc102qo",
+      "https://plain-apac-prod-public.komododecks.com/202605/25/oDa6BnVd5zaZhgc102qo/image.png",
     coverGradient: "from-primary/40 via-primary/10 to-transparent",
     accentColor: "text-primary",
     instagram: "https://www.instagram.com/aashishverma_28",

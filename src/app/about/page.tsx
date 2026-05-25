@@ -42,7 +42,7 @@ export default function AboutPage() {
       name: "Aashish Verma",
       role: "Founder & CEO",
       description: "Btech-CSE Student with a vision to revolutionize the independent music scene in India.",
-      image: "https://kommodo.ai/i/oDa6BnVd5zaZhgc102qo",
+      image: "https://plain-apac-prod-public.komododecks.com/202605/25/oDa6BnVd5zaZhgc102qo/image.png",
       instagram: "https://www.instagram.com/aashishverma_28",
       profileSlug: "aashish-verma",
       tilt: "-rotate-2",
