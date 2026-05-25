@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
+import { sendJobApplicationConfirmation } from "@/lib/mail";
 
 export async function POST(req: Request) {
   try {
@@ -20,6 +21,13 @@ export async function POST(req: Request) {
         status: "PENDING",
       },
     });
+
+    // Send confirmation email
+    try {
+      await sendJobApplicationConfirmation(email, name, roleTitle);
+    } catch (mailErr) {
+      console.error("Failed to send job confirmation email:", mailErr);
+    }
 
     return NextResponse.json({ success: true, application }, { status: 201 });
   } catch (error: any) {

@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/db";
+import { sendJobApplicationStatusUpdate, sendOfferLetterEmail } from "@/lib/mail";
 
 // PATCH - update application status
 export async function PATCH(req: Request, { params }: { params: Promise<{ id: string }> }) {
@@ -18,10 +19,32 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
       return NextResponse.json({ error: "Status is required" }, { status: 400 });
     }
 
+    // Get current application to check previous status (optional)
+    const currentApp = await prisma.jobApplication.findUnique({
+      where: { id },
+    });
+
+    if (!currentApp) {
+      return NextResponse.json({ error: "Application not found" }, { status: 404 });
+    }
+
     const application = await prisma.jobApplication.update({
       where: { id },
       data: { status },
     });
+
+    // Only send email if status has changed
+    if (currentApp.status !== status) {
+      try {
+        if (status === "VERIFIED") {
+          await sendOfferLetterEmail(application.email, application.name, application.roleTitle);
+        } else {
+          await sendJobApplicationStatusUpdate(application.email, application.name, application.roleTitle, status);
+        }
+      } catch (mailErr) {
+        console.error("Failed to send status update/offer email:", mailErr);
+      }
+    }
 
     return NextResponse.json({ success: true, application });
   } catch (error) {

@@ -262,6 +262,7 @@ export default function AdminJobsDashboard() {
     switch (status) {
       case "PENDING": return { bg: "rgba(255,195,1,0.1)", text: "#ffc301", border: "rgba(255,195,1,0.3)" };
       case "REVIEWED": return { bg: "rgba(0,176,252,0.1)", text: "#00b0fc", border: "rgba(0,176,252,0.3)" };
+      case "VERIFIED": return { bg: "rgba(34,197,94,0.1)", text: "#22c55e", border: "rgba(34,197,94,0.3)" };
       case "REJECTED": return { bg: "rgba(239,68,68,0.1)", text: "#ef4444", border: "rgba(239,68,68,0.3)" };
       default: return { bg: "rgba(255,255,255,0.05)", text: "#fff", border: "rgba(255,255,255,0.1)" };
     }
@@ -440,11 +441,12 @@ export default function AdminJobsDashboard() {
       {activeTab === "applications" && (
         <div className="space-y-6">
           {/* Stats */}
-          <div className="grid grid-cols-1 sm:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-5 gap-6">
             {[
               { label: "Total Applications", value: applications.length, color: "#00b0fc" },
               { label: "Pending Review", value: applications.filter(a => a.status === "PENDING").length, color: "#ffc301" },
-              { label: "Reviewed Profiles", value: applications.filter(a => a.status === "REVIEWED").length, color: "#22c55e" },
+              { label: "Reviewed Profiles", value: applications.filter(a => a.status === "REVIEWED").length, color: "#a855f7" },
+              { label: "Verified & Offered", value: applications.filter(a => a.status === "VERIFIED").length, color: "#22c55e" },
               { label: "Rejected Profiles", value: applications.filter(a => a.status === "REJECTED").length, color: "#ef4444" }
             ].map(s => (
               <div 
@@ -461,7 +463,7 @@ export default function AdminJobsDashboard() {
           {/* Filters & Actions */}
           <div className="flex gap-2 flex-wrap items-center bg-[#111113] p-4 border-2 border-foreground/10">
             <span className="text-xs font-black uppercase tracking-wider text-white/40 mr-2">Filter Status:</span>
-            {["ALL", "PENDING", "REVIEWED", "REJECTED"].map(status => (
+            {["ALL", "PENDING", "REVIEWED", "VERIFIED", "REJECTED"].map(status => (
               <button
                 key={status}
                 onClick={() => setAppFilter(status)}
@@ -944,6 +946,14 @@ export default function AdminJobsDashboard() {
                       }`}
                     >
                       Reviewed
+                    </button>
+                    <button
+                      onClick={() => handleUpdateAppStatus(selectedApp.id, "VERIFIED")}
+                      className={`flex-1 py-2.5 border-2 border-black font-black uppercase text-xs tracking-wider transition-all hover:bg-neutral-100 ${
+                        selectedApp.status === "VERIFIED" ? "bg-green-500 text-white border-black shadow-[2px_2px_0px_0px_#000]" : "bg-white text-black"
+                      }`}
+                    >
+                      Verified & Offer
                     </button>
                     <button
                       onClick={() => handleUpdateAppStatus(selectedApp.id, "REJECTED")}
