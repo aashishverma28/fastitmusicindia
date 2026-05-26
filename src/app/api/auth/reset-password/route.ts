@@ -14,9 +14,9 @@ export async function POST(req: Request) {
       );
     }
 
-    // Find the user
-    const user = await db.user.findUnique({
-      where: { email },
+    // Find the user case-insensitively
+    const user = await db.user.findFirst({
+      where: { email: { equals: email, mode: "insensitive" } },
     });
 
     if (!user) {

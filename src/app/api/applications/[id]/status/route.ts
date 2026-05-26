@@ -48,7 +48,9 @@ export async function PATCH(
         const data = application.applicantData as any;
         const email = data.email || data.contactEmail;
         
-        let user = await tx.user.findUnique({ where: { email } });
+        let user = await tx.user.findFirst({
+          where: { email: { equals: email, mode: "insensitive" } },
+        });
         let isNewUser = false;
         let tempPassword = "";
         let username = "";

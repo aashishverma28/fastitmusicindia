@@ -29,7 +29,7 @@ export default function StaffLoginPage() {
       });
 
       if (res?.error) {
-        setError("Invalid credentials. Please try again.");
+        setError(res.error === "CredentialsSignin" ? "Invalid credentials. Please try again." : res.error);
       } else {
         router.push("/dashboard/employee");
       }
