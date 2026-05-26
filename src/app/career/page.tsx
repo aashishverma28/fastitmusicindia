@@ -266,17 +266,17 @@ export default function CareerPage() {
         {/* Job Roles Grid */}
         <section className="mb-32">
           <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-6 relative">
-            {/* Doodle annotation */}
-            <div className="absolute top-[-50px] left-[200px] hidden md:block">
-              <CurlyArrow direction="down" className="w-16 h-16 text-secondary rotate-12" />
-              <span className="absolute -left-36 top-16 font-handwriting text-secondary text-2xl w-44 leading-none">
-                Pick your dream role!
-              </span>
-            </div>
-
             <div className="space-y-4">
-              <h2 className="text-4xl md:text-5xl font-black font-display text-white tracking-tighter">
+              <h2 className="text-4xl md:text-5xl font-black font-display text-white tracking-tighter relative inline-block">
                 Open <span className="relative inline-block pr-1 text-primary">Positions.<ScribbleUnderline color="#ffd709" /></span>
+                
+                {/* Doodle annotation */}
+                <div className="absolute -top-10 left-[105%] hidden md:block">
+                  <CurlyArrow direction="down" className="w-14 h-14 text-secondary rotate-12" />
+                  <span className="absolute -top-6 left-10 font-handwriting text-secondary text-2xl w-48 leading-none rotate-3">
+                    Pick your dream role!
+                  </span>
+                </div>
               </h2>
               <p className="text-white/50 font-sans font-bold uppercase tracking-widest text-xs">
                 Find the role that matches your skills.

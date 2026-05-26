@@ -167,14 +167,6 @@ export default function ArtistsPage() {
 
         {/* Header Section */}
         <div className="flex flex-col md:flex-row justify-between items-end gap-8 mb-20 relative">
-          {/* Annotation doodle */}
-          <div className="absolute top-[-50px] left-[200px] hidden md:block">
-            <CurlyArrow direction="left" className="w-14 h-14 text-secondary rotate-12" />
-            <span className="absolute -left-32 top-8 font-handwriting text-secondary text-xl w-32 leading-none">
-              Meet our creators!
-            </span>
-          </div>
-
           <div className="space-y-4">
             <motion.div 
               initial={{ opacity: 0, x: -20 }}
@@ -186,9 +178,17 @@ export default function ArtistsPage() {
             <motion.h1 
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
-              className="text-5xl md:text-7xl font-black font-display text-white tracking-tighter leading-none"
+              className="text-5xl md:text-7xl font-black font-display text-white tracking-tighter leading-none relative inline-block"
             >
               The <span className="relative inline-block pr-1 text-primary">Artists.<ScribbleUnderlineDouble color="#00b0fc" /></span>
+              
+              {/* Annotation doodle */}
+              <div className="absolute -top-12 left-[105%] hidden md:block">
+                <CurlyArrow direction="left" className="w-14 h-14 text-secondary rotate-12" />
+                <span className="absolute -top-4 left-10 font-handwriting text-secondary text-xl w-32 leading-none rotate-3">
+                  Meet our creators!
+                </span>
+              </div>
             </motion.h1>
             <p className="text-white/70 text-lg max-w-xl font-sans font-semibold">
               Meet the independent creators defining the next wave of Indian music. Distributed and supported by Fastit.
