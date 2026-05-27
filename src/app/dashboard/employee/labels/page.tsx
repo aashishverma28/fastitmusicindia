@@ -67,7 +67,8 @@ export default function EmployeeLabelsPage() {
           </p>
         </div>
         <div className="flex gap-3">
-          <div className="flex items-center gap-2 px-4 py-2.5 rounded-full bg-black/40 border border-white/10 w-64 focus-within:border-secondary/50 transition-colors">
+          <div className="flex items-center gap-2 px-4 py-2.5 rounded-full w-64 border focus-within:border-secondary/50 transition-colors"
+               style={{ background: "var(--background)", borderColor: "var(--glass-border)" }}>
             <Search className="w-4 h-4 text-white/30" />
             <input 
               type="text" 
@@ -92,7 +93,7 @@ export default function EmployeeLabelsPage() {
 
         {loading ? (
           [0, 1, 2, 3].map((i) => (
-            <Skeleton key={i} className="h-[76px] rounded-2xl bg-white/5 animate-pulse" />
+            <Skeleton key={i} className="h-[76px] rounded-2xl bg-white/5 border animate-pulse" style={{ borderColor: "var(--glass-border)" }} />
           ))
         ) : filteredLabels.length > 0 ? (
           filteredLabels.map((label) => (
@@ -114,7 +115,7 @@ export default function EmployeeLabelsPage() {
               </div>
 
               <div className="col-span-6 md:col-span-2">
-                <span className="text-[10px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wider border border-white/5 bg-white/5 text-white/70">
+                <span className="text-[10px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wider border border-black/5 dark:border-white/5 bg-black/5 dark:bg-white/5 text-white/70">
                   {label.labelProfile?.genreFocus || "Multi-Genre"}
                 </span>
               </div>

@@ -77,7 +77,8 @@ export default function EmployeeApplicationsPage() {
           </p>
         </div>
         <div className="flex gap-3">
-          <div className="flex items-center gap-2 px-4 py-2.5 rounded-full bg-black/40 border border-white/10 w-64 focus-within:border-primary/50 transition-colors">
+          <div className="flex items-center gap-2 px-4 py-2.5 rounded-full w-64 border focus-within:border-primary/50 transition-colors"
+               style={{ background: "var(--background)", borderColor: "var(--glass-border)" }}>
             <Search className="w-4 h-4 text-white/30" />
             <input 
               type="text" 
@@ -91,7 +92,8 @@ export default function EmployeeApplicationsPage() {
       </div>
 
       {/* Filters bar */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-[#111113]/40 p-4 rounded-2xl border border-white/5">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 p-4 rounded-2xl border"
+           style={{ background: "var(--card-bg)", borderColor: "var(--glass-border)" }}>
         {/* Type Filter */}
         <div className="flex gap-2">
           {["ALL", "ARTIST", "LABEL"].map((t) => (
@@ -101,7 +103,7 @@ export default function EmployeeApplicationsPage() {
               className={`px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
                 typeFilter === t
                   ? "bg-primary text-white"
-                  : "bg-white/5 text-white/60 hover:text-white"
+                  : "bg-black/5 dark:bg-white/5 text-white/60 hover:text-white"
               }`}
             >
               {t === "ALL" ? "All Types" : t}
@@ -118,7 +120,7 @@ export default function EmployeeApplicationsPage() {
               className={`px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
                 statusFilter === s
                   ? "bg-[#ffc301] text-black"
-                  : "bg-white/5 text-white/60 hover:text-white"
+                  : "bg-black/5 dark:bg-white/5 text-white/60 hover:text-white"
               }`}
             >
               {s === "ALL" ? "All Statuses" : s.replace("_", " ")}
@@ -140,7 +142,7 @@ export default function EmployeeApplicationsPage() {
 
         {loading ? (
           [0, 1, 2, 3].map((i) => (
-            <Skeleton key={i} className="h-[76px] rounded-2xl bg-white/5 animate-pulse" />
+            <Skeleton key={i} className="h-[76px] rounded-2xl bg-white/5 border animate-pulse" style={{ borderColor: "var(--glass-border)" }} />
           ))
         ) : filteredApplications.length > 0 ? (
           filteredApplications.map((app) => {
@@ -164,7 +166,7 @@ export default function EmployeeApplicationsPage() {
                 </div>
 
                 <div className="col-span-6 md:col-span-2">
-                  <span className="text-[10px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wider border border-white/5 bg-white/5 text-white/70">
+                  <span className="text-[10px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wider border border-black/5 dark:border-white/5 bg-black/5 dark:bg-white/5 text-white/70">
                     {app.type}
                   </span>
                 </div>
@@ -191,7 +193,7 @@ export default function EmployeeApplicationsPage() {
 
                 <div className="col-span-12 md:col-span-1 flex justify-end">
                   <Link href={`/dashboard/employee/applications/${app.id}`}
-                        className="w-8 h-8 rounded-full flex items-center justify-center transition-colors bg-white/5 border border-white/10 text-white hover:bg-white/10 cursor-pointer">
+                        className="w-8 h-8 rounded-full flex items-center justify-center transition-colors bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 text-white hover:bg-black/10 dark:hover:bg-white/10 cursor-pointer">
                     <ChevronRight className="w-4 h-4" />
                   </Link>
                 </div>

@@ -98,7 +98,7 @@ export default function EmployeeDashboard() {
         </div>
 
         {/* Header row */}
-        <div className="hidden md:grid grid-cols-12 gap-4 px-6 py-2 text-xs font-bold uppercase tracking-wider text-white/35 border-b border-white/5">
+        <div className="hidden md:grid grid-cols-12 gap-4 px-6 py-2 text-xs font-bold uppercase tracking-wider text-white/40 border-b border-white/5">
           <div className="col-span-4">Artist / ID</div>
           <div className="col-span-3">Genre</div>
           <div className="col-span-3">Status</div>
@@ -127,11 +127,11 @@ export default function EmployeeDashboard() {
                   <p className="font-bold text-white text-sm leading-tight font-display">
                     {artist.username || artist.email.split("@")[0]}
                   </p>
-                  <p className="text-xs text-white/35 mt-0.5">{artist.email}</p>
+                  <p className="text-xs text-white/40 mt-0.5">{artist.email}</p>
                 </div>
               </div>
               <div className="col-span-3 hidden md:block">
-                <span className="text-[10px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wider border border-white/5 bg-white/5 text-white/70">
+                <span className="text-[10px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wider border border-black/5 dark:border-white/5 bg-black/5 dark:bg-white/5 text-white/70">
                   {artist.artistProfile?.primaryGenre || "—"}
                 </span>
               </div>

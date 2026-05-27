@@ -116,7 +116,8 @@ export default function EmployeeFinancePage() {
           </p>
         </div>
         <div className="flex gap-3">
-          <div className="flex items-center gap-2 px-4 py-2.5 rounded-full bg-black/40 border border-white/10 w-64 focus-within:border-secondary/50 transition-colors">
+          <div className="flex items-center gap-2 px-4 py-2.5 rounded-full w-64 border focus-within:border-secondary/50 transition-colors"
+               style={{ background: "var(--background)", borderColor: "var(--glass-border)" }}>
             <Search className="w-4 h-4 text-white/30" />
             <input 
               type="text" 
@@ -153,7 +154,7 @@ export default function EmployeeFinancePage() {
             className={`px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
               statusFilter === s
                 ? "bg-secondary text-black"
-                : "bg-white/5 text-white/60 hover:text-white"
+                : "bg-black/5 dark:bg-white/5 text-white/60 hover:text-white"
             }`}
           >
             {s === "ALL" ? "All Payouts" : s}
@@ -174,7 +175,7 @@ export default function EmployeeFinancePage() {
 
         {loading ? (
           [0, 1, 2, 3].map((i) => (
-            <Skeleton key={i} className="h-[76px] rounded-2xl bg-white/5 animate-pulse" />
+            <Skeleton key={i} className="h-[76px] rounded-2xl bg-white/5 border animate-pulse" style={{ borderColor: "var(--glass-border)" }} />
           ))
         ) : filteredPayments.length > 0 ? (
           filteredPayments.map((payment) => (
@@ -260,7 +261,7 @@ export default function EmployeeFinancePage() {
                     className={`py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
                       statusAction === "COMPLETED"
                         ? "bg-emerald-500 text-white"
-                        : "bg-white/5 text-white/60 hover:text-white"
+                        : "bg-black/5 dark:bg-white/5 text-white/60 hover:text-white"
                     }`}
                   >
                     Mark Settled
@@ -271,7 +272,7 @@ export default function EmployeeFinancePage() {
                     className={`py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
                       statusAction === "FAILED"
                         ? "bg-red-500 text-white"
-                        : "bg-white/5 text-white/60 hover:text-white"
+                        : "bg-black/5 dark:bg-white/5 text-white/60 hover:text-white"
                     }`}
                   >
                     Mark Failed
@@ -298,7 +299,7 @@ export default function EmployeeFinancePage() {
                 <button
                   type="button"
                   onClick={() => { setProcessingId(null); setRefNumber(""); }}
-                  className="flex-1 py-3 rounded-xl text-sm font-bold bg-white/5 border border-white/10 text-white/50 hover:text-white cursor-pointer"
+                  className="flex-1 py-3 rounded-xl text-sm font-bold bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 text-white/50 hover:text-white cursor-pointer"
                 >
                   Cancel
                 </button>

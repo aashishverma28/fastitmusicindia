@@ -43,12 +43,12 @@ export default function EmployeeLayout({ children }: { children: React.ReactNode
   const employeeName = (session.user as any).name || "Staff Member";
 
   return (
-    <div className="min-h-screen flex relative antialiased bg-[#0e0e0e] text-white font-sans">
+    <div className="min-h-screen flex relative antialiased bg-background text-foreground font-sans transition-colors duration-200">
       <style>{`@import url('https://fonts.googleapis.com/css2?family=Epilogue:wght@400;700;900&family=Manrope:wght@400;500;600;700&display=swap');`}</style>
       
       {/* Ambient glows */}
-      <div className="fixed pointer-events-none z-0 top-[-10%] left-[-10%] w-[400px] h-[400px] rounded-full bg-primary/10 blur-[120px]" />
-      <div className="fixed pointer-events-none z-0 bottom-[-10%] right-[-10%] w-[400px] h-[400px] rounded-full bg-secondary/5 blur-[120px]" />
+      <div className="fixed pointer-events-none z-0 top-[-10%] left-[-10%] w-[400px] h-[400px] rounded-full bg-primary/10 blur-[120px] dark:opacity-100 opacity-30" />
+      <div className="fixed pointer-events-none z-0 bottom-[-10%] right-[-10%] w-[400px] h-[400px] rounded-full bg-secondary/5 blur-[120px] dark:opacity-100 opacity-20" />
 
       {/* Sidebar overlay (mobile) */}
       {sidebarOpen && (
@@ -56,8 +56,10 @@ export default function EmployeeLayout({ children }: { children: React.ReactNode
       )}
 
       {/* Sidebar */}
-      <aside className={`fixed left-0 top-0 h-screen w-64 z-40 flex flex-col p-5 gap-1 transition-transform duration-300 md:translate-x-0 ${sidebarOpen ? "translate-x-0" : "-translate-x-full"} bg-[#080809] border-r border-white/5`}>
-        
+      <aside 
+        className={`fixed left-0 top-0 h-screen w-64 z-40 flex flex-col p-5 gap-1 transition-transform duration-300 md:translate-x-0 ${sidebarOpen ? "translate-x-0" : "-translate-x-full"} border-r`}
+        style={{ background: "var(--card-bg)", borderColor: "var(--glass-border)" }}
+      >
         <div className="px-3 py-4 mb-4">
           <Link href="/dashboard/employee" className="block">
             <h1 className="text-2xl font-display font-black tracking-tighter bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
@@ -81,7 +83,7 @@ export default function EmployeeLayout({ children }: { children: React.ReactNode
                     className={`flex items-center gap-3 px-4 py-3.5 rounded-xl text-sm font-bold transition-all border ${
                       isActive
                         ? "bg-gradient-to-r from-primary to-secondary border-transparent text-black shadow-md hover:scale-[1.01]"
-                        : "border-transparent text-white/50 hover:text-white hover:bg-white/5"
+                        : "border-transparent text-white/50 hover:text-white hover:bg-black/5 dark:hover:bg-white/5"
                     }`}>
                 <item.icon className="w-5 h-5 flex-shrink-0" />
                 {item.label}
@@ -92,7 +94,7 @@ export default function EmployeeLayout({ children }: { children: React.ReactNode
 
         <div className="pt-4 border-t border-white/5">
           <button onClick={() => signOut({ callbackUrl: "/staff/login" })}
-                  className="flex items-center gap-3 px-4 py-3.5 w-full rounded-xl text-sm font-bold transition-all text-red-400 hover:text-red-300 hover:bg-red-500/5 cursor-pointer">
+                  className="flex items-center gap-3 px-4 py-3.5 w-full rounded-xl text-sm font-bold transition-all text-red-500 hover:bg-red-500/5 cursor-pointer">
             <LogOut className="w-5 h-5 flex-shrink-0" /> Sign Out
           </button>
         </div>
@@ -101,7 +103,10 @@ export default function EmployeeLayout({ children }: { children: React.ReactNode
       {/* Main Container */}
       <div className="flex-1 md:ml-64 flex flex-col min-h-screen relative z-10 overflow-hidden">
         {/* Top bar */}
-        <header className="sticky top-0 z-20 flex items-center justify-between px-6 h-16 gap-4 bg-[#0e0e0e]/80 backdrop-blur-md border-b border-white/5">
+        <header 
+          className="sticky top-0 z-20 flex items-center justify-between px-6 h-16 gap-4 backdrop-blur-md border-b"
+          style={{ background: "var(--background)", opacity: 0.95, borderColor: "var(--glass-border)" }}
+        >
           <button className="md:hidden p-2 rounded-lg text-white/50 hover:text-white cursor-pointer" onClick={() => setSidebarOpen(!sidebarOpen)}>
             {sidebarOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
           </button>
@@ -111,12 +116,13 @@ export default function EmployeeLayout({ children }: { children: React.ReactNode
             <input
               type="text"
               placeholder="Search anything..."
-              className="w-full rounded-xl py-2 pl-9 pr-4 text-xs bg-black/40 border border-white/5 text-white placeholder:text-white/35 outline-none focus:border-primary/50 transition-colors"
+              className="w-full rounded-xl py-2 pl-9 pr-4 text-xs text-white placeholder:text-white/40 border outline-none focus:border-primary/50 transition-colors"
+              style={{ background: "var(--card-bg)", borderColor: "var(--glass-border)" }}
             />
           </div>
 
           <div className="flex items-center gap-4">
-            <button className="p-2 rounded-full relative text-primary hover:bg-white/5 cursor-pointer">
+            <button className="p-2 rounded-full relative text-primary hover:bg-black/5 dark:hover:bg-white/5 cursor-pointer">
               <Bell className="w-4 h-4" />
               <span className="absolute top-1.5 right-1.5 w-1.5 h-1.5 rounded-full bg-primary" />
             </button>

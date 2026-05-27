@@ -38,7 +38,7 @@ export default function EmployeeSettingsPage() {
               className={`flex items-center gap-3 px-4 py-3 w-full rounded-xl text-sm font-bold border transition-all cursor-pointer ${
                 activeTab === tab.id
                   ? "bg-primary border-transparent text-black"
-                  : "bg-white/5 border-transparent text-white/60 hover:text-white hover:bg-white/10"
+                  : "bg-black/5 dark:bg-white/5 border-transparent text-white/60 hover:text-white hover:bg-black/10 dark:hover:bg-white/10"
               }`}
             >
               <tab.icon className="w-4 h-4 shrink-0" />
@@ -104,7 +104,7 @@ export default function EmployeeSettingsPage() {
                     <p className="text-sm font-bold text-white">System Theme</p>
                     <p className="text-xs text-white/40">Toggle portal background color theme</p>
                   </div>
-                  <span className="text-xs font-mono bg-white/5 border border-white/10 px-3 py-1 rounded-md text-white/70">
+                  <span className="text-xs font-mono bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 px-3 py-1 rounded-md text-white/70">
                     Dark Only (Restricted)
                   </span>
                 </div>
@@ -124,7 +124,7 @@ export default function EmployeeSettingsPage() {
                     <p className="text-sm font-bold text-white">Telemetry Logs</p>
                     <p className="text-xs text-white/40">Record authentication transactions locally</p>
                   </div>
-                  <span className="text-xs font-mono bg-white/5 border border-white/10 px-3 py-1 rounded-md text-white/70">
+                  <span className="text-xs font-mono bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 px-3 py-1 rounded-md text-white/70">
                     Auto-Purge
                   </span>
                 </div>
