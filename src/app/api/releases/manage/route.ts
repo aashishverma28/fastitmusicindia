@@ -60,3 +60,66 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Failed to create release" }, { status: 500 });
   }
 }
+
+export async function PUT(req: Request) {
+  try {
+    const session = await getServerSession(authOptions);
+    if (!session || (session.user as any).role !== "ADMIN" && (session.user as any).role !== "EMPLOYEE") {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
+    const body = await req.json();
+    const { 
+      id,
+      title, 
+      artistName, 
+      youtubeUrl, 
+      coverArtUrl, 
+      genre, 
+      releaseDate, 
+      slug,
+      spotifyUrl,
+      appleMusicUrl,
+      ytMusicUrl,
+      jioSaavnUrl 
+    } = body;
+
+    if (!id) {
+      return NextResponse.json({ error: "Release ID is required" }, { status: 400 });
+    }
+
+    // Helper to get YouTube ID
+    const getYouTubeId = (url: string) => {
+      if (!url) return "";
+      const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+      const match = url.match(regExp);
+      return (match && match[2].length === 11) ? match[2] : "";
+    };
+
+    const ytId = getYouTubeId(youtubeUrl);
+    const finalCoverArtUrl = coverArtUrl || (ytId ? `https://img.youtube.com/vi/${ytId}/hqdefault.jpg` : null);
+
+    const updated = await prisma.publicRelease.update({
+      where: { id },
+      data: {
+        title,
+        artistName,
+        coverArtUrl: finalCoverArtUrl,
+        genre,
+        releaseDate: releaseDate ? new Date(releaseDate) : new Date(),
+        audioFileUrl: youtubeUrl || "",
+        youtubeUrl,
+        spotifyUrl,
+        appleMusicUrl,
+        ytMusicUrl,
+        jioSaavnUrl,
+        slug: slug || title.toLowerCase().replace(/ /g, '-'),
+      }
+    });
+
+    return NextResponse.json({ success: true, release: updated });
+  } catch (error: any) {
+    console.error("Release update error:", error);
+    return NextResponse.json({ error: "Failed to update release: " + error.message }, { status: 500 });
+  }
+}

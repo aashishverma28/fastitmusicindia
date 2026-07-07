@@ -20,6 +20,11 @@ export async function GET() {
       genre: rel.genre,
       releaseDate: rel.releaseDate,
       audioUrl: rel.audioFileUrl || "",
+      youtubeUrl: rel.youtubeUrl || "",
+      spotifyUrl: rel.spotifyUrl || "",
+      appleMusicUrl: rel.appleMusicUrl || "",
+      ytMusicUrl: rel.ytMusicUrl || "",
+      jioSaavnUrl: rel.jioSaavnUrl || "",
       slug: rel.slug || rel.id
     }));
 

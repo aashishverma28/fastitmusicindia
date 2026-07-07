@@ -15,6 +15,7 @@ interface VinylCardProps {
   onPlay?: (e: React.MouseEvent) => void;
   isAdminOrStaff?: boolean;
   onRemove?: (e: React.MouseEvent) => void;
+  onEdit?: (e: React.MouseEvent) => void;
 }
 
 export const VinylCard: React.FC<VinylCardProps> = ({
@@ -29,30 +30,53 @@ export const VinylCard: React.FC<VinylCardProps> = ({
   onPlay,
   isAdminOrStaff = false,
   onRemove,
+  onEdit,
 }) => {
   const detailLink = `/releases/${slug || id}`;
   const displayGenre = genre ? genre.split(" / ")[0] : "Indie";
 
   return (
     <div className="group relative flex flex-col vinyl-container w-full select-none">
-      {/* Remove Button for Admins */}
-      {isAdminOrStaff && onRemove && (
-        <button
-          onClick={onRemove}
-          className="absolute -top-3 -right-3 z-30 p-2.5 bg-red-600 hover:bg-red-700 text-white rounded-xl shadow-xl scale-90 group-hover:scale-100 opacity-0 group-hover:opacity-100 transition-all duration-300"
-          title="Remove Release"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="h-4.5 w-4.5"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            strokeWidth="2.5"
-          >
-            <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-          </svg>
-        </button>
+      {/* Action Buttons for Admins */}
+      {isAdminOrStaff && (
+        <div className="absolute -top-3 -right-3 z-30 flex items-center gap-1.5 scale-90 group-hover:scale-100 opacity-0 group-hover:opacity-100 transition-all duration-300">
+          {onEdit && (
+            <button
+              onClick={onEdit}
+              className="p-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl shadow-xl"
+              title="Edit Release"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-4.5 w-4.5"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth="2.5"
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+              </svg>
+            </button>
+          )}
+          {onRemove && (
+            <button
+              onClick={onRemove}
+              className="p-2.5 bg-red-600 hover:bg-red-700 text-white rounded-xl shadow-xl"
+              title="Remove Release"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-4.5 w-4.5"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth="2.5"
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          )}
+        </div>
       )}
 
       {/* Album Box & Record (Clickable Link to details) */}

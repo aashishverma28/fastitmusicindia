@@ -12,17 +12,85 @@ import {
   CheckCircle2, 
   XCircle,
   AlertCircle,
-  Play
+  Play,
+  Upload,
+  X,
+  Loader2,
+  Check
 } from "lucide-react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import EmptyState from "@/components/shared/EmptyState";
+import { uploadFile } from "@/lib/supabase";
 
 export default function ArtistReleasesPage() {
   const [releases, setReleases] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const searchParams = useSearchParams();
   const showSuccess = searchParams.get("success");
+
+  // Edit release state
+  const [editingRelease, setEditingRelease] = useState<any | null>(null);
+  const [isUpdating, setIsUpdating] = useState(false);
+  const [isUploading, setIsUploading] = useState(false);
+
+  const handleEditClick = (rel: any) => {
+    setEditingRelease({
+      id: rel.id,
+      title: rel.title || "",
+      type: rel.type || "Single",
+      genre: rel.genre || "",
+      subGenre: rel.subGenre || "",
+      language: rel.language || "",
+      releaseDate: rel.releaseDate ? new Date(rel.releaseDate).toISOString().split('T')[0] : "",
+      copyrightHolder: rel.copyrightHolder || "",
+      copyrightYear: rel.copyrightYear || new Date().getFullYear(),
+      isExplicit: rel.isExplicit || false,
+      youtubeUrl: rel.youtubeUrl || "",
+      artworkUrl: rel.coverArtUrl || "",
+      spotifyUrl: rel.spotifyUrl || "",
+      appleMusicUrl: rel.appleMusicUrl || "",
+      ytMusicUrl: rel.ytMusicUrl || "",
+      jioSaavnUrl: rel.jioSaavnUrl || ""
+    });
+  };
+
+  const handleEditUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setIsUploading(true);
+    try {
+      const url = await uploadFile(file, "releases", "artwork");
+      setEditingRelease((prev: any) => ({ ...prev, artworkUrl: url }));
+    } catch (err: any) {
+      alert(`Upload failed: ${err.message}`);
+    } finally {
+      setIsUploading(false);
+    }
+  };
+
+  const handleEditSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsUpdating(true);
+    try {
+      const res = await fetch("/api/releases", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(editingRelease)
+      });
+      if (res.ok) {
+        setEditingRelease(null);
+        fetchReleases(); // refresh table
+      } else {
+        const errorData = await res.json();
+        alert(`Failed to update release: ${errorData.error}`);
+      }
+    } catch (err) {
+      alert("Error updating release.");
+    } finally {
+      setIsUpdating(false);
+    }
+  };
 
   useEffect(() => {
     fetchReleases();
@@ -157,12 +225,19 @@ export default function ArtistReleasesPage() {
                       </td>
                       <td className="px-8 py-6">
                          <div className="flex items-center gap-3">
-                            <button className="p-2.5 rounded-xl bg-white/5 text-white/40 border border-white/5 hover:text-white hover:bg-white/10 transition-all">
+                            <button 
+                              onClick={() => handleEditClick(rel)}
+                              className="px-4 py-2 rounded-xl bg-white/5 text-xs font-bold text-white/60 border border-white/5 hover:text-white hover:bg-white/10 hover:border-primary/40 transition-all"
+                            >
+                               Edit
+                            </button>
+                            <Link 
+                              href={`/releases/${rel.slug || rel.id}`}
+                              target="_blank"
+                              className="p-2.5 rounded-xl bg-white/5 text-white/40 border border-white/5 hover:text-white hover:bg-white/10 transition-all"
+                            >
                                <ExternalLink className="w-4 h-4" />
-                            </button>
-                            <button className="p-2.5 rounded-xl bg-white/5 text-white/40 border border-white/5 hover:text-white hover:bg-white/10 transition-all">
-                               <MoreVertical className="w-4 h-4" />
-                            </button>
+                            </Link>
                          </div>
                       </td>
                     </tr>
@@ -181,6 +256,247 @@ export default function ArtistReleasesPage() {
              </div>
           </div>
         </>
+      )}
+
+      {/* Edit Release Modal */}
+      {editingRelease && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md overflow-y-auto">
+          <div className="bg-[#111113] border-2 border-white/10 rounded-[2.5rem] p-8 max-w-2xl w-full my-8 space-y-6 relative max-h-[90vh] overflow-y-auto">
+            <button 
+              onClick={() => setEditingRelease(null)}
+              className="absolute top-6 right-6 p-2 rounded-xl bg-white/5 text-white/40 hover:text-white transition-all border border-white/5"
+            >
+              <X className="w-5 h-5" />
+            </button>
+
+            <div>
+              <h2 className="text-2xl font-black text-white italic">Edit Release</h2>
+              <p className="text-white/40 text-xs font-sans">Modify metadata, visual art, and store platform links.</p>
+            </div>
+
+            <form onSubmit={handleEditSubmit} className="space-y-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="space-y-1">
+                  <label className="text-[10px] font-black uppercase tracking-widest text-white/40">Release Title</label>
+                  <input 
+                    type="text" 
+                    required
+                    className="w-full bg-black/40 border border-white/10 rounded-xl py-3 px-4 text-white text-xs outline-none focus:border-primary/40"
+                    value={editingRelease.title}
+                    onChange={(e) => setEditingRelease({...editingRelease, title: e.target.value})}
+                  />
+                </div>
+                <div className="space-y-1">
+                  <label className="text-[10px] font-black uppercase tracking-widest text-white/40">Type</label>
+                  <select 
+                    className="w-full bg-black/40 border border-white/10 rounded-xl py-3 px-4 text-white text-xs outline-none focus:border-primary/40 appearance-none"
+                    value={editingRelease.type}
+                    onChange={(e) => setEditingRelease({...editingRelease, type: e.target.value})}
+                  >
+                    <option value="Single">Single</option>
+                    <option value="EP">EP</option>
+                    <option value="Album">Album</option>
+                  </select>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="space-y-1">
+                  <label className="text-[10px] font-black uppercase tracking-widest text-white/40">Genre</label>
+                  <input 
+                    type="text" 
+                    required
+                    className="w-full bg-black/40 border border-white/10 rounded-xl py-3 px-4 text-white text-xs outline-none focus:border-primary/40"
+                    value={editingRelease.genre}
+                    onChange={(e) => setEditingRelease({...editingRelease, genre: e.target.value})}
+                  />
+                </div>
+                <div className="space-y-1">
+                  <label className="text-[10px] font-black uppercase tracking-widest text-white/40">Sub-Genre</label>
+                  <input 
+                    type="text" 
+                    className="w-full bg-black/40 border border-white/10 rounded-xl py-3 px-4 text-white text-xs outline-none focus:border-primary/40"
+                    value={editingRelease.subGenre}
+                    onChange={(e) => setEditingRelease({...editingRelease, subGenre: e.target.value})}
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="space-y-1">
+                  <label className="text-[10px] font-black uppercase tracking-widest text-white/40">Language</label>
+                  <input 
+                    type="text" 
+                    required
+                    className="w-full bg-black/40 border border-white/10 rounded-xl py-3 px-4 text-white text-xs outline-none focus:border-primary/40"
+                    value={editingRelease.language}
+                    onChange={(e) => setEditingRelease({...editingRelease, language: e.target.value})}
+                  />
+                </div>
+                <div className="space-y-1">
+                  <label className="text-[10px] font-black uppercase tracking-widest text-white/40">Release Date</label>
+                  <input 
+                    type="date" 
+                    required
+                    className="w-full bg-black/40 border border-white/10 rounded-xl py-3 px-4 text-white text-xs outline-none focus:border-primary/40"
+                    value={editingRelease.releaseDate}
+                    onChange={(e) => setEditingRelease({...editingRelease, releaseDate: e.target.value})}
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="space-y-1">
+                  <label className="text-[10px] font-black uppercase tracking-widest text-white/40">Copyright Holder</label>
+                  <input 
+                    type="text" 
+                    required
+                    className="w-full bg-black/40 border border-white/10 rounded-xl py-3 px-4 text-white text-xs outline-none focus:border-primary/40"
+                    value={editingRelease.copyrightHolder}
+                    onChange={(e) => setEditingRelease({...editingRelease, copyrightHolder: e.target.value})}
+                  />
+                </div>
+                <div className="space-y-1">
+                  <label className="text-[10px] font-black uppercase tracking-widest text-white/40">Copyright Year</label>
+                  <input 
+                    type="number" 
+                    required
+                    className="w-full bg-black/40 border border-white/10 rounded-xl py-3 px-4 text-white text-xs outline-none focus:border-primary/40"
+                    value={editingRelease.copyrightYear}
+                    onChange={(e) => setEditingRelease({...editingRelease, copyrightYear: parseInt(e.target.value)})}
+                  />
+                </div>
+              </div>
+
+              <div className="flex items-center gap-2">
+                <input 
+                  type="checkbox" 
+                  id="edit-explicit"
+                  className="rounded bg-black border-white/10 text-primary focus:ring-0 w-4 h-4 cursor-pointer"
+                  checked={editingRelease.isExplicit}
+                  onChange={(e) => setEditingRelease({...editingRelease, isExplicit: e.target.checked})}
+                />
+                <label htmlFor="edit-explicit" className="text-[10px] font-black uppercase tracking-widest text-white/40 cursor-pointer">Explicit Content</label>
+              </div>
+
+              <div className="space-y-1">
+                <label className="text-[10px] font-black uppercase tracking-widest text-white/40">YouTube Video URL</label>
+                <input 
+                  type="url" 
+                  required
+                  placeholder="https://..."
+                  className="w-full bg-black/40 border border-white/10 rounded-xl py-3 px-4 text-white text-xs outline-none focus:border-primary/40"
+                  value={editingRelease.youtubeUrl}
+                  onChange={(e) => setEditingRelease({...editingRelease, youtubeUrl: e.target.value})}
+                />
+              </div>
+
+              <div className="space-y-2">
+                <label className="text-[10px] font-black uppercase tracking-widest text-white/40">Cover Image artwork (Optional)</label>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="relative group aspect-square bg-black border-2 border-white/5 rounded-2xl overflow-hidden flex flex-col items-center justify-center p-4">
+                    {editingRelease.artworkUrl ? (
+                      <>
+                        <img src={editingRelease.artworkUrl} className="absolute inset-0 w-full h-full object-cover opacity-50" alt="Preview" />
+                        <div className="relative z-10 text-center">
+                          <Check className="w-6 h-6 text-green-500 mx-auto mb-1" />
+                          <p className="text-[9px] font-bold text-white uppercase tracking-widest">Uploaded</p>
+                        </div>
+                      </>
+                    ) : (
+                      <>
+                        <Upload className="w-6 h-6 text-white/20 mb-1" />
+                        <p className="text-[9px] font-bold text-white/40 uppercase tracking-widest">Upload Image</p>
+                      </>
+                    )}
+                    <input 
+                      type="file" 
+                      accept="image/*"
+                      className="absolute inset-0 opacity-0 cursor-pointer z-20"
+                      onChange={handleEditUpload}
+                      disabled={isUploading}
+                    />
+                    {isUploading && (
+                      <div className="absolute inset-0 bg-black/60 flex items-center justify-center z-30">
+                        <Loader2 className="w-5 h-5 text-primary animate-spin" />
+                      </div>
+                    )}
+                  </div>
+                  
+                  <div className="flex flex-col justify-center space-y-2">
+                    <label className="text-[10px] font-black uppercase tracking-widest text-white/20">Or Image Link</label>
+                    <input 
+                      type="url" 
+                      placeholder="https://..."
+                      className="w-full bg-black/40 border border-white/10 rounded-xl py-3 px-4 text-white text-xs outline-none focus:border-primary/40"
+                      value={editingRelease.artworkUrl}
+                      onChange={(e) => setEditingRelease({...editingRelease, artworkUrl: e.target.value})}
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div className="space-y-3">
+                <label className="text-[10px] font-black uppercase tracking-widest text-white/40">Streaming Platform Links (Optional)</label>
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-1">
+                    <label className="text-[9px] font-bold text-white/30">Spotify</label>
+                    <input 
+                      type="url" 
+                      className="w-full bg-black/40 border border-white/10 rounded-xl py-2 px-3 text-white text-xs outline-none focus:border-primary/40"
+                      value={editingRelease.spotifyUrl}
+                      onChange={(e) => setEditingRelease({...editingRelease, spotifyUrl: e.target.value})}
+                    />
+                  </div>
+                  <div className="space-y-1">
+                    <label className="text-[9px] font-bold text-white/30">Apple Music</label>
+                    <input 
+                      type="url" 
+                      className="w-full bg-black/40 border border-white/10 rounded-xl py-2 px-3 text-white text-xs outline-none focus:border-primary/40"
+                      value={editingRelease.appleMusicUrl}
+                      onChange={(e) => setEditingRelease({...editingRelease, appleMusicUrl: e.target.value})}
+                    />
+                  </div>
+                  <div className="space-y-1">
+                    <label className="text-[9px] font-bold text-white/30">YouTube Music</label>
+                    <input 
+                      type="url" 
+                      className="w-full bg-black/40 border border-white/10 rounded-xl py-2 px-3 text-white text-xs outline-none focus:border-primary/40"
+                      value={editingRelease.ytMusicUrl}
+                      onChange={(e) => setEditingRelease({...editingRelease, ytMusicUrl: e.target.value})}
+                    />
+                  </div>
+                  <div className="space-y-1">
+                    <label className="text-[9px] font-bold text-white/30">JioSaavn</label>
+                    <input 
+                      type="url" 
+                      className="w-full bg-black/40 border border-white/10 rounded-xl py-2 px-3 text-white text-xs outline-none focus:border-primary/40"
+                      value={editingRelease.jioSaavnUrl}
+                      onChange={(e) => setEditingRelease({...editingRelease, jioSaavnUrl: e.target.value})}
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div className="pt-4 flex gap-4">
+                <button 
+                  type="button"
+                  onClick={() => setEditingRelease(null)}
+                  className="w-1/2 py-4 rounded-xl border border-white/10 text-white hover:bg-white/5 text-xs font-black uppercase tracking-widest transition-all"
+                >
+                  Cancel
+                </button>
+                <button 
+                  type="submit"
+                  disabled={isUpdating || isUploading}
+                  className="w-1/2 btn-gradient py-4 rounded-xl text-black text-xs font-black uppercase tracking-widest hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-2"
+                >
+                  {isUpdating ? <Loader2 className="w-4 h-4 animate-spin" /> : "Save Changes"}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
       )}
     </div>
   );

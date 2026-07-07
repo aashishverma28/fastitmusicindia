@@ -138,3 +138,105 @@ export async function GET(req: Request) {
     return NextResponse.json({ error: "Failed to fetch releases" }, { status: 500 });
   }
 }
+
+export async function PUT(req: Request) {
+  try {
+    const session = await getServerSession(authOptions);
+    if (!session) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
+    const body = await req.json();
+    const { 
+      id,
+      title, 
+      type, 
+      genre, 
+      subGenre, 
+      language, 
+      releaseDate, 
+      copyrightHolder, 
+      copyrightYear, 
+      isExplicit, 
+      youtubeUrl,
+      artworkUrl,
+      spotifyUrl,
+      appleMusicUrl,
+      ytMusicUrl,
+      jioSaavnUrl
+    } = body;
+
+    if (!id) {
+      return NextResponse.json({ error: "Release ID is required" }, { status: 400 });
+    }
+
+    // Find if release belongs to user
+    const existing = await prisma.release.findFirst({
+      where: {
+        id,
+        OR: [
+          { artist: { userId: session.user.id } },
+          { label: { userId: session.user.id } }
+        ]
+      }
+    });
+
+    if (!existing) {
+      return NextResponse.json({ error: "Release not found or access denied" }, { status: 404 });
+    }
+
+    // Helper to get YouTube ID
+    const getYouTubeId = (url: string) => {
+      if (!url) return "";
+      const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+      const match = url.match(regExp);
+      return (match && match[2].length === 11) ? match[2] : "";
+    };
+
+    const ytId = getYouTubeId(youtubeUrl);
+    const finalCoverArtUrl = artworkUrl || (ytId ? `https://img.youtube.com/vi/${ytId}/hqdefault.jpg` : null);
+
+    // Update release
+    const updated = await prisma.release.update({
+      where: { id },
+      data: {
+        title,
+        type,
+        genre,
+        subGenre,
+        language,
+        releaseDate: new Date(releaseDate),
+        copyrightHolder,
+        copyrightYear: parseInt(copyrightYear),
+        isExplicit,
+        coverArtUrl: finalCoverArtUrl,
+        youtubeUrl,
+        spotifyUrl,
+        appleMusicUrl,
+        ytMusicUrl,
+        jioSaavnUrl,
+        status: existing.status === "REJECTED" ? "SUBMITTED" : existing.status,
+      }
+    });
+
+    // Update the track related to this release
+    const firstTrack = await prisma.track.findFirst({
+      where: { releaseId: id }
+    });
+
+    if (firstTrack) {
+      await prisma.track.update({
+        where: { id: firstTrack.id },
+        data: {
+          title: title,
+          audioFileUrl: youtubeUrl || firstTrack.audioFileUrl
+        }
+      });
+    }
+
+    return NextResponse.json({ success: true, release: updated });
+  } catch (error: any) {
+    console.error("Release update error:", error);
+    return NextResponse.json({ error: "Failed to update release: " + error.message }, { status: 500 });
+  }
+}
