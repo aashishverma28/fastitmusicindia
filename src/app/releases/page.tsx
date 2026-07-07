@@ -561,39 +561,39 @@ export default function ReleasesPage() {
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.95 }}
-                className="bg-[#111113] border-3 border-white p-8 max-w-2xl w-full my-8 space-y-6 relative max-h-[90vh] overflow-y-auto rounded-none shadow-[8px_8px_0px_0px_#00b0fc]"
+                className="bg-[var(--card-bg)] border-3 border-[var(--foreground)] p-8 max-w-2xl w-full my-8 space-y-6 relative max-h-[90vh] overflow-y-auto rounded-none shadow-[8px_8px_0px_0px_#00b0fc]"
               >
                 <button 
                   type="button"
                   onClick={() => setEditingRelease(null)}
-                  className="absolute top-6 right-6 p-2 bg-black border-2 border-white text-white/70 hover:text-white transition-all shadow-[2px_2px_0px_0px_#ff0000]"
+                  className="absolute top-6 right-6 p-2 bg-[var(--background)] border-2 border-[var(--foreground)] text-[var(--foreground)]/70 hover:text-[var(--foreground)] transition-all shadow-[2px_2px_0px_0px_#ff0000]"
                 >
                   <X className="w-5 h-5" />
                 </button>
 
                 <div>
-                  <h2 className="text-2xl font-display font-black text-white italic">Edit Public Release</h2>
-                  <p className="text-white/40 text-xs font-sans">Modify public release details, artwork, and streaming platform links.</p>
+                  <h2 className="text-2xl font-display font-black text-[var(--foreground)] italic">Edit Public Release</h2>
+                  <p className="text-[var(--foreground)]/40 text-xs font-sans">Modify public release details, artwork, and streaming platform links.</p>
                 </div>
 
                 <form onSubmit={handleEditReleaseSubmit} className="space-y-6">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="space-y-1">
-                      <label className="text-[10px] font-black uppercase tracking-widest text-white/40 ml-2">Release Title</label>
+                      <label className="text-[10px] font-black uppercase tracking-widest text-[var(--foreground)]/50 ml-2">Release Title</label>
                       <input 
                         type="text" 
                         required
-                        className="w-full bg-black border-2 border-white rounded-none py-3 px-4 text-white text-xs focus:border-primary outline-none transition-all font-sans"
+                        className="w-full bg-[var(--background)] border-2 border-[var(--foreground)] rounded-none py-3 px-4 text-[var(--foreground)] text-xs focus:border-primary outline-none transition-all font-sans"
                         value={editingRelease.title}
                         onChange={(e) => setEditingRelease({...editingRelease, title: e.target.value})}
                       />
                     </div>
                     <div className="space-y-1">
-                      <label className="text-[10px] font-black uppercase tracking-widest text-white/40 ml-2">Artist Name</label>
+                      <label className="text-[10px] font-black uppercase tracking-widest text-[var(--foreground)]/50 ml-2">Artist Name</label>
                       <input 
                         type="text" 
                         required
-                        className="w-full bg-black border-2 border-white rounded-none py-3 px-4 text-white text-xs focus:border-primary outline-none transition-all font-sans"
+                        className="w-full bg-[var(--background)] border-2 border-[var(--foreground)] rounded-none py-3 px-4 text-[var(--foreground)] text-xs focus:border-primary outline-none transition-all font-sans"
                         value={editingRelease.artistName}
                         onChange={(e) => setEditingRelease({...editingRelease, artistName: e.target.value})}
                       />
@@ -602,21 +602,21 @@ export default function ReleasesPage() {
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="space-y-1">
-                      <label className="text-[10px] font-black uppercase tracking-widest text-white/40 ml-2">Genre</label>
+                      <label className="text-[10px] font-black uppercase tracking-widest text-[var(--foreground)]/50 ml-2">Genre</label>
                       <input 
                         type="text" 
                         required
-                        className="w-full bg-black border-2 border-white rounded-none py-3 px-4 text-white text-xs focus:border-primary outline-none transition-all font-sans"
+                        className="w-full bg-[var(--background)] border-2 border-[var(--foreground)] rounded-none py-3 px-4 text-[var(--foreground)] text-xs focus:border-primary outline-none transition-all font-sans"
                         value={editingRelease.genre}
                         onChange={(e) => setEditingRelease({...editingRelease, genre: e.target.value})}
                       />
                     </div>
                     <div className="space-y-1">
-                      <label className="text-[10px] font-black uppercase tracking-widest text-white/40 ml-2">Release Date</label>
+                      <label className="text-[10px] font-black uppercase tracking-widest text-[var(--foreground)]/50 ml-2">Release Date</label>
                       <input 
                         type="date" 
                         required
-                        className="w-full bg-black border-2 border-white rounded-none py-3 px-4 text-white text-xs focus:border-primary outline-none transition-all font-sans"
+                        className="w-full bg-[var(--background)] border-2 border-[var(--foreground)] rounded-none py-3 px-4 text-[var(--foreground)] text-xs focus:border-primary outline-none transition-all font-sans"
                         value={editingRelease.releaseDate}
                         onChange={(e) => setEditingRelease({...editingRelease, releaseDate: e.target.value})}
                       />
@@ -624,32 +624,32 @@ export default function ReleasesPage() {
                   </div>
 
                   <div className="space-y-2">
-                    <label className="text-[10px] font-black uppercase tracking-widest text-white/40 ml-2">YouTube Video URL</label>
+                    <label className="text-[10px] font-black uppercase tracking-widest text-[var(--foreground)]/50 ml-2">YouTube Video URL</label>
                     <input 
                       type="url" 
                       required
-                      className="w-full bg-black border-2 border-white rounded-none py-3 px-4 text-white focus:border-primary outline-none transition-all font-sans"
+                      className="w-full bg-[var(--background)] border-2 border-[var(--foreground)] rounded-none py-3 px-4 text-[var(--foreground)] focus:border-primary outline-none transition-all font-sans"
                       value={editingRelease.youtubeUrl}
                       onChange={(e) => setEditingRelease({...editingRelease, youtubeUrl: e.target.value})}
                     />
                   </div>
 
                   <div className="space-y-4">
-                    <label className="text-[10px] font-black uppercase tracking-widest text-white/40 ml-2">Track Artwork (Optional)</label>
+                    <label className="text-[10px] font-black uppercase tracking-widest text-[var(--foreground)]/50 ml-2">Track Artwork (Optional)</label>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <div className="relative group aspect-square bg-black border-2 border-white rounded-none overflow-hidden flex flex-col items-center justify-center p-4">
+                      <div className="relative group aspect-square bg-[var(--background)] border-2 border-[var(--foreground)] rounded-none overflow-hidden flex flex-col items-center justify-center p-4">
                         {editingRelease.coverArtUrl ? (
                           <>
                             <img src={editingRelease.coverArtUrl} className="absolute inset-0 w-full h-full object-cover opacity-50" alt="Preview" />
                             <div className="relative z-10 text-center">
                               <Check className="w-6 h-6 text-green-500 mx-auto mb-1" />
-                              <p className="text-[9px] font-bold text-white uppercase tracking-widest">Ready</p>
+                              <p className="text-[9px] font-bold text-[var(--foreground)] uppercase tracking-widest">Ready</p>
                             </div>
                           </>
                         ) : (
                           <>
-                            <Upload className="w-6 h-6 text-white/20 mb-1" />
-                            <p className="text-[9px] font-bold text-white/40 uppercase tracking-widest">Upload Image</p>
+                            <Upload className="w-6 h-6 text-[var(--foreground)]/20 mb-1" />
+                            <p className="text-[9px] font-bold text-[var(--foreground)]/40 uppercase tracking-widest">Upload Image</p>
                           </>
                         )}
                         <input 
@@ -667,11 +667,11 @@ export default function ReleasesPage() {
                       </div>
                       
                       <div className="flex flex-col justify-center space-y-2">
-                        <label className="text-[10px] font-black uppercase tracking-widest text-white/20 ml-2">Or Use Image Link</label>
+                        <label className="text-[10px] font-black uppercase tracking-widest text-[var(--foreground)]/40 ml-2">Or Use Image Link</label>
                         <input 
                           type="url" 
                           placeholder="https://..."
-                          className="w-full bg-black border-2 border-white rounded-none py-3 px-4 text-white focus:border-primary outline-none transition-all font-sans text-xs"
+                          className="w-full bg-[var(--background)] border-2 border-[var(--foreground)] rounded-none py-3 px-4 text-[var(--foreground)] focus:border-primary outline-none transition-all font-sans text-xs"
                           value={editingRelease.coverArtUrl}
                           onChange={(e) => setEditingRelease({...editingRelease, coverArtUrl: e.target.value})}
                         />
@@ -680,40 +680,40 @@ export default function ReleasesPage() {
                   </div>
 
                   <div className="space-y-4">
-                    <label className="text-[10px] font-black uppercase tracking-widest text-white/40 ml-2">Streaming Platforms (Optional)</label>
+                    <label className="text-[10px] font-black uppercase tracking-widest text-[var(--foreground)]/50 ml-2">Streaming Platforms (Optional)</label>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div className="space-y-1">
-                        <label className="text-[9px] font-bold text-white/30 ml-2">Spotify</label>
+                        <label className="text-[9px] font-bold text-[var(--foreground)]/40 ml-2">Spotify</label>
                         <input 
                           type="url" 
-                          className="w-full bg-black border-2 border-white rounded-none py-2 px-3 text-white focus:border-primary outline-none transition-all font-sans text-xs"
+                          className="w-full bg-[var(--background)] border-2 border-[var(--foreground)] rounded-none py-2 px-3 text-[var(--foreground)] focus:border-primary outline-none transition-all font-sans text-xs"
                           value={editingRelease.spotifyUrl || ""}
                           onChange={(e) => setEditingRelease({...editingRelease, spotifyUrl: e.target.value})}
                         />
                       </div>
                       <div className="space-y-1">
-                        <label className="text-[9px] font-bold text-white/30 ml-2">Apple Music</label>
+                        <label className="text-[9px] font-bold text-[var(--foreground)]/40 ml-2">Apple Music</label>
                         <input 
                           type="url" 
-                          className="w-full bg-black border-2 border-white rounded-none py-2 px-3 text-white focus:border-primary outline-none transition-all font-sans text-xs"
+                          className="w-full bg-[var(--background)] border-2 border-[var(--foreground)] rounded-none py-2 px-3 text-[var(--foreground)] focus:border-primary outline-none transition-all font-sans text-xs"
                           value={editingRelease.appleMusicUrl || ""}
                           onChange={(e) => setEditingRelease({...editingRelease, appleMusicUrl: e.target.value})}
                         />
                       </div>
                       <div className="space-y-1">
-                        <label className="text-[9px] font-bold text-white/30 ml-2">YouTube Music</label>
+                        <label className="text-[9px] font-bold text-[var(--foreground)]/40 ml-2">YouTube Music</label>
                         <input 
                           type="url" 
-                          className="w-full bg-black border-2 border-white rounded-none py-2 px-3 text-white focus:border-primary outline-none transition-all font-sans text-xs"
+                          className="w-full bg-[var(--background)] border-2 border-[var(--foreground)] rounded-none py-2 px-3 text-[var(--foreground)] focus:border-primary outline-none transition-all font-sans text-xs"
                           value={editingRelease.ytMusicUrl || ""}
                           onChange={(e) => setEditingRelease({...editingRelease, ytMusicUrl: e.target.value})}
                         />
                       </div>
                       <div className="space-y-1">
-                        <label className="text-[9px] font-bold text-white/30 ml-2">JioSaavn</label>
+                        <label className="text-[9px] font-bold text-[var(--foreground)]/40 ml-2">JioSaavn</label>
                         <input 
                           type="url" 
-                          className="w-full bg-black border-2 border-white rounded-none py-2 px-3 text-white focus:border-primary outline-none transition-all font-sans text-xs"
+                          className="w-full bg-[var(--background)] border-2 border-[var(--foreground)] rounded-none py-2 px-3 text-[var(--foreground)] focus:border-primary outline-none transition-all font-sans text-xs"
                           value={editingRelease.jioSaavnUrl || ""}
                           onChange={(e) => setEditingRelease({...editingRelease, jioSaavnUrl: e.target.value})}
                         />
@@ -725,7 +725,7 @@ export default function ReleasesPage() {
                     <button 
                       type="button"
                       onClick={() => setEditingRelease(null)}
-                      className="w-1/2 py-4 bg-black border-2 border-white text-white hover:bg-white/5 text-xs font-black uppercase tracking-widest transition-all"
+                      className="w-1/2 py-4 bg-[var(--background)] border-2 border-[var(--foreground)] text-[var(--foreground)] hover:bg-[var(--foreground)]/5 text-xs font-black uppercase tracking-widest transition-all"
                     >
                       Cancel
                     </button>

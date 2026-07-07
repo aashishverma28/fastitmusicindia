@@ -315,61 +315,61 @@ export default function LabelCatalogPage() {
       {/* Edit Release Modal */}
       {editingRelease && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md overflow-y-auto">
-          <div className="bg-[#111113] border-2 border-white/10 rounded-[2.5rem] p-8 max-w-2xl w-full my-8 space-y-6 relative max-h-[90vh] overflow-y-auto">
+          <div className="bg-[var(--card-bg)] border-2 border-[var(--glass-border)] rounded-[2.5rem] p-8 max-w-2xl w-full my-8 space-y-6 relative max-h-[90vh] overflow-y-auto shadow-2xl">
             <button 
               onClick={() => setEditingRelease(null)}
-              className="absolute top-6 right-6 p-2 rounded-xl bg-white/5 text-white/40 hover:text-white transition-all border border-white/5"
+              className="absolute top-6 right-6 p-2 rounded-xl bg-[var(--background)] text-[var(--foreground)]/40 hover:text-[var(--foreground)] transition-all border border-[var(--glass-border)]"
             >
               <X className="w-5 h-5" />
             </button>
 
             <div>
-              <h2 className="text-2xl font-black text-white italic">Edit Release</h2>
-              <p className="text-white/40 text-xs font-sans">Modify metadata, visual art, and store platform links.</p>
+              <h2 className="text-2xl font-black text-[var(--foreground)] italic">Edit Release</h2>
+              <p className="text-[var(--foreground)]/40 text-xs font-sans">Modify metadata, visual art, and store platform links.</p>
             </div>
 
             <form onSubmit={handleEditSubmit} className="space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-1">
-                  <label className="text-[10px] font-black uppercase tracking-widest text-white/40">Release Title</label>
+                  <label className="text-[10px] font-black uppercase tracking-widest text-[var(--foreground)]/50">Release Title</label>
                   <input 
                     type="text" 
                     required
-                    className="w-full bg-black/40 border border-white/10 rounded-xl py-3 px-4 text-white text-xs outline-none focus:border-primary/40"
+                    className="w-full bg-[var(--background)] border border-[var(--glass-border)] rounded-xl py-3 px-4 text-[var(--foreground)] text-xs outline-none focus:border-primary/40 focus:ring-0"
                     value={editingRelease.title}
                     onChange={(e) => setEditingRelease({...editingRelease, title: e.target.value})}
                   />
                 </div>
                 <div className="space-y-1">
-                  <label className="text-[10px] font-black uppercase tracking-widest text-white/40">Type</label>
+                  <label className="text-[10px] font-black uppercase tracking-widest text-[var(--foreground)]/50">Type</label>
                   <select 
-                    className="w-full bg-black/40 border border-white/10 rounded-xl py-3 px-4 text-white text-xs outline-none focus:border-primary/40 appearance-none"
+                    className="w-full bg-[var(--background)] border border-[var(--glass-border)] rounded-xl py-3 px-4 text-[var(--foreground)] text-xs outline-none focus:border-primary/40 appearance-none"
                     value={editingRelease.type}
                     onChange={(e) => setEditingRelease({...editingRelease, type: e.target.value})}
                   >
-                    <option value="Single">Single</option>
-                    <option value="EP">EP</option>
-                    <option value="Album">Album</option>
+                    <option value="Single" style={{ background: "var(--card-bg)", color: "var(--foreground)" }}>Single</option>
+                    <option value="EP" style={{ background: "var(--card-bg)", color: "var(--foreground)" }}>EP</option>
+                    <option value="Album" style={{ background: "var(--card-bg)", color: "var(--foreground)" }}>Album</option>
                   </select>
                 </div>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-1">
-                  <label className="text-[10px] font-black uppercase tracking-widest text-white/40">Genre</label>
+                  <label className="text-[10px] font-black uppercase tracking-widest text-[var(--foreground)]/50">Genre</label>
                   <input 
                     type="text" 
                     required
-                    className="w-full bg-black/40 border border-white/10 rounded-xl py-3 px-4 text-white text-xs outline-none focus:border-primary/40"
+                    className="w-full bg-[var(--background)] border border-[var(--glass-border)] rounded-xl py-3 px-4 text-[var(--foreground)] text-xs outline-none focus:border-primary/40 focus:ring-0"
                     value={editingRelease.genre}
                     onChange={(e) => setEditingRelease({...editingRelease, genre: e.target.value})}
                   />
                 </div>
                 <div className="space-y-1">
-                  <label className="text-[10px] font-black uppercase tracking-widest text-white/40">Sub-Genre</label>
+                  <label className="text-[10px] font-black uppercase tracking-widest text-[var(--foreground)]/50">Sub-Genre</label>
                   <input 
                     type="text" 
-                    className="w-full bg-black/40 border border-white/10 rounded-xl py-3 px-4 text-white text-xs outline-none focus:border-primary/40"
+                    className="w-full bg-[var(--background)] border border-[var(--glass-border)] rounded-xl py-3 px-4 text-[var(--foreground)] text-xs outline-none focus:border-primary/40 focus:ring-0"
                     value={editingRelease.subGenre}
                     onChange={(e) => setEditingRelease({...editingRelease, subGenre: e.target.value})}
                   />
@@ -378,21 +378,21 @@ export default function LabelCatalogPage() {
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-1">
-                  <label className="text-[10px] font-black uppercase tracking-widest text-white/40">Language</label>
+                  <label className="text-[10px] font-black uppercase tracking-widest text-[var(--foreground)]/50">Language</label>
                   <input 
                     type="text" 
                     required
-                    className="w-full bg-black/40 border border-white/10 rounded-xl py-3 px-4 text-white text-xs outline-none focus:border-primary/40"
+                    className="w-full bg-[var(--background)] border border-[var(--glass-border)] rounded-xl py-3 px-4 text-[var(--foreground)] text-xs outline-none focus:border-primary/40 focus:ring-0"
                     value={editingRelease.language}
                     onChange={(e) => setEditingRelease({...editingRelease, language: e.target.value})}
                   />
                 </div>
                 <div className="space-y-1">
-                  <label className="text-[10px] font-black uppercase tracking-widest text-white/40">Release Date</label>
+                  <label className="text-[10px] font-black uppercase tracking-widest text-[var(--foreground)]/50">Release Date</label>
                   <input 
                     type="date" 
                     required
-                    className="w-full bg-black/40 border border-white/10 rounded-xl py-3 px-4 text-white text-xs outline-none focus:border-primary/40"
+                    className="w-full bg-[var(--background)] border border-[var(--glass-border)] rounded-xl py-3 px-4 text-[var(--foreground)] text-xs outline-none focus:border-primary/40 focus:ring-0"
                     value={editingRelease.releaseDate}
                     onChange={(e) => setEditingRelease({...editingRelease, releaseDate: e.target.value})}
                   />
@@ -401,21 +401,21 @@ export default function LabelCatalogPage() {
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-1">
-                  <label className="text-[10px] font-black uppercase tracking-widest text-white/40">Copyright Holder</label>
+                  <label className="text-[10px] font-black uppercase tracking-widest text-[var(--foreground)]/50">Copyright Holder</label>
                   <input 
                     type="text" 
                     required
-                    className="w-full bg-black/40 border border-white/10 rounded-xl py-3 px-4 text-white text-xs outline-none focus:border-primary/40"
+                    className="w-full bg-[var(--background)] border border-[var(--glass-border)] rounded-xl py-3 px-4 text-[var(--foreground)] text-xs outline-none focus:border-primary/40 focus:ring-0"
                     value={editingRelease.copyrightHolder}
                     onChange={(e) => setEditingRelease({...editingRelease, copyrightHolder: e.target.value})}
                   />
                 </div>
                 <div className="space-y-1">
-                  <label className="text-[10px] font-black uppercase tracking-widest text-white/40">Copyright Year</label>
+                  <label className="text-[10px] font-black uppercase tracking-widest text-[var(--foreground)]/50">Copyright Year</label>
                   <input 
                     type="number" 
                     required
-                    className="w-full bg-black/40 border border-white/10 rounded-xl py-3 px-4 text-white text-xs outline-none focus:border-primary/40"
+                    className="w-full bg-[var(--background)] border border-[var(--glass-border)] rounded-xl py-3 px-4 text-[var(--foreground)] text-xs outline-none focus:border-primary/40 focus:ring-0"
                     value={editingRelease.copyrightYear}
                     onChange={(e) => setEditingRelease({...editingRelease, copyrightYear: parseInt(e.target.value)})}
                   />
@@ -426,41 +426,41 @@ export default function LabelCatalogPage() {
                 <input 
                   type="checkbox" 
                   id="edit-explicit"
-                  className="rounded bg-black border-white/10 text-primary focus:ring-0 w-4 h-4 cursor-pointer"
+                  className="rounded bg-[var(--background)] border-[var(--glass-border)] text-primary focus:ring-0 w-4 h-4 cursor-pointer"
                   checked={editingRelease.isExplicit}
                   onChange={(e) => setEditingRelease({...editingRelease, isExplicit: e.target.checked})}
                 />
-                <label htmlFor="edit-explicit" className="text-[10px] font-black uppercase tracking-widest text-white/40 cursor-pointer">Explicit Content</label>
+                <label htmlFor="edit-explicit" className="text-[10px] font-black uppercase tracking-widest text-[var(--foreground)]/50 cursor-pointer">Explicit Content</label>
               </div>
 
               <div className="space-y-1">
-                <label className="text-[10px] font-black uppercase tracking-widest text-white/40">YouTube Video URL</label>
+                <label className="text-[10px] font-black uppercase tracking-widest text-[var(--foreground)]/50">YouTube Video URL</label>
                 <input 
                   type="url" 
                   required
                   placeholder="https://..."
-                  className="w-full bg-black/40 border border-white/10 rounded-xl py-3 px-4 text-white text-xs outline-none focus:border-primary/40"
+                  className="w-full bg-[var(--background)] border border-[var(--glass-border)] rounded-xl py-3 px-4 text-[var(--foreground)] text-xs outline-none focus:border-primary/40 focus:ring-0"
                   value={editingRelease.youtubeUrl}
                   onChange={(e) => setEditingRelease({...editingRelease, youtubeUrl: e.target.value})}
                 />
               </div>
 
               <div className="space-y-2">
-                <label className="text-[10px] font-black uppercase tracking-widest text-white/40">Cover Image artwork (Optional)</label>
+                <label className="text-[10px] font-black uppercase tracking-widest text-[var(--foreground)]/50">Cover Image artwork (Optional)</label>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="relative group aspect-square bg-black border-2 border-white/5 rounded-2xl overflow-hidden flex flex-col items-center justify-center p-4">
+                  <div className="relative group aspect-square bg-[var(--background)] border border-[var(--glass-border)] rounded-2xl overflow-hidden flex flex-col items-center justify-center p-4">
                     {editingRelease.artworkUrl ? (
                       <>
                         <img src={editingRelease.artworkUrl} className="absolute inset-0 w-full h-full object-cover opacity-50" alt="Preview" />
                         <div className="relative z-10 text-center">
                           <Check className="w-6 h-6 text-green-500 mx-auto mb-1" />
-                          <p className="text-[9px] font-bold text-white uppercase tracking-widest">Uploaded</p>
+                          <p className="text-[9px] font-bold text-[var(--foreground)] uppercase tracking-widest">Uploaded</p>
                         </div>
                       </>
                     ) : (
                       <>
-                        <Upload className="w-6 h-6 text-white/20 mb-1" />
-                        <p className="text-[9px] font-bold text-white/40 uppercase tracking-widest">Upload Image</p>
+                        <Upload className="w-6 h-6 text-[var(--foreground)]/20 mb-1" />
+                        <p className="text-[9px] font-bold text-[var(--foreground)]/40 uppercase tracking-widest">Upload Image</p>
                       </>
                     )}
                     <input 
@@ -478,11 +478,11 @@ export default function LabelCatalogPage() {
                   </div>
                   
                   <div className="flex flex-col justify-center space-y-2">
-                    <label className="text-[10px] font-black uppercase tracking-widest text-white/20">Or Image Link</label>
+                    <label className="text-[10px] font-black uppercase tracking-widest text-[var(--foreground)]/40">Or Image Link</label>
                     <input 
                       type="url" 
                       placeholder="https://..."
-                      className="w-full bg-black/40 border border-white/10 rounded-xl py-3 px-4 text-white text-xs outline-none focus:border-primary/40"
+                      className="w-full bg-[var(--background)] border border-[var(--glass-border)] rounded-xl py-3 px-4 text-[var(--foreground)] text-xs outline-none focus:border-primary/40 focus:ring-0"
                       value={editingRelease.artworkUrl}
                       onChange={(e) => setEditingRelease({...editingRelease, artworkUrl: e.target.value})}
                     />
@@ -491,40 +491,40 @@ export default function LabelCatalogPage() {
               </div>
 
               <div className="space-y-3">
-                <label className="text-[10px] font-black uppercase tracking-widest text-white/40">Streaming Platform Links (Optional)</label>
+                <label className="text-[10px] font-black uppercase tracking-widest text-[var(--foreground)]/50">Streaming Platform Links (Optional)</label>
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-1">
-                    <label className="text-[9px] font-bold text-white/30">Spotify</label>
+                    <label className="text-[9px] font-bold text-[var(--foreground)]/40">Spotify</label>
                     <input 
                       type="url" 
-                      className="w-full bg-black/40 border border-white/10 rounded-xl py-2 px-3 text-white text-xs outline-none focus:border-primary/40"
+                      className="w-full bg-[var(--background)] border border-[var(--glass-border)] rounded-xl py-2 px-3 text-[var(--foreground)] text-xs outline-none focus:border-primary/40 focus:ring-0"
                       value={editingRelease.spotifyUrl}
                       onChange={(e) => setEditingRelease({...editingRelease, spotifyUrl: e.target.value})}
                     />
                   </div>
                   <div className="space-y-1">
-                    <label className="text-[9px] font-bold text-white/30">Apple Music</label>
+                    <label className="text-[9px] font-bold text-[var(--foreground)]/40">Apple Music</label>
                     <input 
                       type="url" 
-                      className="w-full bg-black/40 border border-white/10 rounded-xl py-2 px-3 text-white text-xs outline-none focus:border-primary/40"
+                      className="w-full bg-[var(--background)] border border-[var(--glass-border)] rounded-xl py-2 px-3 text-[var(--foreground)] text-xs outline-none focus:border-primary/40 focus:ring-0"
                       value={editingRelease.appleMusicUrl}
                       onChange={(e) => setEditingRelease({...editingRelease, appleMusicUrl: e.target.value})}
                     />
                   </div>
                   <div className="space-y-1">
-                    <label className="text-[9px] font-bold text-white/30">YouTube Music</label>
+                    <label className="text-[9px] font-bold text-[var(--foreground)]/40">YouTube Music</label>
                     <input 
                       type="url" 
-                      className="w-full bg-black/40 border border-white/10 rounded-xl py-2 px-3 text-white text-xs outline-none focus:border-primary/40"
+                      className="w-full bg-[var(--background)] border border-[var(--glass-border)] rounded-xl py-2 px-3 text-[var(--foreground)] text-xs outline-none focus:border-primary/40 focus:ring-0"
                       value={editingRelease.ytMusicUrl}
                       onChange={(e) => setEditingRelease({...editingRelease, ytMusicUrl: e.target.value})}
                     />
                   </div>
                   <div className="space-y-1">
-                    <label className="text-[9px] font-bold text-white/30">JioSaavn</label>
+                    <label className="text-[9px] font-bold text-[var(--foreground)]/40">JioSaavn</label>
                     <input 
                       type="url" 
-                      className="w-full bg-black/40 border border-white/10 rounded-xl py-2 px-3 text-white text-xs outline-none focus:border-primary/40"
+                      className="w-full bg-[var(--background)] border border-[var(--glass-border)] rounded-xl py-2 px-3 text-[var(--foreground)] text-xs outline-none focus:border-primary/40 focus:ring-0"
                       value={editingRelease.jioSaavnUrl}
                       onChange={(e) => setEditingRelease({...editingRelease, jioSaavnUrl: e.target.value})}
                     />
@@ -536,7 +536,7 @@ export default function LabelCatalogPage() {
                 <button 
                   type="button"
                   onClick={() => setEditingRelease(null)}
-                  className="w-1/2 py-4 rounded-xl border border-white/10 text-white hover:bg-white/5 text-xs font-black uppercase tracking-widest transition-all"
+                  className="w-1/2 py-4 rounded-xl border border-[var(--glass-border)] text-[var(--foreground)] hover:bg-[var(--foreground)]/5 text-xs font-black uppercase tracking-widest transition-all"
                 >
                   Cancel
                 </button>
