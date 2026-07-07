@@ -10,7 +10,9 @@ import {
   AlertCircle,
   Users,
   Search,
-  Layers
+  Layers,
+  Image as ImageIcon,
+  Upload
 } from "lucide-react";
 import { useState, useEffect } from "react";
 import Link from "next/link";
@@ -22,7 +24,8 @@ const steps = [
   { id: 1, name: "Artist", icon: <Users className="w-5 h-5" /> },
   { id: 2, name: "Metadata", icon: <Disc className="w-5 h-5" /> },
   { id: 3, name: "YouTube Video", icon: <Layers className="w-5 h-5" /> },
-  { id: 4, name: "Review", icon: <CheckCircle2 className="w-5 h-5" /> },
+  { id: 4, name: "Artwork & Links", icon: <ImageIcon className="w-5 h-5" /> },
+  { id: 5, name: "Review", icon: <CheckCircle2 className="w-5 h-5" /> },
 ];
 
 export default function LabelNewReleasePage() {
@@ -42,7 +45,12 @@ export default function LabelNewReleasePage() {
     copyrightHolder: "",
     copyrightYear: new Date().getFullYear(),
     isExplicit: false,
-    youtubeUrl: ""
+    youtubeUrl: "",
+    artworkUrl: "",
+    spotifyUrl: "",
+    appleMusicUrl: "",
+    ytMusicUrl: "",
+    jioSaavnUrl: ""
   });
   
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -378,8 +386,107 @@ export default function LabelNewReleasePage() {
                 </div>
               )}
 
-              {/* Step 4: Review */}
+              {/* Step 4: Artwork & Links */}
               {currentStep === 4 && (
+                <div className="space-y-8">
+                   <div className="space-y-2">
+                      <h2 className="text-2xl font-black text-white italic">Artwork & Streaming Links</h2>
+                      <p className="text-white/40 text-sm font-sans underline decoration-primary/30 underline-offset-4">Upload custom artwork and add direct links to song streaming platforms.</p>
+                   </div>
+                   
+                   <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
+                     {/* Artwork Upload */}
+                     <div className="space-y-4 flex flex-col items-center">
+                        <label className="text-[10px] font-black uppercase tracking-widest text-white/30 self-start">Cover Art (Optional)</label>
+                        <div className="w-64 h-64 relative group">
+                          <input 
+                            type="file" 
+                            id="artwork-upload"
+                            className="hidden"
+                            accept="image/*"
+                            onChange={(e) => handleFileUpload(e, "artworkUrl")}
+                            disabled={!!uploadingField}
+                          />
+                          <label 
+                            htmlFor="artwork-upload"
+                            className={`w-full h-full rounded-3xl border-2 border-dashed flex flex-col items-center justify-center text-center p-6 transition-all cursor-pointer overflow-hidden ${
+                              formData.artworkUrl ? "border-green-500/50" : "border-white/10 hover:border-primary/40"
+                            }`}
+                          >
+                             {formData.artworkUrl && (
+                               <img src={formData.artworkUrl} alt="Artwork Preview" className="absolute inset-0 w-full h-full object-cover opacity-40 group-hover:scale-105 transition-transform pointer-events-none" />
+                             )}
+                             <div className="z-10 bg-black/60 backdrop-blur-md p-4 rounded-2xl border border-white/10 space-y-2 group-hover:scale-105 transition-transform">
+                                {uploadingField === "artwork" ? (
+                                  <Loader2 className="w-6 h-6 text-primary mx-auto animate-spin" />
+                                ) : formData.artworkUrl ? (
+                                  <Check className="w-6 h-6 text-green-500 mx-auto" />
+                                ) : (
+                                  <Upload className="w-6 h-6 text-primary mx-auto" />
+                                )}
+                                <div>
+                                   <p className={`text-[10px] font-black uppercase tracking-widest ${formData.artworkUrl ? "text-green-500" : "text-white"}`}>
+                                     {uploadingField === "artwork" ? "Uploading..." : formData.artworkUrl ? "Artwork Ready" : "Select Artwork"}
+                                   </p>
+                                </div>
+                             </div>
+                          </label>
+                        </div>
+                     </div>
+
+                     {/* Streaming Links */}
+                     <div className="space-y-4">
+                        <label className="text-[10px] font-black uppercase tracking-widest text-white/30">Streaming Platform Links (Optional)</label>
+                        
+                        <div className="space-y-3">
+                           <div className="space-y-1">
+                              <label className="text-[9px] font-bold text-white/40">Spotify URL</label>
+                              <input 
+                                type="url" 
+                                placeholder="https://open.spotify.com/track/..."
+                                className="w-full bg-black/40 border border-white/10 rounded-xl py-3 px-4 text-white text-xs outline-none focus:border-primary/40"
+                                value={formData.spotifyUrl}
+                                onChange={(e) => updateFormData("spotifyUrl", e.target.value)}
+                              />
+                           </div>
+                           <div className="space-y-1">
+                              <label className="text-[9px] font-bold text-white/40">Apple Music URL</label>
+                              <input 
+                                type="url" 
+                                placeholder="https://music.apple.com/..."
+                                className="w-full bg-black/40 border border-white/10 rounded-xl py-3 px-4 text-white text-xs outline-none focus:border-primary/40"
+                                value={formData.appleMusicUrl}
+                                onChange={(e) => updateFormData("appleMusicUrl", e.target.value)}
+                              />
+                           </div>
+                           <div className="space-y-1">
+                              <label className="text-[9px] font-bold text-white/40">YouTube Music URL</label>
+                              <input 
+                                type="url" 
+                                placeholder="https://music.youtube.com/watch?v=..."
+                                className="w-full bg-black/40 border border-white/10 rounded-xl py-3 px-4 text-white text-xs outline-none focus:border-primary/40"
+                                value={formData.ytMusicUrl}
+                                onChange={(e) => updateFormData("ytMusicUrl", e.target.value)}
+                              />
+                           </div>
+                           <div className="space-y-1">
+                              <label className="text-[9px] font-bold text-white/40">JioSaavn URL</label>
+                              <input 
+                                type="url" 
+                                placeholder="https://www.jiosaavn.com/song/..."
+                                className="w-full bg-black/40 border border-white/10 rounded-xl py-3 px-4 text-white text-xs outline-none focus:border-primary/40"
+                                value={formData.jioSaavnUrl}
+                                onChange={(e) => updateFormData("jioSaavnUrl", e.target.value)}
+                              />
+                           </div>
+                        </div>
+                     </div>
+                   </div>
+                </div>
+              )}
+
+              {/* Step 5: Review */}
+              {currentStep === 5 && (
                 <div className="space-y-10">
                    <div className="text-center space-y-2">
                       <h2 className="text-3xl font-black text-white italic">Final Quality Check</h2>
@@ -403,6 +510,14 @@ export default function LabelNewReleasePage() {
                                <p className="text-[10px] font-black uppercase tracking-widest text-white/20">Release Title</p>
                                <p className="text-lg font-bold text-white italic">{formData.title || "Untitled"}</p>
                             </div>
+                            {formData.artworkUrl && (
+                               <div>
+                                  <p className="text-[10px] font-black uppercase tracking-widest text-white/20 mb-2">Cover Art</p>
+                                  <div className="w-24 h-24 rounded-xl border border-white/10 overflow-hidden">
+                                     <img src={formData.artworkUrl} alt="Cover Art" className="w-full h-full object-cover" />
+                                  </div>
+                               </div>
+                            )}
                          </div>
                       </div>
 
@@ -446,7 +561,7 @@ export default function LabelNewReleasePage() {
         </AnimatePresence>
 
         {/* Footer Actions */}
-        {currentStep < 4 && (
+        {currentStep < 5 && (
           <div className="mt-12 pt-8 border-t border-white/5 flex justify-between items-center">
              <button 
               onClick={prevStep}

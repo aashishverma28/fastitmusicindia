@@ -24,7 +24,12 @@ export async function POST(req: Request) {
       copyrightHolder, 
       copyrightYear, 
       isExplicit, 
-      youtubeUrl
+      youtubeUrl,
+      artworkUrl,
+      spotifyUrl,
+      appleMusicUrl,
+      ytMusicUrl,
+      jioSaavnUrl
     } = await req.json();
 
     // Find the profile ID for the current user
@@ -60,7 +65,7 @@ export async function POST(req: Request) {
     };
 
     const ytId = getYouTubeId(youtubeUrl);
-    const coverArtUrl = ytId ? `https://img.youtube.com/vi/${ytId}/hqdefault.jpg` : null;
+    const finalCoverArtUrl = artworkUrl || (ytId ? `https://img.youtube.com/vi/${ytId}/hqdefault.jpg` : null);
 
     // Create Release with Tracks in a single operation
     const result = await prisma.release.create({
@@ -75,8 +80,12 @@ export async function POST(req: Request) {
         copyrightHolder,
         copyrightYear: parseInt(copyrightYear),
         isExplicit,
-        coverArtUrl,
+        coverArtUrl: finalCoverArtUrl,
         youtubeUrl,
+        spotifyUrl,
+        appleMusicUrl,
+        ytMusicUrl,
+        jioSaavnUrl,
         status: "SUBMITTED",
         labelId: labelId,
         tracks: {

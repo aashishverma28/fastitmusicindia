@@ -11,7 +11,19 @@ export async function POST(req: Request) {
     }
 
     const body = await req.json();
-    const { title, artistName, youtubeUrl, genre, releaseDate, slug } = body;
+    const { 
+      title, 
+      artistName, 
+      youtubeUrl, 
+      coverArtUrl, 
+      genre, 
+      releaseDate, 
+      slug,
+      spotifyUrl,
+      appleMusicUrl,
+      ytMusicUrl,
+      jioSaavnUrl 
+    } = body;
 
     // Helper to get YouTube ID
     const getYouTubeId = (url: string) => {
@@ -22,17 +34,21 @@ export async function POST(req: Request) {
     };
 
     const ytId = getYouTubeId(youtubeUrl);
-    const coverArtUrl = ytId ? `https://img.youtube.com/vi/${ytId}/hqdefault.jpg` : null;
+    const finalCoverArtUrl = coverArtUrl || (ytId ? `https://img.youtube.com/vi/${ytId}/hqdefault.jpg` : null);
 
     const release = await prisma.publicRelease.create({
       data: {
         title,
         artistName,
-        coverArtUrl,
+        coverArtUrl: finalCoverArtUrl,
         genre,
         releaseDate: releaseDate ? new Date(releaseDate) : new Date(),
         audioFileUrl: youtubeUrl || "",
         youtubeUrl,
+        spotifyUrl,
+        appleMusicUrl,
+        ytMusicUrl,
+        jioSaavnUrl,
         slug: slug || title.toLowerCase().replace(/ /g, '-'),
         isFeatured: true
       }

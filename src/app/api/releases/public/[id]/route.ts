@@ -32,6 +32,10 @@ export async function GET(
       releaseDate: release.releaseDate,
       audioUrl: release.audioFileUrl,
       youtubeUrl: release.youtubeUrl,
+      spotifyUrl: release.spotifyUrl,
+      appleMusicUrl: release.appleMusicUrl,
+      ytMusicUrl: release.ytMusicUrl,
+      jioSaavnUrl: release.jioSaavnUrl,
       labelName: "Fastit Music India",
       tracks: [
         {

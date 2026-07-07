@@ -37,10 +37,16 @@ export default function ReleasesPage() {
     title: "",
     artistName: "",
     youtubeUrl: "",
+    coverArtUrl: "",
     genre: "Pop",
     releaseDate: new Date().toISOString().split('T')[0],
-    slug: ""
+    slug: "",
+    spotifyUrl: "",
+    appleMusicUrl: "",
+    ytMusicUrl: "",
+    jioSaavnUrl: ""
   });
+  const [isUploadingArtwork, setIsUploadingArtwork] = useState(false);
 
   const isAdminOrStaff = session?.user?.role === "ADMIN" || session?.user?.role === "EMPLOYEE";
 
@@ -126,7 +132,19 @@ export default function ReleasesPage() {
         };
         setRealReleases(prev => [newRel, ...prev]);
         setIsModalOpen(false);
-        setFormData({ title: "", artistName: "", youtubeUrl: "", genre: "Pop", releaseDate: new Date().toISOString().split('T')[0], slug: "" });
+        setFormData({ 
+          title: "", 
+          artistName: "", 
+          youtubeUrl: "", 
+          coverArtUrl: "", 
+          genre: "Pop", 
+          releaseDate: new Date().toISOString().split('T')[0], 
+          slug: "", 
+          spotifyUrl: "", 
+          appleMusicUrl: "", 
+          ytMusicUrl: "", 
+          jioSaavnUrl: "" 
+        });
       } else {
         alert("Failed to add release.");
       }
@@ -359,27 +377,120 @@ export default function ReleasesPage() {
 
                   <div className="space-y-2">
                     <label className="text-[10px] font-black uppercase tracking-widest text-white/40 ml-2">YouTube Video URL</label>
-                    <input 
-                      type="url" 
-                      required
-                      placeholder="https://www.youtube.com/watch?v=..."
-                      className="w-full bg-black border-2 border-white rounded-none py-4 px-6 text-white focus:border-primary outline-none transition-all font-sans"
-                      value={formData.youtubeUrl}
-                      onChange={(e) => setFormData({...formData, youtubeUrl: e.target.value})}
-                    />
-                  </div>
+                     <input 
+                       type="url" 
+                       required
+                       placeholder="https://www.youtube.com/watch?v=..."
+                       className="w-full bg-black border-2 border-white rounded-none py-4 px-6 text-white focus:border-primary outline-none transition-all font-sans"
+                       value={formData.youtubeUrl}
+                       onChange={(e) => setFormData({...formData, youtubeUrl: e.target.value})}
+                     />
+                   </div>
 
-                  <button 
-                    type="submit" 
-                    disabled={isSubmitting}
-                    className="w-full btn-neubrutalist py-5 rounded-none font-black font-display text-sm tracking-widest uppercase flex items-center justify-center gap-2 disabled:opacity-50"
-                  >
-                    {isSubmitting ? (
-                      <Loader2 className="w-5 h-5 animate-spin" />
-                    ) : (
-                      <><Check className="w-5 h-5" /> PUBLISH VIDEO</>
-                    )}
-                  </button>
+                   <div className="space-y-4">
+                     <label className="text-[10px] font-black uppercase tracking-widest text-white/40 ml-2">Track Artwork (Optional)</label>
+                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                       <div className="relative group aspect-square bg-black border-2 border-white rounded-none overflow-hidden flex flex-col items-center justify-center p-4">
+                         {formData.coverArtUrl ? (
+                           <>
+                             <img src={formData.coverArtUrl} className="absolute inset-0 w-full h-full object-cover opacity-50" alt="Preview" />
+                             <div className="relative z-10 text-center">
+                               <Check className="w-8 h-8 text-green-500 mx-auto mb-2" />
+                               <p className="text-[10px] font-bold text-white uppercase tracking-widest">Ready</p>
+                             </div>
+                           </>
+                         ) : (
+                           <>
+                             <Upload className="w-8 h-8 text-white/20 mb-2" />
+                             <p className="text-[10px] font-bold text-white/40 uppercase tracking-widest">Upload Image</p>
+                           </>
+                         )}
+                         <input 
+                           type="file" 
+                           accept="image/*"
+                           className="absolute inset-0 opacity-0 cursor-pointer z-20"
+                           onChange={handleArtworkUpload}
+                           disabled={isUploadingArtwork}
+                         />
+                         {isUploadingArtwork && (
+                           <div className="absolute inset-0 bg-black/60 flex items-center justify-center z-35">
+                             <Loader2 className="w-6 h-6 text-primary animate-spin" />
+                           </div>
+                         )}
+                       </div>
+                       
+                       <div className="flex flex-col justify-center space-y-2">
+                         <label className="text-[10px] font-black uppercase tracking-widest text-white/20 ml-2">Or Use Image Link</label>
+                         <input 
+                           type="url" 
+                           placeholder="https://..."
+                           className="w-full bg-black border-2 border-white rounded-none py-4 px-6 text-white focus:border-primary outline-none transition-all font-sans text-xs"
+                           value={formData.coverArtUrl}
+                           onChange={(e) => setFormData({...formData, coverArtUrl: e.target.value})}
+                         />
+                       </div>
+                     </div>
+                   </div>
+
+                   <div className="space-y-4">
+                     <label className="text-[10px] font-black uppercase tracking-widest text-white/40 ml-2">Streaming Platforms (Optional)</label>
+                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                       <div className="space-y-1">
+                          <label className="text-[9px] font-bold text-white/30 ml-2">Spotify Link</label>
+                          <input 
+                            type="url" 
+                            placeholder="https://..."
+                            className="w-full bg-black border-2 border-white rounded-none py-3 px-4 text-white focus:border-primary outline-none transition-all font-sans text-xs"
+                            value={formData.spotifyUrl}
+                            onChange={(e) => setFormData({...formData, spotifyUrl: e.target.value})}
+                          />
+                       </div>
+                       <div className="space-y-1">
+                          <label className="text-[9px] font-bold text-white/30 ml-2">Apple Music Link</label>
+                          <input 
+                            type="url" 
+                            placeholder="https://..."
+                            className="w-full bg-black border-2 border-white rounded-none py-3 px-4 text-white focus:border-primary outline-none transition-all font-sans text-xs"
+                            value={formData.appleMusicUrl}
+                            onChange={(e) => setFormData({...formData, appleMusicUrl: e.target.value})}
+                          />
+                       </div>
+                       <div className="space-y-1">
+                          <label className="text-[9px] font-bold text-white/30 ml-2">YouTube Music Link</label>
+                          <input 
+                            type="url" 
+                            placeholder="https://..."
+                            className="w-full bg-black border-2 border-white rounded-none py-3 px-4 text-white focus:border-primary outline-none transition-all font-sans text-xs"
+                            value={formData.ytMusicUrl}
+                            onChange={(e) => setFormData({...formData, ytMusicUrl: e.target.value})}
+                          />
+                       </div>
+                       <div className="space-y-1">
+                          <label className="text-[9px] font-bold text-white/30 ml-2">JioSaavn Link</label>
+                          <input 
+                            type="url" 
+                            placeholder="https://..."
+                            className="w-full bg-black border-2 border-white rounded-none py-3 px-4 text-white focus:border-primary outline-none transition-all font-sans text-xs"
+                            value={formData.jioSaavnUrl}
+                            onChange={(e) => setFormData({...formData, jioSaavnUrl: e.target.value})}
+                          />
+                       </div>
+                     </div>
+                   </div>
+
+                   <button 
+                     type="submit" 
+                     disabled={isSubmitting || isUploadingArtwork}
+                     className="w-full btn-neubrutalist py-5 rounded-none font-black font-display text-sm tracking-widest uppercase flex items-center justify-center gap-2 disabled:opacity-50"
+                   >
+                     {isSubmitting ? (
+                       <Loader2 className="w-5 h-5 animate-spin" />
+                     ) : isUploadingArtwork ? (
+                       <><Loader2 className="w-5 h-5 animate-spin" /> UPLOADING ARTWORK...</>
+                     ) : (
+                       <><Check className="w-5 h-5" /> PUBLISH VIDEO</>
+                     )}
+                   </button>
                 </form>
               </motion.div>
             </div>

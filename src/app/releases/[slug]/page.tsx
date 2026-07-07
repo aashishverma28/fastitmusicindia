@@ -75,11 +75,11 @@ export default function ReleaseDetailPage({ params }: { params: Promise<{ slug: 
   };
 
   const streamingLinks = [
-    { name: "Spotify", url: "#", icon: <Globe className="w-5 h-5" /> },
-    { name: "Apple Music", url: "#", icon: <Disc className="w-5 h-5" /> },
-    { name: "YouTube Music", url: "#", icon: <Mic2 className="w-5 h-5" /> },
-    { name: "JioSaavn", url: "#", icon: <ListMusic className="w-5 h-5" /> },
-  ];
+    { name: "Spotify", url: release.spotifyUrl, icon: <Globe className="w-5 h-5" /> },
+    { name: "Apple Music", url: release.appleMusicUrl, icon: <Disc className="w-5 h-5" /> },
+    { name: "YouTube Music", url: release.ytMusicUrl, icon: <Mic2 className="w-5 h-5" /> },
+    { name: "JioSaavn", url: release.jioSaavnUrl, icon: <ListMusic className="w-5 h-5" /> },
+  ].filter(link => link.url);
 
   return (
     <div className="min-h-screen pt-24 pb-20 relative overflow-hidden">
@@ -145,10 +145,12 @@ export default function ReleaseDetailPage({ params }: { params: Promise<{ slug: 
             <div className="space-y-6">
                <h3 className="text-sm font-black uppercase tracking-[0.2em] text-white/30">Watch / Listen Now</h3>
                <div className="grid grid-cols-2 gap-4">
-                  {streamingLinks.map((link) => (
+                  {streamingLinks.length > 0 ? streamingLinks.map((link) => (
                     <a 
                       key={link.name} 
                       href={link.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
                       className="flex flex-col items-center justify-center gap-3 p-6 glass border border-white/5 rounded-2xl hover:border-primary/40 hover:bg-primary/5 transition-all group"
                     >
                       <div className="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center text-white/40 group-hover:text-primary transition-colors border border-white/5">
@@ -156,7 +158,9 @@ export default function ReleaseDetailPage({ params }: { params: Promise<{ slug: 
                       </div>
                       <span className="text-[10px] font-black uppercase tracking-widest text-white/60">{link.name}</span>
                     </a>
-                  ))}
+                  )) : (
+                    <p className="text-white/40 text-xs italic col-span-2">Streaming links will be active once live on DSP platforms.</p>
+                  )}
                </div>
             </div>
 

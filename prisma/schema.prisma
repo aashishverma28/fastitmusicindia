@@ -193,6 +193,10 @@ model Release {
   isrc            String?
   upc             String?
   youtubeUrl      String?
+  spotifyUrl      String?
+  appleMusicUrl   String?
+  ytMusicUrl      String?
+  jioSaavnUrl     String?
   createdAt       DateTime      @default(now())
   updatedAt       DateTime      @updatedAt
 
@@ -387,6 +391,10 @@ model PublicRelease {
   releaseDate     DateTime @default(now())
   audioFileUrl    String?
   youtubeUrl      String?
+  spotifyUrl      String?
+  appleMusicUrl   String?
+  ytMusicUrl      String?
+  jioSaavnUrl     String?
   slug            String?  @unique
   isFeatured      Boolean  @default(false)
   createdAt       DateTime @default(now())
