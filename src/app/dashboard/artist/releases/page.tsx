@@ -103,71 +103,73 @@ export default function ArtistReleasesPage() {
           </div>
 
           <div className="glass rounded-[2.5rem] border border-white/5 overflow-hidden">
-            <table className="w-full text-left border-collapse">
-              <thead>
-                <tr className="bg-white/5">
-                  <th className="px-8 py-5 text-[10px] font-black uppercase tracking-[0.2em] text-white/20">Release info</th>
-                  <th className="px-8 py-5 text-[10px] font-black uppercase tracking-[0.2em] text-white/20">Status</th>
-                  <th className="px-8 py-5 text-[10px] font-black uppercase tracking-[0.2em] text-white/20">Streams</th>
-                  <th className="px-8 py-5 text-[10px] font-black uppercase tracking-[0.2em] text-white/20">Release date</th>
-                  <th className="px-8 py-5 text-[10px] font-black uppercase tracking-[0.2em] text-white/20">Actions</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-white/5">
-                {isLoading ? (
-                  [...Array(3)].map((_, i) => (
-                    <tr key={i} className="animate-pulse">
-                       <td colSpan={5} className="px-8 py-8 h-20 bg-white/[0.02]"></td>
-                    </tr>
-                  ))
-                ) : releases.map((rel) => (
-                  <tr key={rel.id} className="group hover:bg-white/[0.02] transition-colors">
-                    <td className="px-8 py-6">
-                      <div className="flex items-center gap-4">
-                        <div className="w-14 h-14 rounded-xl bg-white/5 overflow-hidden border border-white/5 relative flex-shrink-0">
-                           {rel.coverArtUrl ? (
-                             <img src={rel.coverArtUrl} alt={rel.title} className="w-full h-full object-cover" />
-                           ) : (
-                             <Music className="w-6 h-6 text-white/10 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" />
-                           )}
-                           <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                              <Play className="w-5 h-5 text-white fill-white" />
-                           </div>
-                        </div>
-                        <div>
-                          <h4 className="font-bold text-white group-hover:text-primary transition-colors">{rel.title}</h4>
-                          <p className="text-[10px] font-black uppercase tracking-widest text-white/30">{rel.type} • {rel.genre}</p>
-                        </div>
-                      </div>
-                    </td>
-                    <td className="px-8 py-6">
-                       <span className={`px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-tighter border ${getStatusStyle(rel.status)}`}>
-                          {rel.status}
-                       </span>
-                    </td>
-                    <td className="px-8 py-6">
-                       <div className="flex items-center gap-2 text-white/60">
-                          <span className="font-mono font-bold">0</span>
-                          <p className="text-[10px] font-black uppercase tracking-widest text-white/20">Plays</p>
-                       </div>
-                    </td>
-                    <td className="px-8 py-6 text-sm font-bold text-white/40 font-mono">
-                      {new Date(rel.releaseDate).toLocaleDateString()}
-                    </td>
-                    <td className="px-8 py-6">
-                       <div className="flex items-center gap-3">
-                          <button className="p-2.5 rounded-xl bg-white/5 text-white/40 border border-white/5 hover:text-white hover:bg-white/10 transition-all">
-                             <ExternalLink className="w-4 h-4" />
-                          </button>
-                          <button className="p-2.5 rounded-xl bg-white/5 text-white/40 border border-white/5 hover:text-white hover:bg-white/10 transition-all">
-                             <MoreVertical className="w-4 h-4" />
-                          </button>
-                       </div>
-                    </td>
+            <div className="overflow-x-auto">
+              <table className="w-full text-left border-collapse min-w-[700px]">
+                <thead>
+                  <tr className="bg-white/5">
+                    <th className="px-8 py-5 text-[10px] font-black uppercase tracking-[0.2em] text-white/20">Release info</th>
+                    <th className="px-8 py-5 text-[10px] font-black uppercase tracking-[0.2em] text-white/20">Status</th>
+                    <th className="px-8 py-5 text-[10px] font-black uppercase tracking-[0.2em] text-white/20">Streams</th>
+                    <th className="px-8 py-5 text-[10px] font-black uppercase tracking-[0.2em] text-white/20">Release date</th>
+                    <th className="px-8 py-5 text-[10px] font-black uppercase tracking-[0.2em] text-white/20">Actions</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody className="divide-y divide-white/5">
+                  {isLoading ? (
+                    [...Array(3)].map((_, i) => (
+                      <tr key={i} className="animate-pulse">
+                         <td colSpan={5} className="px-8 py-8 h-20 bg-white/[0.02]"></td>
+                      </tr>
+                    ))
+                  ) : releases.map((rel) => (
+                    <tr key={rel.id} className="group hover:bg-white/[0.02] transition-colors">
+                      <td className="px-8 py-6">
+                        <div className="flex items-center gap-4">
+                          <div className="w-14 h-14 rounded-xl bg-white/5 overflow-hidden border border-white/5 relative flex-shrink-0">
+                             {rel.coverArtUrl ? (
+                               <img src={rel.coverArtUrl} alt={rel.title} className="w-full h-full object-cover" />
+                             ) : (
+                               <Music className="w-6 h-6 text-white/10 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" />
+                             )}
+                             <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                                <Play className="w-5 h-5 text-white fill-white" />
+                             </div>
+                          </div>
+                          <div>
+                            <h4 className="font-bold text-white group-hover:text-primary transition-colors">{rel.title}</h4>
+                            <p className="text-[10px] font-black uppercase tracking-widest text-white/30">{rel.type} • {rel.genre}</p>
+                          </div>
+                        </div>
+                      </td>
+                      <td className="px-8 py-6">
+                         <span className={`px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-tighter border ${getStatusStyle(rel.status)}`}>
+                            {rel.status}
+                         </span>
+                      </td>
+                      <td className="px-8 py-6">
+                         <div className="flex items-center gap-2 text-white/60">
+                            <span className="font-mono font-bold">0</span>
+                            <p className="text-[10px] font-black uppercase tracking-widest text-white/20">Plays</p>
+                         </div>
+                      </td>
+                      <td className="px-8 py-6 text-sm font-bold text-white/40 font-mono">
+                        {new Date(rel.releaseDate).toLocaleDateString()}
+                      </td>
+                      <td className="px-8 py-6">
+                         <div className="flex items-center gap-3">
+                            <button className="p-2.5 rounded-xl bg-white/5 text-white/40 border border-white/5 hover:text-white hover:bg-white/10 transition-all">
+                               <ExternalLink className="w-4 h-4" />
+                            </button>
+                            <button className="p-2.5 rounded-xl bg-white/5 text-white/40 border border-white/5 hover:text-white hover:bg-white/10 transition-all">
+                               <MoreVertical className="w-4 h-4" />
+                            </button>
+                         </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
 
           <div className="flex items-center justify-between px-8 py-4 glass rounded-3xl border border-white/5">

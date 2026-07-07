@@ -86,72 +86,74 @@ export default async function AdminSupportPage() {
 
       {/* Admin Ticket List */}
       <div className="glass rounded-[2.5rem] border border-white/5 overflow-hidden">
-        <table className="w-full text-left">
-          <thead>
-            <tr className="bg-white/5">
-              <th className="px-8 py-5 text-[10px] font-black uppercase tracking-widest text-white/20">Ticket / Subject</th>
-              <th className="px-8 py-5 text-[10px] font-black uppercase tracking-widest text-white/20">Partner</th>
-              <th className="px-8 py-5 text-[10px] font-black uppercase tracking-widest text-white/20">Priority</th>
-              <th className="px-8 py-5 text-[10px] font-black uppercase tracking-widest text-white/20">Status</th>
-              <th className="px-8 py-5 text-right text-[10px] font-black uppercase tracking-widest text-white/20">Engagement</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-white/5 font-sans">
-            {tickets.length > 0 ? tickets.map((t) => (
-              <tr key={t.id} className="group hover:bg-white/[0.02] transition-colors relative">
-                <td className="px-8 py-6">
-                   <Link href={`/dashboard/admin/support/tickets/${t.id}`} className="absolute inset-0 z-10" />
-                   <div className="flex flex-col gap-1">
-                      <div className="flex items-center gap-2">
-                         {t.priority === "Urgent" && <ShieldAlert className="w-4 h-4 text-red-500" />}
-                         <p className="font-bold text-white group-hover:text-primary transition-colors">{t.subject}</p>
-                      </div>
-                      <p className="text-[10px] font-black uppercase tracking-widest text-white/20">{t.category} • Ref: {t.id.slice(-6).toUpperCase()}</p>
-                   </div>
-                </td>
-                <td className="px-8 py-6">
-                   <div className="flex items-center gap-3">
-                      <div className="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center font-black text-[10px] text-white/20">
-                         {t.user.username?.[0].toUpperCase() || "U"}
-                      </div>
-                      <div className="flex flex-col">
-                         <p className="text-xs font-bold text-white uppercase tracking-tight">{t.user.username}</p>
-                         <p className="text-[10px] text-white/20 font-mono italic">{t.user.role}</p>
-                      </div>
-                   </div>
-                </td>
-                <td className="px-8 py-6">
-                   <span className={`text-[10px] font-black uppercase tracking-widest ${
-                      t.priority === "Urgent" ? "text-red-500" :
-                      t.priority === "High" ? "text-orange-500" :
-                      "text-white/40"
-                   }`}>
-                      {t.priority}
-                   </span>
-                </td>
-                <td className="px-8 py-6">
-                   <span className={`px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-tighter border ${
-                      t.status === "OPEN" ? "bg-green-500/10 text-green-400 border-green-500/20" :
-                      t.status === "RESOLVED" ? "bg-primary/10 text-primary border-primary/20" :
-                      "bg-white/5 text-white/40 border-white/10"
-                   }`}>
-                      {t.status}
-                   </span>
-                </td>
-                <td className="px-8 py-6 text-right">
-                   <div className="flex items-center justify-end gap-3">
-                      <p className="text-[10px] font-black uppercase tracking-widest text-white/20">{new Date(t.createdAt).toLocaleDateString()}</p>
-                      <ArrowRight className="w-4 h-4 text-white/10 group-hover:text-primary transition-colors translate-x-0 group-hover:translate-x-1" />
-                   </div>
-                </td>
+        <div className="overflow-x-auto">
+          <table className="w-full text-left min-w-[650px]">
+            <thead>
+              <tr className="bg-white/5">
+                <th className="px-8 py-5 text-[10px] font-black uppercase tracking-widest text-white/20">Ticket / Subject</th>
+                <th className="px-8 py-5 text-[10px] font-black uppercase tracking-widest text-white/20">Partner</th>
+                <th className="px-8 py-5 text-[10px] font-black uppercase tracking-widest text-white/20">Priority</th>
+                <th className="px-8 py-5 text-[10px] font-black uppercase tracking-widest text-white/20">Status</th>
+                <th className="px-8 py-5 text-right text-[10px] font-black uppercase tracking-widest text-white/20">Engagement</th>
               </tr>
-            )) : (
-              <tr>
-                 <td colSpan={5} className="px-8 py-32 text-center text-white/10 font-bold italic">The helpdesk queue is currently empty.</td>
-              </tr>
-            )}
-          </tbody>
-        </table>
+            </thead>
+            <tbody className="divide-y divide-white/5 font-sans">
+              {tickets.length > 0 ? tickets.map((t) => (
+                <tr key={t.id} className="group hover:bg-white/[0.02] transition-colors relative">
+                  <td className="px-8 py-6">
+                     <Link href={`/dashboard/admin/support/tickets/${t.id}`} className="absolute inset-0 z-10" />
+                     <div className="flex flex-col gap-1">
+                        <div className="flex items-center gap-2">
+                           {t.priority === "Urgent" && <ShieldAlert className="w-4 h-4 text-red-500" />}
+                           <p className="font-bold text-white group-hover:text-primary transition-colors">{t.subject}</p>
+                        </div>
+                        <p className="text-[10px] font-black uppercase tracking-widest text-white/20">{t.category} • Ref: {t.id.slice(-6).toUpperCase()}</p>
+                     </div>
+                  </td>
+                  <td className="px-8 py-6">
+                     <div className="flex items-center gap-3">
+                        <div className="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center font-black text-[10px] text-white/20">
+                           {t.user.username?.[0].toUpperCase() || "U"}
+                        </div>
+                        <div className="flex flex-col">
+                           <p className="text-xs font-bold text-white uppercase tracking-tight">{t.user.username}</p>
+                           <p className="text-[10px] text-white/20 font-mono italic">{t.user.role}</p>
+                        </div>
+                     </div>
+                  </td>
+                  <td className="px-8 py-6">
+                     <span className={`text-[10px] font-black uppercase tracking-widest ${
+                        t.priority === "Urgent" ? "text-red-500" :
+                        t.priority === "High" ? "text-orange-500" :
+                        "text-white/40"
+                     }`}>
+                        {t.priority}
+                     </span>
+                  </td>
+                  <td className="px-8 py-6">
+                     <span className={`px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-tighter border ${
+                        t.status === "OPEN" ? "bg-green-500/10 text-green-400 border-green-500/20" :
+                        t.status === "RESOLVED" ? "bg-primary/10 text-primary border-primary/20" :
+                        "bg-white/5 text-white/40 border-white/10"
+                     }`}>
+                        {t.status}
+                     </span>
+                  </td>
+                  <td className="px-8 py-6 text-right">
+                     <div className="flex items-center justify-end gap-3">
+                        <p className="text-[10px] font-black uppercase tracking-widest text-white/20">{new Date(t.createdAt).toLocaleDateString()}</p>
+                        <ArrowRight className="w-4 h-4 text-white/10 group-hover:text-primary transition-colors translate-x-0 group-hover:translate-x-1" />
+                     </div>
+                  </td>
+                </tr>
+              )) : (
+                <tr>
+                   <td colSpan={5} className="px-8 py-32 text-center text-white/10 font-bold italic">The helpdesk queue is currently empty.</td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   );

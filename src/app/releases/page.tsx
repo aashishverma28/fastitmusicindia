@@ -16,12 +16,14 @@ import {
 } from "lucide-react";
 import { useAudioStore } from "@/lib/store/useAudioStore";
 import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 import { uploadFile } from "@/lib/supabase";
 import { VinylCard } from "@/components/shared/VinylCard";
 import { ScribbleUnderline, ScribbleUnderlineDouble, CurlyArrow, BadgeStamp } from "@/components/shared/Doodles";
 
 export default function ReleasesPage() {
   const { data: session } = useSession();
+  const router = useRouter();
   const [realReleases, setRealReleases] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
@@ -34,13 +36,11 @@ export default function ReleasesPage() {
   const [formData, setFormData] = useState({
     title: "",
     artistName: "",
-    coverArtUrl: "",
+    youtubeUrl: "",
     genre: "Pop",
     releaseDate: new Date().toISOString().split('T')[0],
-    audioFileUrl: "",
     slug: ""
   });
-  const [isUploadingArtwork, setIsUploadingArtwork] = useState(false);
 
   const isAdminOrStaff = session?.user?.role === "ADMIN" || session?.user?.role === "EMPLOYEE";
 
@@ -126,7 +126,7 @@ export default function ReleasesPage() {
         };
         setRealReleases(prev => [newRel, ...prev]);
         setIsModalOpen(false);
-        setFormData({ title: "", artistName: "", coverArtUrl: "", genre: "Pop", releaseDate: new Date().toISOString().split('T')[0], audioFileUrl: "", slug: "" });
+        setFormData({ title: "", artistName: "", youtubeUrl: "", genre: "Pop", releaseDate: new Date().toISOString().split('T')[0], slug: "" });
       } else {
         alert("Failed to add release.");
       }
@@ -138,13 +138,9 @@ export default function ReleasesPage() {
   };
 
   const handlePlay = (e: React.MouseEvent, rel: any) => {
-    setTrack({
-      id: rel.id,
-      title: rel.title,
-      artist: rel.artist,
-      cover: rel.cover,
-      url: rel.audioUrl || "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"
-    });
+    e.preventDefault();
+    e.stopPropagation();
+    router.push(`/releases/${rel.slug || rel.id}`);
   };
 
   const genres = ["All", "Pop", "Rock", "Hip Hop", "Electronic", "Folk", "Lo-Fi", "Classical", "Jazz", "Devotional"];
@@ -361,73 +357,27 @@ export default function ReleasesPage() {
                     </div>
                   </div>
 
-                  <div className="space-y-4">
-                    <label className="text-[10px] font-black uppercase tracking-widest text-white/40 ml-2">Track Artwork</label>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <div className="relative group aspect-square bg-black border-2 border-white rounded-none overflow-hidden flex flex-col items-center justify-center p-4">
-                        {formData.coverArtUrl ? (
-                          <>
-                            <img src={formData.coverArtUrl} className="absolute inset-0 w-full h-full object-cover opacity-50" alt="Preview" />
-                            <div className="relative z-10 text-center">
-                              <Check className="w-8 h-8 text-green-500 mx-auto mb-2" />
-                              <p className="text-[10px] font-bold text-white uppercase tracking-widest">Ready</p>
-                            </div>
-                          </>
-                        ) : (
-                          <>
-                            <Upload className="w-8 h-8 text-white/20 mb-2" />
-                            <p className="text-[10px] font-bold text-white/40 uppercase tracking-widest">Upload Image</p>
-                          </>
-                        )}
-                        <input 
-                          type="file" 
-                          accept="image/*"
-                          className="absolute inset-0 opacity-0 cursor-pointer z-20"
-                          onChange={handleArtworkUpload}
-                          disabled={isUploadingArtwork}
-                        />
-                        {isUploadingArtwork && (
-                          <div className="absolute inset-0 bg-black/60 flex items-center justify-center z-35">
-                            <Loader2 className="w-6 h-6 text-primary animate-spin" />
-                          </div>
-                        )}
-                      </div>
-                      
-                      <div className="flex flex-col justify-center space-y-2">
-                        <label className="text-[10px] font-black uppercase tracking-widest text-white/20 ml-2">Or Use Image Link</label>
-                        <input 
-                          type="url" 
-                          placeholder="https://..."
-                          className="w-full bg-black border-2 border-white rounded-none py-4 px-6 text-white focus:border-primary outline-none transition-all font-sans text-xs"
-                          value={formData.coverArtUrl}
-                          onChange={(e) => setFormData({...formData, coverArtUrl: e.target.value})}
-                        />
-                      </div>
-                    </div>
-                  </div>
-
                   <div className="space-y-2">
-                    <label className="text-[10px] font-black uppercase tracking-widest text-white/40 ml-2">Audio File URL (Direct MP3 link)</label>
+                    <label className="text-[10px] font-black uppercase tracking-widest text-white/40 ml-2">YouTube Video URL</label>
                     <input 
                       type="url" 
-                      placeholder="https://..."
+                      required
+                      placeholder="https://www.youtube.com/watch?v=..."
                       className="w-full bg-black border-2 border-white rounded-none py-4 px-6 text-white focus:border-primary outline-none transition-all font-sans"
-                      value={formData.audioFileUrl}
-                      onChange={(e) => setFormData({...formData, audioFileUrl: e.target.value})}
+                      value={formData.youtubeUrl}
+                      onChange={(e) => setFormData({...formData, youtubeUrl: e.target.value})}
                     />
                   </div>
 
                   <button 
                     type="submit" 
-                    disabled={isSubmitting || isUploadingArtwork}
+                    disabled={isSubmitting}
                     className="w-full btn-neubrutalist py-5 rounded-none font-black font-display text-sm tracking-widest uppercase flex items-center justify-center gap-2 disabled:opacity-50"
                   >
                     {isSubmitting ? (
                       <Loader2 className="w-5 h-5 animate-spin" />
-                    ) : isUploadingArtwork ? (
-                      <><Loader2 className="w-5 h-5 animate-spin" /> UPLOADING ARTWORK...</>
                     ) : (
-                      <><Check className="w-5 h-5" /> PUBLISH TRACK</>
+                      <><Check className="w-5 h-5" /> PUBLISH VIDEO</>
                     )}
                   </button>
                 </form>

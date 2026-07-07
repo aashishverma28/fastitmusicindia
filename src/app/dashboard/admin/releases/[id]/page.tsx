@@ -25,6 +25,14 @@ export default async function AdminReleaseDetailPage({
   const { id } = await params;
   const session = await getServerSession(authOptions);
 
+  // Helper to get YouTube ID
+  const getYouTubeId = (url: string) => {
+    if (!url) return "";
+    const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+    const match = url.match(regExp);
+    return (match && match[2].length === 11) ? match[2] : "";
+  };
+
   if (!session || session.user.role !== "ADMIN") {
     redirect("/login");
   }
@@ -124,31 +132,24 @@ export default async function AdminReleaseDetailPage({
             </div>
           </div>
 
-          {/* Tracklist Window */}
+          {/* YouTube Video Preview Window */}
           <div className="glass rounded-[2.5rem] border border-white/5 overflow-hidden">
              <div className="p-6 border-b border-white/5 bg-white/[0.02]">
-                <h3 className="text-xl font-bold text-white italic flex items-center gap-2"><Music className="w-5 h-5 text-secondary" /> Tracklist ({release.tracks.length})</h3>
+                <h3 className="text-xl font-bold text-white italic flex items-center gap-2"><Music className="w-5 h-5 text-secondary" /> YouTube Video Preview</h3>
              </div>
-             <div className="divide-y divide-white/5">
-                {release.tracks.length > 0 ? release.tracks.map((track: any) => (
-                  <div key={track.id} className="p-6 flex flex-col md:flex-row md:items-center justify-between gap-4 hover:bg-white/[0.02] transition-colors">
-                     <div className="flex items-center gap-4">
-                        <div className="w-8 h-8 rounded-full bg-white/5 border border-white/10 flex items-center justify-center font-mono text-xs text-white/40">
-                           {track.trackNumber}
-                        </div>
-                        <div>
-                           <h4 className="font-bold text-white">{track.title}</h4>
-                           <p className="text-xs text-white/40 font-mono mt-1">ISRC: {track.isrc || "Pending"} • Duration: {Math.floor(track.duration / 60)}:{(track.duration % 60).toString().padStart(2, "0")}</p>
-                        </div>
-                     </div>
-                     <div className="flex items-center gap-3">
-                        <audio controls src={track.audioFileUrl} className="h-10 w-64 md:w-48 appearance-none rounded-full bg-transparent" />
-                     </div>
+             <div className="p-6">
+                {release.youtubeUrl ? (
+                  <div className="aspect-video w-full rounded-2xl overflow-hidden border border-white/10 relative">
+                     <iframe
+                       className="absolute inset-0 w-full h-full border-none"
+                       src={`https://www.youtube.com/embed/${getYouTubeId(release.youtubeUrl)}`}
+                       title={release.title}
+                       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                       allowFullScreen
+                     ></iframe>
                   </div>
-                )) : (
-                  <div className="p-10 text-center">
-                     <p className="text-white/40 italic">No tracks uploaded yet.</p>
-                  </div>
+                ) : (
+                  <p className="text-white/40 text-center italic py-10">No YouTube URL provided.</p>
                 )}
              </div>
           </div>
@@ -198,12 +199,12 @@ export default async function AdminReleaseDetailPage({
            </div>
 
            <div className="glass p-8 rounded-[2.5rem] border border-white/5 space-y-4">
-              <h3 className="text-lg font-bold text-white italic">Metadata Checklist</h3>
+              <h3 className="text-lg font-bold text-white italic">Video Checklist</h3>
               <ul className="space-y-3 text-sm text-white/60">
-                 <li className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-secondary"/> Cover Art HQ (3000x3000px)</li>
-                 <li className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-secondary"/> Copyright correctly inputted</li>
-                 <li className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-secondary"/> No explicit content mismatch</li>
-                 <li className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-secondary"/> Audio files lossless (.wav)</li>
+                 <li className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-secondary"/> Valid YouTube link provided</li>
+                 <li className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-secondary"/> Video plays and loads correctly</li>
+                 <li className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-secondary"/> Copyright holder verified</li>
+                 <li className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-secondary"/> Explicit contents tagged properly</li>
               </ul>
            </div>
         </div>

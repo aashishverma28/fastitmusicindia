@@ -493,7 +493,7 @@ export default function AdminJobsDashboard() {
             </div>
           ) : (
             <div className="border-2 border-black overflow-x-auto bg-[#111113] shadow-[4px_4px_0px_0px_rgba(255,255,255,0.05)]">
-              <table className="w-full text-left border-collapse text-sm">
+              <table className="w-full text-left border-collapse text-sm min-w-[650px]">
                 <thead>
                   <tr className="border-b-2 border-black bg-white/5 text-xs font-black uppercase tracking-wider text-white/40">
                     <th className="p-4">Applicant Name</th>

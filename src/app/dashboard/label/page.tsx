@@ -138,37 +138,39 @@ export default async function LabelDashboardPage() {
            
            <div className="glass rounded-[2.5rem] border border-white/5 overflow-hidden">
               {performerData.length > 0 ? (
-                <table className="w-full text-left">
-                  <thead>
-                      <tr className="bg-white/5">
-                        <th className="px-8 py-5 text-[10px] font-black uppercase tracking-widest text-white/20">Artist</th>
-                        <th className="px-8 py-5 text-[10px] font-black uppercase tracking-widest text-white/20">Releases</th>
-                        <th className="px-8 py-5 text-[10px] font-black uppercase tracking-widest text-white/20">Plays (30d)</th>
-                        <th className="px-8 py-5 text-[10px] font-black uppercase tracking-widest text-white/20">Action</th>
-                      </tr>
-                  </thead>
-                  <tbody className="divide-y divide-white/5 font-sans">
-                      {performerData.map((artist, i) => (
-                        <tr key={i} className="group hover:bg-white/[0.02] transition-colors">
-                            <td className="px-8 py-4">
-                              <div className="flex items-center gap-3">
-                                  <div className={`w-10 h-10 rounded-xl ${artist.color}/20 flex items-center justify-center font-black text-[10px] text-white`}>
-                                    {artist.name[0]}
-                                  </div>
-                                  <span className="font-bold text-white group-hover:text-secondary transition-colors">{artist.name}</span>
-                              </div>
-                            </td>
-                            <td className="px-8 py-4 text-white/40 font-bold text-sm tracking-tight">{artist.releases}</td>
-                            <td className="px-8 py-4 text-white/40 font-bold text-sm tracking-tight">{artist.plays}</td>
-                            <td className="px-8 py-4">
-                              <Link href={`/dashboard/label/roster/${i}`} className="text-white/20 group-hover:text-white transition-colors">
-                                  <ChevronRight className="w-5 h-5" />
-                              </Link>
-                            </td>
+                <div className="overflow-x-auto">
+                  <table className="w-full text-left min-w-[500px]">
+                    <thead>
+                        <tr className="bg-white/5">
+                          <th className="px-8 py-5 text-[10px] font-black uppercase tracking-widest text-white/20">Artist</th>
+                          <th className="px-8 py-5 text-[10px] font-black uppercase tracking-widest text-white/20">Releases</th>
+                          <th className="px-8 py-5 text-[10px] font-black uppercase tracking-widest text-white/20">Plays (30d)</th>
+                          <th className="px-8 py-5 text-[10px] font-black uppercase tracking-widest text-white/20">Action</th>
                         </tr>
-                      ))}
-                  </tbody>
-                </table>
+                    </thead>
+                    <tbody className="divide-y divide-white/5 font-sans">
+                        {performerData.map((artist, i) => (
+                          <tr key={i} className="group hover:bg-white/[0.02] transition-colors">
+                              <td className="px-8 py-4">
+                                <div className="flex items-center gap-3">
+                                    <div className={`w-10 h-10 rounded-xl ${artist.color}/20 flex items-center justify-center font-black text-[10px] text-white`}>
+                                      {artist.name[0]}
+                                    </div>
+                                    <span className="font-bold text-white group-hover:text-secondary transition-colors">{artist.name}</span>
+                                </div>
+                              </td>
+                              <td className="px-8 py-4 text-white/40 font-bold text-sm tracking-tight">{artist.releases}</td>
+                              <td className="px-8 py-4 text-white/40 font-bold text-sm tracking-tight">{artist.plays}</td>
+                              <td className="px-8 py-4">
+                                <Link href={`/dashboard/label/roster/${i}`} className="text-white/20 group-hover:text-white transition-colors">
+                                    <ChevronRight className="w-5 h-5" />
+                                </Link>
+                              </td>
+                          </tr>
+                        ))}
+                    </tbody>
+                  </table>
+                </div>
               ) : (
                 <div className="p-20 text-center space-y-4">
                   <div className="w-16 h-16 rounded-full bg-white/5 flex items-center justify-center mx-auto">

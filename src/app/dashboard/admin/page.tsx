@@ -76,47 +76,49 @@ export default async function AdminDashboardPage() {
           </div>
 
           <div className="glass rounded-[2rem] border border-white/5 overflow-hidden">
-            <table className="w-full text-left border-collapse">
-              <thead>
-                <tr className="bg-white/5">
-                  <th className="p-5 text-xs font-black uppercase tracking-widest text-white/40 border-b border-white/5">Applicant</th>
-                  <th className="p-5 text-xs font-black uppercase tracking-widest text-white/40 border-b border-white/5">Type</th>
-                  <th className="p-5 text-xs font-black uppercase tracking-widest text-white/40 border-b border-white/5">Date</th>
-                  <th className="p-5 text-xs font-black uppercase tracking-widest text-white/40 border-b border-white/5">Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                {recentApps.length > 0 ? recentApps.map((app: any) => (
-                  <tr key={app.id} className="hover:bg-white/[0.02] transition-colors group">
-                    <td className="p-5 border-b border-white/5">
-                      <div>
-                        <p className="font-bold text-white leading-none mb-1">{(app.applicantData as any).fullName || (app.applicantData as any).labelName}</p>
-                        <p className="text-[10px] font-mono text-white/40">{app.applicationId}</p>
-                      </div>
-                    </td>
-                    <td className="p-5 border-b border-white/5">
-                      <span className={`text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-tighter ${
-                        app.type === "ARTIST" ? "bg-primary/20 text-primary border border-primary/20" : "bg-secondary/20 text-secondary border border-secondary/20"
-                      }`}>
-                        {app.type}
-                      </span>
-                    </td>
-                    <td className="p-5 border-b border-white/5 text-xs text-white/40">
-                      {new Date(app.createdAt).toLocaleDateString()}
-                    </td>
-                    <td className="p-5 border-b border-white/5">
-                      <Link href={`/dashboard/admin/applications/${app.id}`} className="text-white/40 group-hover:text-primary transition-colors">
-                        <ArrowUpRight className="w-5 h-5" />
-                      </Link>
-                    </td>
+            <div className="overflow-x-auto">
+              <table className="w-full text-left border-collapse min-w-[500px]">
+                <thead>
+                  <tr className="bg-white/5">
+                    <th className="p-5 text-xs font-black uppercase tracking-widest text-white/40 border-b border-white/5">Applicant</th>
+                    <th className="p-5 text-xs font-black uppercase tracking-widest text-white/40 border-b border-white/5">Type</th>
+                    <th className="p-5 text-xs font-black uppercase tracking-widest text-white/40 border-b border-white/5">Date</th>
+                    <th className="p-5 text-xs font-black uppercase tracking-widest text-white/40 border-b border-white/5">Action</th>
                   </tr>
-                )) : (
-                  <tr>
-                    <td colSpan={4} className="p-20 text-center text-white/20 font-bold italic">No pending applications found.</td>
-                  </tr>
-                )}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {recentApps.length > 0 ? recentApps.map((app: any) => (
+                    <tr key={app.id} className="hover:bg-white/[0.02] transition-colors group">
+                      <td className="p-5 border-b border-white/5">
+                        <div>
+                          <p className="font-bold text-white leading-none mb-1">{(app.applicantData as any).fullName || (app.applicantData as any).labelName}</p>
+                          <p className="text-[10px] font-mono text-white/40">{app.applicationId}</p>
+                        </div>
+                      </td>
+                      <td className="p-5 border-b border-white/5">
+                        <span className={`text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-tighter ${
+                          app.type === "ARTIST" ? "bg-primary/20 text-primary border border-primary/20" : "bg-secondary/20 text-secondary border border-secondary/20"
+                        }`}>
+                          {app.type}
+                        </span>
+                      </td>
+                      <td className="p-5 border-b border-white/5 text-xs text-white/40">
+                        {new Date(app.createdAt).toLocaleDateString()}
+                      </td>
+                      <td className="p-5 border-b border-white/5">
+                        <Link href={`/dashboard/admin/applications/${app.id}`} className="text-white/40 group-hover:text-primary transition-colors">
+                          <ArrowUpRight className="w-5 h-5" />
+                        </Link>
+                      </td>
+                    </tr>
+                  )) : (
+                    <tr>
+                      <td colSpan={4} className="p-20 text-center text-white/20 font-bold italic">No pending applications found.</td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
 

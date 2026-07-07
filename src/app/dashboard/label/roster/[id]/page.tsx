@@ -89,48 +89,50 @@ export default async function ArtistDetailAnalyticsPage({ params }: { params: Pr
                <BarChart3 className="w-5 h-5 text-secondary" /> Catalog Performance
             </h2>
             <div className="glass rounded-[2.5rem] border border-white/5 overflow-hidden">
-               <table className="w-full text-left text-sm">
-                  <thead>
-                     <tr className="bg-white/5">
-                        <th className="px-8 py-5 text-[10px] font-black uppercase tracking-widest text-white/20">Release</th>
-                        <th className="px-8 py-5 text-[10px] font-black uppercase tracking-widest text-white/20">Streams</th>
-                        <th className="px-8 py-5 text-right text-[10px] font-black uppercase tracking-widest text-white/20">Revenue</th>
-                     </tr>
-                  </thead>
-                  <tbody className="divide-y divide-white/5">
-                     {artist.releases.length > 0 ? artist.releases.map((release) => {
-                        const releaseStreams = artist.revenues
-                          .filter(r => r.releaseId === release.id)
-                          .reduce((acc, r) => acc + r.streams, 0);
-                        const releaseRev = artist.revenues
-                          .filter(r => r.releaseId === release.id)
-                          .reduce((acc, r) => acc + r.revenueAmount, 0);
-
-                        return (
-                          <tr key={release.id} className="hover:bg-white/[0.02]">
-                            <td className="px-8 py-5 flex items-center gap-3">
-                              <div className="w-10 h-10 rounded-lg bg-white/5 flex items-center justify-center overflow-hidden border border-white/10">
-                                {release.coverArtUrl ? (
-                                  <img src={release.coverArtUrl} alt="" className="w-full h-full object-cover" />
-                                ) : (
-                                  <Music className="w-5 h-5 text-white/10" />
-                                )}
-                              </div>
-                              <span className="font-bold text-white">{release.title}</span>
-                            </td>
-                            <td className="px-8 py-5 font-mono text-white/60">{releaseStreams.toLocaleString()}</td>
-                            <td className="px-8 py-5 text-right font-black text-secondary">₹{releaseRev.toLocaleString()}</td>
-                          </tr>
-                        );
-                     }) : (
-                        <tr>
-                           <td colSpan={3} className="px-8 py-20 text-center text-white/20 italic text-xs">
-                              No recordings distributed under this label yet.
-                           </td>
+               <div className="overflow-x-auto">
+                  <table className="w-full text-left text-sm min-w-[450px]">
+                     <thead>
+                        <tr className="bg-white/5">
+                           <th className="px-8 py-5 text-[10px] font-black uppercase tracking-widest text-white/20">Release</th>
+                           <th className="px-8 py-5 text-[10px] font-black uppercase tracking-widest text-white/20">Streams</th>
+                           <th className="px-8 py-5 text-right text-[10px] font-black uppercase tracking-widest text-white/20">Revenue</th>
                         </tr>
-                     )}
-                  </tbody>
-               </table>
+                     </thead>
+                     <tbody className="divide-y divide-white/5">
+                        {artist.releases.length > 0 ? artist.releases.map((release) => {
+                           const releaseStreams = artist.revenues
+                             .filter(r => r.releaseId === release.id)
+                             .reduce((acc, r) => acc + r.streams, 0);
+                           const releaseRev = artist.revenues
+                             .filter(r => r.releaseId === release.id)
+                             .reduce((acc, r) => acc + r.revenueAmount, 0);
+   
+                           return (
+                             <tr key={release.id} className="hover:bg-white/[0.02]">
+                               <td className="px-8 py-5 flex items-center gap-3">
+                                 <div className="w-10 h-10 rounded-lg bg-white/5 flex items-center justify-center overflow-hidden border border-white/10">
+                                   {release.coverArtUrl ? (
+                                     <img src={release.coverArtUrl} alt="" className="w-full h-full object-cover" />
+                                   ) : (
+                                     <Music className="w-5 h-5 text-white/10" />
+                                   )}
+                                 </div>
+                                 <span className="font-bold text-white">{release.title}</span>
+                               </td>
+                               <td className="px-8 py-5 font-mono text-white/60">{releaseStreams.toLocaleString()}</td>
+                               <td className="px-8 py-5 text-right font-black text-secondary">₹{releaseRev.toLocaleString()}</td>
+                             </tr>
+                           );
+                        }) : (
+                           <tr>
+                              <td colSpan={3} className="px-8 py-20 text-center text-white/20 italic text-xs">
+                                 No recordings distributed under this label yet.
+                              </td>
+                           </tr>
+                        )}
+                     </tbody>
+                  </table>
+               </div>
             </div>
          </div>
 

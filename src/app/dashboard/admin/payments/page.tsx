@@ -83,59 +83,61 @@ export default async function AdminPaymentsPage() {
 
       {/* Payments List */}
       <div className="glass rounded-[2.5rem] border border-white/5 overflow-hidden">
-        <table className="w-full text-left border-collapse">
-          <thead>
-            <tr className="bg-white/5">
-              <th className="px-8 py-5 text-[10px] font-black uppercase tracking-[0.2em] text-white/20">Recipient</th>
-              <th className="px-8 py-5 text-[10px] font-black uppercase tracking-[0.2em] text-white/20">Amount</th>
-              <th className="px-8 py-5 text-[10px] font-black uppercase tracking-[0.2em] text-white/20">Method</th>
-              <th className="px-8 py-5 text-[10px] font-black uppercase tracking-[0.2em] text-white/20">Status</th>
-              <th className="px-8 py-5 text-right text-[10px] font-black uppercase tracking-[0.2em] text-white/20">Action</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-white/5">
-            {payments.length > 0 ? payments.map((p: any) => (
-              <tr key={p.id} className="group hover:bg-white/[0.02] transition-colors">
-                <td className="px-8 py-6">
-                  <div className="flex items-center gap-4">
-                     <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center">
-                        <User className="w-5 h-5 text-white/20" />
-                     </div>
-                     <div>
-                        <p className="text-sm font-bold text-white uppercase tracking-tight">{p.userId}</p>
-                        <p className="text-[10px] text-white/40 font-mono italic">Requested {new Date(p.requestedAt).toLocaleDateString()}</p>
-                     </div>
-                  </div>
-                </td>
-                <td className="px-8 py-6 font-black text-white text-lg">
-                   ₹{p.amount.toLocaleString()}
-                </td>
-                <td className="px-8 py-6">
-                   <div className="flex items-center gap-2 text-white/40">
-                      {p.method === "bank" ? <Building2 className="w-4 h-4" /> : <CreditCard className="w-4 h-4" />}
-                      <span className="text-[10px] font-black uppercase tracking-widest">{p.method}</span>
-                   </div>
-                </td>
-                <td className="px-8 py-6">
-                   <span className={`px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-tighter border ${
-                      p.status === "COMPLETED" ? "bg-green-500/10 text-green-400 border-green-500/20" :
-                      p.status === "FAILED" ? "bg-red-500/10 text-red-400 border-red-500/20" :
-                      "bg-yellow-500/10 text-yellow-500 border-yellow-500/20"
-                   }`}>
-                      {p.status}
-                   </span>
-                </td>
-                <td className="px-8 py-6 text-right">
-                   <PaymentStatusActions payment={p} />
-                </td>
+        <div className="overflow-x-auto">
+          <table className="w-full text-left border-collapse min-w-[650px]">
+            <thead>
+              <tr className="bg-white/5">
+                <th className="px-8 py-5 text-[10px] font-black uppercase tracking-[0.2em] text-white/20">Recipient</th>
+                <th className="px-8 py-5 text-[10px] font-black uppercase tracking-[0.2em] text-white/20">Amount</th>
+                <th className="px-8 py-5 text-[10px] font-black uppercase tracking-[0.2em] text-white/20">Method</th>
+                <th className="px-8 py-5 text-[10px] font-black uppercase tracking-[0.2em] text-white/20">Status</th>
+                <th className="px-8 py-5 text-right text-[10px] font-black uppercase tracking-[0.2em] text-white/20">Action</th>
               </tr>
-            )) : (
-              <tr>
-                <td colSpan={5} className="px-8 py-32 text-center text-white/10 font-bold italic">No payout requests in the system.</td>
-              </tr>
-            )}
-          </tbody>
-        </table>
+            </thead>
+            <tbody className="divide-y divide-white/5">
+              {payments.length > 0 ? payments.map((p: any) => (
+                <tr key={p.id} className="group hover:bg-white/[0.02] transition-colors">
+                  <td className="px-8 py-6">
+                    <div className="flex items-center gap-4">
+                       <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center">
+                          <User className="w-5 h-5 text-white/20" />
+                       </div>
+                       <div>
+                          <p className="text-sm font-bold text-white uppercase tracking-tight">{p.userId}</p>
+                          <p className="text-[10px] text-white/40 font-mono italic">Requested {new Date(p.requestedAt).toLocaleDateString()}</p>
+                       </div>
+                    </div>
+                  </td>
+                  <td className="px-8 py-6 font-black text-white text-lg">
+                     ₹{p.amount.toLocaleString()}
+                  </td>
+                  <td className="px-8 py-6">
+                     <div className="flex items-center gap-2 text-white/40">
+                        {p.method === "bank" ? <Building2 className="w-4 h-4" /> : <CreditCard className="w-4 h-4" />}
+                        <span className="text-[10px] font-black uppercase tracking-widest">{p.method}</span>
+                     </div>
+                  </td>
+                  <td className="px-8 py-6">
+                     <span className={`px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-tighter border ${
+                        p.status === "COMPLETED" ? "bg-green-500/10 text-green-400 border-green-500/20" :
+                        p.status === "FAILED" ? "bg-red-500/10 text-red-400 border-red-500/20" :
+                        "bg-yellow-500/10 text-yellow-500 border-yellow-500/20"
+                     }`}>
+                        {p.status}
+                     </span>
+                  </td>
+                  <td className="px-8 py-6 text-right">
+                     <PaymentStatusActions payment={p} />
+                  </td>
+                </tr>
+              )) : (
+                <tr>
+                  <td colSpan={5} className="px-8 py-32 text-center text-white/10 font-bold italic">No payout requests in the system.</td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   );

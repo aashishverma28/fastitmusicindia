@@ -2,19 +2,15 @@
 
 import { motion, AnimatePresence } from "framer-motion";
 import { 
-  Music, 
   Disc, 
-  Image as ImageIcon, 
   CheckCircle2, 
   ArrowLeft, 
   ArrowRight, 
-  Upload,
   Calendar,
-  Plus,
-  Trash2,
   AlertCircle,
   Users,
-  Search
+  Search,
+  Layers
 } from "lucide-react";
 import { useState, useEffect } from "react";
 import Link from "next/link";
@@ -25,9 +21,8 @@ import { uploadFile } from "@/lib/supabase";
 const steps = [
   { id: 1, name: "Artist", icon: <Users className="w-5 h-5" /> },
   { id: 2, name: "Metadata", icon: <Disc className="w-5 h-5" /> },
-  { id: 3, name: "Tracks", icon: <Music className="w-5 h-5" /> },
-  { id: 4, name: "Artwork", icon: <ImageIcon className="w-5 h-5" /> },
-  { id: 5, name: "Review", icon: <CheckCircle2 className="w-5 h-5" /> },
+  { id: 3, name: "YouTube Video", icon: <Layers className="w-5 h-5" /> },
+  { id: 4, name: "Review", icon: <CheckCircle2 className="w-5 h-5" /> },
 ];
 
 export default function LabelNewReleasePage() {
@@ -47,8 +42,7 @@ export default function LabelNewReleasePage() {
     copyrightHolder: "",
     copyrightYear: new Date().getFullYear(),
     isExplicit: false,
-    tracks: [{ title: "", audioUrl: "", artist: "" }],
-    artworkUrl: ""
+    youtubeUrl: ""
   });
   
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -77,6 +71,23 @@ export default function LabelNewReleasePage() {
       setError("Please select an artist first.");
       return;
     }
+    if (currentStep === 2) {
+      if (!formData.title || !formData.genre || !formData.language || !formData.releaseDate) {
+        setError("Please fill in all metadata fields.");
+        return;
+      }
+    }
+    if (currentStep === 3) {
+      if (!formData.youtubeUrl) {
+        setError("Please provide a YouTube video URL.");
+        return;
+      }
+      const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+      if (!formData.youtubeUrl.match(regExp)) {
+        setError("Please enter a valid YouTube video link.");
+        return;
+      }
+    }
     setError("");
     setCurrentStep(prev => Math.min(prev + 1, steps.length));
   };
@@ -87,25 +98,11 @@ export default function LabelNewReleasePage() {
     setFormData(prev => ({ ...prev, [field]: value }));
   };
 
-  const addTrack = () => {
-    setFormData(prev => ({
-      ...prev,
-      tracks: [...prev.tracks, { title: "", audioUrl: "", artist: "" }]
-    }));
-  };
-
-  const removeTrack = (index: number) => {
-    if (formData.tracks.length === 1) return;
-    setFormData(prev => ({
-      ...prev,
-      tracks: prev.tracks.filter((_, i) => i !== index)
-    }));
-  };
-
-  const updateTrack = (index: number, field: string, value: string) => {
-    const newTracks = [...formData.tracks];
-    newTracks[index] = { ...newTracks[index], [field]: value };
-    setFormData(prev => ({ ...prev, tracks: newTracks }));
+  const getYouTubeId = (url: string) => {
+    if (!url) return null;
+    const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+    const match = url.match(regExp);
+    return (match && match[2].length === 11) ? match[2] : null;
   };
 
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>, field: "artworkUrl" | "trackAudio", index?: number) => {
@@ -343,134 +340,46 @@ export default function LabelNewReleasePage() {
                 </div>
               )}
 
-              {/* Step 3: Tracks */}
+              {/* Step 3: YouTube Video */}
               {currentStep === 3 && (
                 <div className="space-y-8">
-                   <div className="flex items-center justify-between">
-                      <div className="space-y-1">
-                        <h2 className="text-2xl font-black text-white italic">Tracklist Builder</h2>
-                        <p className="text-white/40 text-sm font-sans tracking-tight">Upload high fidelity WAV/FLAC files.</p>
-                      </div>
-                      <button 
-                        onClick={addTrack}
-                        className="flex items-center gap-2 bg-primary/10 text-primary px-4 py-2 rounded-xl text-xs font-black uppercase border border-primary/20 hover:bg-primary/20 transition-all"
-                      >
-                         <Plus className="w-4 h-4" /> Add Track
-                      </button>
-                   </div>
-
-                   <div className="space-y-4">
-                      {formData.tracks.map((track, i) => (
-                        <div key={i} className="glass p-6 rounded-3xl border border-white/5 flex flex-col md:flex-row gap-6 relative group">
-                           <div className="w-12 h-12 rounded-2xl bg-white/5 flex items-center justify-center font-black text-white/40 flex-shrink-0">
-                              {i + 1}
-                           </div>
-                           <div className="flex-grow grid grid-cols-1 md:grid-cols-2 gap-4">
-                              <div className="space-y-1">
-                                 <label className="text-[10px] font-black uppercase tracking-widest text-white/20">Track Title</label>
-                                 <input 
-                                  type="text" 
-                                  placeholder="Track Name"
-                                  className="w-full bg-black/20 border border-white/10 rounded-xl py-3 px-4 text-white text-sm outline-none focus:border-primary/40"
-                                  value={track.title}
-                                  onChange={(e) => updateTrack(i, "title", e.target.value)}
-                                 />
-                              </div>
-                              <div className="space-y-1">
-                                 <label className="text-[10px] font-black uppercase tracking-widest text-white/20">Credits / Features</label>
-                                 <input 
-                                  type="text" 
-                                  placeholder="Optional"
-                                  className="w-full bg-black/20 border border-white/10 rounded-xl py-3 px-4 text-white text-sm outline-none focus:border-primary/40"
-                                  value={track.artist}
-                                  onChange={(e) => updateTrack(i, "artist", e.target.value)}
-                                 />
-                              </div>
-                           </div>
-                           <div className="flex items-center gap-3">
-                                <input 
-                                  type="file" 
-                                  id={`audio-upload-${i}`}
-                                  className="hidden" 
-                                  accept="audio/*"
-                                  onChange={(e) => handleFileUpload(e, "trackAudio", i)}
-                                  disabled={!!uploadingField}
-                                />
-                                <label 
-                                  htmlFor={`audio-upload-${i}`}
-                                  className={`p-3 rounded-xl transition-colors cursor-pointer ${
-                                    track.audioUrl ? "bg-green-500/20 text-green-500" : "bg-white/5 text-white/40 hover:text-primary"
-                                  }`}
-                                >
-                                   {uploadingField === `track-${i}` ? (
-                                     <Loader2 className="w-5 h-5 animate-spin" />
-                                   ) : track.audioUrl ? (
-                                     <Check className="w-5 h-5" />
-                                   ) : (
-                                     <Upload className="w-5 h-5" />
-                                   )}
-                                </label>
-                                <button 
-                                  onClick={() => removeTrack(i)}
-                                  className="p-3 bg-white/5 rounded-xl text-white/20 hover:text-red-500 transition-colors"
-                                >
-                                   <Trash2 className="w-5 h-5" />
-                                </button>
-                             </div>
-                        </div>
-                      ))}
-                   </div>
-                </div>
-              )}
-
-              {/* Step 4: Artwork */}
-              {currentStep === 4 && (
-                <div className="space-y-8 flex flex-col items-center">
-                   <div className="text-center space-y-2">
-                      <h2 className="text-2xl font-black text-white italic">The Visuals</h2>
-                      <p className="text-white/40 text-sm font-sans max-w-lg">High resolution artwork is mandatory.</p>
+                   <div className="space-y-2">
+                     <h2 className="text-2xl font-black text-white italic">YouTube Video Integration</h2>
+                     <p className="text-white/40 text-sm font-sans underline decoration-primary/30 underline-offset-4">Paste the official YouTube video link for this artist release.</p>
                    </div>
                    
-                   <div className="w-80 h-80 relative group">
-                      <input 
-                        type="file" 
-                        id="artwork-upload"
-                        className="hidden"
-                        accept="image/*"
-                        onChange={(e) => handleFileUpload(e, "artworkUrl")}
-                        disabled={!!uploadingField}
-                      />
-                      <label 
-                        htmlFor="artwork-upload"
-                        className={`w-full h-full rounded-3xl border-2 border-dashed flex flex-col items-center justify-center text-center p-10 transition-all cursor-pointer overflow-hidden ${
-                          formData.artworkUrl ? "border-green-500/50" : "border-white/10 hover:border-primary/40"
-                        }`}
-                      >
-                         {formData.artworkUrl && (
-                           <img src={formData.artworkUrl} alt="Artwork Preview" className="absolute inset-0 w-full h-full object-cover opacity-40 group-hover:scale-105 transition-transform" />
-                         )}
-                         <div className="z-10 bg-black/60 backdrop-blur-md p-6 rounded-2xl border border-white/10 space-y-4 group-hover:scale-105 transition-transform">
-                            {uploadingField === "artwork" ? (
-                               <Loader2 className="w-8 h-8 text-primary mx-auto animate-spin" />
-                            ) : formData.artworkUrl ? (
-                               <Check className="w-8 h-8 text-green-500 mx-auto" />
-                            ) : (
-                               <Upload className="w-8 h-8 text-primary mx-auto" />
-                            )}
-                            <div>
-                               <p className={`text-xs font-black uppercase tracking-widest ${formData.artworkUrl ? "text-green-500" : "text-white"}`}>
-                                 {uploadingField === "artwork" ? "Uploading..." : formData.artworkUrl ? "Artwork Ready" : "Select Artwork"}
-                               </p>
-                               <p className="text-[10px] text-white/40 mt-1">3000x3000px Recommended</p>
-                            </div>
-                         </div>
-                      </label>
-                    </div>
+                   <div className="space-y-4 max-w-2xl">
+                     <div className="space-y-2">
+                        <label className="text-[10px] font-black uppercase tracking-widest text-white/30">YouTube Link</label>
+                        <input 
+                         type="url" 
+                         placeholder="https://www.youtube.com/watch?v=..."
+                         className="w-full bg-black/40 border border-white/10 rounded-2xl py-5 px-6 text-white text-lg focus:border-primary/50 outline-none placeholder:text-white/10"
+                         value={formData.youtubeUrl}
+                         onChange={(e) => updateFormData("youtubeUrl", e.target.value)}
+                        />
+                     </div>
+                     
+                     {formData.youtubeUrl && getYouTubeId(formData.youtubeUrl) && (
+                       <div className="space-y-4">
+                          <p className="text-[10px] font-black uppercase tracking-widest text-white/30">Video Preview</p>
+                          <div className="aspect-video w-full rounded-2xl overflow-hidden border border-white/10 relative">
+                             <iframe
+                               className="absolute inset-0 w-full h-full"
+                               src={`https://www.youtube.com/embed/${getYouTubeId(formData.youtubeUrl)}`}
+                               title="YouTube video player"
+                               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                               allowFullScreen
+                             ></iframe>
+                          </div>
+                       </div>
+                     )}
+                   </div>
                 </div>
               )}
 
-              {/* Step 5: Review */}
-              {currentStep === 5 && (
+              {/* Step 4: Review */}
+              {currentStep === 4 && (
                 <div className="space-y-10">
                    <div className="text-center space-y-2">
                       <h2 className="text-3xl font-black text-white italic">Final Quality Check</h2>
@@ -499,13 +408,20 @@ export default function LabelNewReleasePage() {
 
                       <div className="glass p-8 rounded-3xl border border-white/5 space-y-6">
                          <div className="flex items-center justify-between">
-                            <p className="text-xs font-black uppercase tracking-widest text-primary italic">Rights & Meta</p>
+                            <p className="text-xs font-black uppercase tracking-widest text-primary italic">Video Preview</p>
                          </div>
-                         <div className="space-y-4 text-sm font-bold text-white/60">
-                            <p>Type: <span className="text-white">{formData.type}</span></p>
-                            <p>Genre: <span className="text-white">{formData.genre || "N/A"}</span></p>
-                            <p>Copyright: <span className="text-white">{formData.copyrightHolder || "N/A"}</span></p>
-                            <p>Tracks: <span className="text-white">{formData.tracks.length}</span></p>
+                         <div className="aspect-video w-full rounded-2xl overflow-hidden border border-white/10 relative">
+                            {formData.youtubeUrl && getYouTubeId(formData.youtubeUrl) ? (
+                              <iframe
+                                className="absolute inset-0 w-full h-full"
+                                src={`https://www.youtube.com/embed/${getYouTubeId(formData.youtubeUrl)}`}
+                                title="YouTube video player"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                allowFullScreen
+                              />
+                            ) : (
+                              <div className="absolute inset-0 flex items-center justify-center text-white/20">No Video Available</div>
+                            )}
                          </div>
                       </div>
                    </div>
@@ -530,7 +446,7 @@ export default function LabelNewReleasePage() {
         </AnimatePresence>
 
         {/* Footer Actions */}
-        {currentStep < 5 && (
+        {currentStep < 4 && (
           <div className="mt-12 pt-8 border-t border-white/5 flex justify-between items-center">
              <button 
               onClick={prevStep}

@@ -9,9 +9,11 @@ import { ScribbleUnderline, ScribbleUnderlineDouble, CurlyArrow, HandDrawnCircle
 import { VinylCard } from "@/components/shared/VinylCard";
 import { useAudioStore } from "@/lib/store/useAudioStore";
 import { useTheme } from "@/components/providers/ThemeProvider";
+import { useRouter } from "next/navigation";
 
 export default function Home() {
   const { theme } = useTheme();
+  const router = useRouter();
   const [realReleases, setRealReleases] = React.useState<any[]>([]);
   const [isLoading, setIsLoading] = React.useState(true);
   const { setTrack } = useAudioStore();
@@ -43,13 +45,9 @@ export default function Home() {
   ];
 
   const handlePlay = (e: React.MouseEvent, rel: any) => {
-    setTrack({
-      id: rel.id,
-      title: rel.title,
-      artist: rel.artist || rel.artistName,
-      cover: rel.img || rel.cover,
-      url: rel.audioUrl || "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"
-    });
+    e.preventDefault();
+    e.stopPropagation();
+    router.push(`/releases/${rel.slug || rel.id}`);
   };
 
   const containerVariants = {

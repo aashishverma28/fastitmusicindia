@@ -24,9 +24,8 @@ import { supabase, uploadFile } from "@/lib/supabase";
 
 const steps = [
   { id: 1, name: "Metadata", icon: <Disc className="w-5 h-5" /> },
-  { id: 2, name: "Tracks", icon: <Music className="w-5 h-5" /> },
-  { id: 3, name: "Artwork", icon: <ImageIcon className="w-5 h-5" /> },
-  { id: 4, name: "Review", icon: <CheckCircle2 className="w-5 h-5" /> },
+  { id: 2, name: "YouTube Video", icon: <Layers className="w-5 h-5" /> },
+  { id: 3, name: "Review", icon: <CheckCircle2 className="w-5 h-5" /> },
 ];
 
 export default function NewReleasePage() {
@@ -41,8 +40,7 @@ export default function NewReleasePage() {
     copyrightHolder: "",
     copyrightYear: new Date().getFullYear(),
     isExplicit: false,
-    tracks: [{ title: "", audioUrl: "", artist: "" }],
-    artworkUrl: ""
+    youtubeUrl: ""
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [uploadingField, setUploadingField] = useState<string | null>(null);
@@ -58,15 +56,13 @@ export default function NewReleasePage() {
       }
     }
     if (currentStep === 2) {
-      const missingAudio = formData.tracks.some(t => !t.audioUrl || !t.title);
-      if (missingAudio) {
-        setError("Please provide title and upload audio for all tracks.");
+      if (!formData.youtubeUrl) {
+        setError("Please provide a YouTube video URL.");
         return;
       }
-    }
-    if (currentStep === 3) {
-      if (!formData.artworkUrl) {
-        setError("Please upload your release artwork.");
+      const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+      if (!formData.youtubeUrl.match(regExp)) {
+        setError("Please enter a valid YouTube video link.");
         return;
       }
     }
@@ -83,25 +79,11 @@ export default function NewReleasePage() {
     setFormData(prev => ({ ...prev, [field]: value }));
   };
 
-  const addTrack = () => {
-    setFormData(prev => ({
-      ...prev,
-      tracks: [...prev.tracks, { title: "", audioUrl: "", artist: "" }]
-    }));
-  };
-
-  const removeTrack = (index: number) => {
-    if (formData.tracks.length === 1) return;
-    setFormData(prev => ({
-      ...prev,
-      tracks: prev.tracks.filter((_, i) => i !== index)
-    }));
-  };
-
-  const updateTrack = (index: number, field: string, value: string) => {
-    const newTracks = [...formData.tracks];
-    newTracks[index] = { ...newTracks[index], [field]: value };
-    setFormData(prev => ({ ...prev, tracks: newTracks }));
+  const getYouTubeId = (url: string) => {
+    if (!url) return null;
+    const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+    const match = url.match(regExp);
+    return (match && match[2].length === 11) ? match[2] : null;
   };
 
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>, field: "artworkUrl" | "trackAudio", index?: number) => {
@@ -127,7 +109,7 @@ export default function NewReleasePage() {
       if (field === "artworkUrl") {
         updateFormData("artworkUrl", url);
       } else if (index !== undefined) {
-        updateTrack(index, "audioUrl", url);
+        // Track updates would require tracks array in state
       }
     } catch (err: any) {
       setError(`Upload failed: ${err.message}`);
@@ -284,146 +266,50 @@ export default function NewReleasePage() {
                 </div>
               )}
 
-              {/* Step 2: Tracks */}
+              {/* Step 2: YouTube Video */}
               {currentStep === 2 && (
                 <div className="space-y-8">
-                   <div className="flex items-center justify-between">
-                      <div className="space-y-1">
-                        <h2 className="text-2xl font-black text-white italic">Tracklist Builder</h2>
-                        <p className="text-white/40 text-sm font-sans tracking-tight">Add your tracks and define featured collaborators.</p>
-                      </div>
-                      <button 
-                        onClick={addTrack}
-                        className="flex items-center gap-2 bg-primary/10 text-primary px-4 py-2 rounded-xl text-xs font-black uppercase border border-primary/20 hover:bg-primary/20 transition-all"
-                      >
-                         <Plus className="w-4 h-4" /> Add Track
-                      </button>
-                   </div>
-
-                   <div className="space-y-4">
-                      {formData.tracks.map((track, i) => (
-                        <div key={i} className="glass p-6 rounded-3xl border border-white/5 flex flex-col md:flex-row gap-6 relative group">
-                           <div className="w-12 h-12 rounded-2xl bg-white/5 flex items-center justify-center font-black text-white/40 flex-shrink-0">
-                              {i + 1}
-                           </div>
-                           <div className="flex-grow grid grid-cols-1 md:grid-cols-2 gap-4">
-                              <div className="space-y-1">
-                                 <label className="text-[10px] font-black uppercase tracking-widest text-white/20">Track Title</label>
-                                 <input 
-                                  type="text" 
-                                  placeholder="Track Name"
-                                  className="w-full bg-black/20 border border-white/10 rounded-xl py-3 px-4 text-white text-sm outline-none focus:border-primary/40"
-                                  value={track.title}
-                                  onChange={(e) => updateTrack(i, "title", e.target.value)}
-                                 />
-                              </div>
-                              <div className="space-y-1">
-                                 <label className="text-[10px] font-black uppercase tracking-widest text-white/20">Featured Artist(s)</label>
-                                 <input 
-                                  type="text" 
-                                  placeholder="Optional"
-                                  className="w-full bg-black/20 border border-white/10 rounded-xl py-3 px-4 text-white text-sm outline-none focus:border-primary/40"
-                                  value={track.artist}
-                                  onChange={(e) => updateTrack(i, "artist", e.target.value)}
-                                 />
-                              </div>
-                           </div>
-                           <div className="flex items-center gap-3">
-                               <input 
-                                 type="file" 
-                                 id={`audio-upload-${i}`}
-                                 className="hidden" 
-                                 accept="audio/*"
-                                 onChange={(e) => handleFileUpload(e, "trackAudio", i)}
-                                 disabled={!!uploadingField}
-                               />
-                               <label 
-                                 htmlFor={`audio-upload-${i}`}
-                                 className={`p-3 rounded-xl transition-colors cursor-pointer ${
-                                   track.audioUrl ? "bg-green-500/20 text-green-500" : "bg-white/5 text-white/40 hover:text-primary"
-                                 }`}
-                               >
-                                  {uploadingField === `track-${i}` ? (
-                                    <Loader2 className="w-5 h-5 animate-spin" />
-                                  ) : track.audioUrl ? (
-                                    <Check className="w-5 h-5" />
-                                  ) : (
-                                    <Upload className="w-5 h-5" />
-                                  )}
-                               </label>
-                               <button 
-                                 onClick={() => removeTrack(i)}
-                                 className="p-3 bg-white/5 rounded-xl text-white/20 hover:text-red-500 transition-colors"
-                               >
-                                  <Trash2 className="w-5 h-5" />
-                               </button>
-                            </div>
-                        </div>
-                      ))}
-                   </div>
-                </div>
-              )}
-
-              {/* Step 3: Artwork */}
-              {currentStep === 3 && (
-                <div className="space-y-8 flex flex-col items-center">
-                   <div className="text-center space-y-2">
-                      <h2 className="text-2xl font-black text-white italic">The Visuals</h2>
-                      <p className="text-white/40 text-sm font-sans max-w-lg">High quality artwork (3000x3000px) is required for Major streaming platforms.</p>
+                   <div className="space-y-2">
+                     <h2 className="text-2xl font-black text-white italic">YouTube Video Integration</h2>
+                     <p className="text-white/40 text-sm font-sans underline decoration-primary/30 underline-offset-4">Paste your official YouTube video link here. The video will be directly embeddable for the public.</p>
                    </div>
                    
-                   <div className="w-80 h-80 relative group">
-                      <input 
-                        type="file" 
-                        id="artwork-upload"
-                        className="hidden"
-                        accept="image/*"
-                        onChange={(e) => handleFileUpload(e, "artworkUrl")}
-                        disabled={!!uploadingField}
-                      />
-                      <label 
-                        htmlFor="artwork-upload"
-                        className={`w-full h-full rounded-3xl border-2 border-dashed flex flex-col items-center justify-center text-center p-10 transition-all cursor-pointer overflow-hidden ${
-                          formData.artworkUrl ? "border-green-500/50" : "border-white/10 hover:border-primary/40"
-                        }`}
-                      >
-                         {formData.artworkUrl && (
-                           <img src={formData.artworkUrl} alt="Artwork Preview" className="absolute inset-0 w-full h-full object-cover opacity-40 group-hover:scale-105 transition-transform pointer-events-none" />
-                         )}
-                         <div className="z-10 bg-black/60 backdrop-blur-md p-6 rounded-2xl border border-white/10 space-y-4 group-hover:scale-105 transition-transform">
-                            {uploadingField === "artwork" ? (
-                              <Loader2 className="w-8 h-8 text-primary mx-auto animate-spin" />
-                            ) : formData.artworkUrl ? (
-                              <Check className="w-8 h-8 text-green-500 mx-auto" />
-                            ) : (
-                              <Upload className="w-8 h-8 text-primary mx-auto" />
-                            )}
-                            <div>
-                               <p className={`text-xs font-black uppercase tracking-widest ${formData.artworkUrl ? "text-green-500" : "text-white"}`}>
-                                 {uploadingField === "artwork" ? "Uploading..." : formData.artworkUrl ? "Artwork Ready" : "Select Artwork"}
-                               </p>
-                               <p className="text-[10px] text-white/40 mt-1">Min 3000px • JPEG/PNG</p>
-                            </div>
-                         </div>
-                         <div className="absolute inset-0 bg-primary/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                      </label>
-                    </div>
-
-                   <div className="bg-white/5 p-6 rounded-2xl border border-white/10 w-full max-w-2xl flex gap-4">
-                      <AlertCircle className="w-5 h-5 text-primary flex-shrink-0" />
-                      <p className="text-xs text-white/40 font-sans leading-relaxed">
-                         Ensure your artwork does not contain URLs, social media handles, or platform logos (Spotify, Apple Music, etc.). These will result in immediate rejection by Stores.
-                      </p>
+                   <div className="space-y-4 max-w-2xl">
+                     <div className="space-y-2">
+                        <label className="text-[10px] font-black uppercase tracking-widest text-white/30">YouTube Link</label>
+                        <input 
+                         type="url" 
+                         placeholder="https://www.youtube.com/watch?v=..."
+                         className="w-full bg-black/40 border border-white/10 rounded-2xl py-5 px-6 text-white text-lg focus:border-primary/50 outline-none placeholder:text-white/10"
+                         value={formData.youtubeUrl}
+                         onChange={(e) => updateFormData("youtubeUrl", e.target.value)}
+                        />
+                     </div>
+                     
+                     {formData.youtubeUrl && getYouTubeId(formData.youtubeUrl) && (
+                       <div className="space-y-4">
+                          <p className="text-[10px] font-black uppercase tracking-widest text-white/30">Video Preview</p>
+                          <div className="aspect-video w-full rounded-2xl overflow-hidden border border-white/10 relative">
+                             <iframe
+                               className="absolute inset-0 w-full h-full"
+                               src={`https://www.youtube.com/embed/${getYouTubeId(formData.youtubeUrl)}`}
+                               title="YouTube video player"
+                               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                               allowFullScreen
+                             ></iframe>
+                          </div>
+                       </div>
+                     )}
                    </div>
                 </div>
               )}
 
-              {/* Step 4: Review */}
-              {currentStep === 4 && (
+              {/* Step 3: Review */}
+              {currentStep === 3 && (
                 <div className="space-y-10">
                    <div className="text-center space-y-2">
                       <h2 className="text-3xl font-black text-white italic">Quality Check</h2>
-                      <p className="text-white/40 text-sm font-sans tracking-tight">Review your data carefully. Once submitted, metadata cannot be changed until stores approve.</p>
+                      <p className="text-white/40 text-sm font-sans tracking-tight">Review your video details carefully before distribution.</p>
                    </div>
 
                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -437,58 +323,27 @@ export default function NewReleasePage() {
                                <p className="text-[10px] font-black uppercase tracking-widest text-white/20">Release Title</p>
                                <p className="text-lg font-bold text-white">{formData.title || "Untitled"}</p>
                             </div>
-                            <div className="flex gap-10">
-                               <div>
-                                  <p className="text-[10px] font-black uppercase tracking-widest text-white/20">Type</p>
-                                  <p className="text-sm font-bold text-white">{formData.type}</p>
-                               </div>
-                               <div>
-                                  <p className="text-[10px] font-black uppercase tracking-widest text-white/20">Genre</p>
-                                  <p className="text-sm font-bold text-white">{formData.genre || "N/A"}</p>
-                               </div>
-                               <div>
-                                  <p className="text-[10px] font-black uppercase tracking-widest text-white/20">Language</p>
-                                  <p className="text-sm font-bold text-white">{formData.language || "N/A"}</p>
-                               </div>
-                            </div>
                          </div>
                       </div>
 
                       <div className="glass p-8 rounded-3xl border border-white/5 space-y-6">
                          <div className="flex items-center justify-between">
-                            <p className="text-xs font-black uppercase tracking-widest text-primary italic">Distribution & Visuals</p>
+                            <p className="text-xs font-black uppercase tracking-widest text-primary italic">Video Preview</p>
                          </div>
-                         <div className="flex gap-6 items-start">
-                            <div className="w-24 h-24 rounded-2xl bg-white/5 border border-white/5 overflow-hidden flex-shrink-0 relative">
-                               {formData.artworkUrl ? (
-                                 <img src={formData.artworkUrl} alt="Artwork" className="w-full h-full object-cover" />
-                               ) : (
-                                 <div className="w-full h-full flex items-center justify-center">
-                                    <ImageIcon className="w-8 h-8 text-white/10" />
-                                 </div>
-                               )}
-                            </div>
-                            <div className="space-y-4 flex-grow">
-                               <div className="flex items-center gap-3">
-                                  <CheckCircle2 className={`w-4 h-4 ${formData.artworkUrl ? "text-green-400" : "text-red-400"}`} />
-                                  <span className="text-xs font-bold text-white/60">Artwork: {formData.artworkUrl ? "Uploaded" : "Missing"}</span>
-                               </div>
-                               <div className="flex items-center gap-3">
-                                  <CheckCircle2 className="w-4 h-4 text-green-400" />
-                                  <span className="text-xs font-bold text-white/60">Stores: Spotify, Apple, YT Music, Amazon</span>
-                                </div>
-                                <div className="flex items-center gap-3">
-                                   <CheckCircle2 className="w-4 h-4 text-green-400" />
-                                   <span className="text-xs font-bold text-white/60">Monetization: Content ID, FB/IG Audio</span>
-                                </div>
-                             </div>
-                          </div>
-                          <div className="space-y-4 pt-2">
-                             <div className="bg-primary/5 p-4 rounded-xl border border-primary/20 text-[10px] font-sans text-primary leading-relaxed">
-                                Distribution typically takes 24-72 hours. We recommend setting a release date at least 14 days in the future for playlist pitching.
-                             </div>
-                          </div>
-                       </div>
+                         <div className="aspect-video w-full rounded-2xl overflow-hidden border border-white/10 relative">
+                            {formData.youtubeUrl && getYouTubeId(formData.youtubeUrl) ? (
+                              <iframe
+                                className="absolute inset-0 w-full h-full"
+                                src={`https://www.youtube.com/embed/${getYouTubeId(formData.youtubeUrl)}`}
+                                title="YouTube video player"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                allowFullScreen
+                              />
+                            ) : (
+                              <div className="absolute inset-0 flex items-center justify-center text-white/20">No Video Available</div>
+                            )}
+                         </div>
+                      </div>
                    </div>
 
                    <button 
@@ -502,7 +357,7 @@ export default function NewReleasePage() {
                           Processing Submission...
                         </>
                       ) : (
-                        "DISTRIBUTE RELEASE NOW"
+                        "DISTRIBUTE VIDEO NOW"
                       )}
                    </button>
                 </div>
@@ -511,7 +366,7 @@ export default function NewReleasePage() {
         </AnimatePresence>
 
         {/* Footer Actions */}
-        {currentStep < 4 && (
+        {currentStep < 3 && (
           <div className="mt-12 pt-8 border-t border-white/5 flex justify-between items-center">
              <button 
               onClick={prevStep}

@@ -267,6 +267,12 @@ h1, h2, h3, h4, h5, h6 {
   transform: translateX(38%) rotate(270deg);
 }
 
+@media (max-width: 767px) {
+  .vinyl-container:hover .vinyl-disc {
+    transform: translateX(20%) rotate(180deg);
+  }
+}
+
 .vinyl-center-label {
   position: absolute;
   top: 32%;

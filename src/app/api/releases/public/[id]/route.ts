@@ -31,6 +31,7 @@ export async function GET(
       genre: release.genre,
       releaseDate: release.releaseDate,
       audioUrl: release.audioFileUrl,
+      youtubeUrl: release.youtubeUrl,
       labelName: "Fastit Music India",
       tracks: [
         {

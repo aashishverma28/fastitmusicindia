@@ -192,6 +192,7 @@ model Release {
   adminFeedback   String?       @db.Text
   isrc            String?
   upc             String?
+  youtubeUrl      String?
   createdAt       DateTime      @default(now())
   updatedAt       DateTime      @updatedAt
 
@@ -385,6 +386,7 @@ model PublicRelease {
   genre           String
   releaseDate     DateTime @default(now())
   audioFileUrl    String?
+  youtubeUrl      String?
   slug            String?  @unique
   isFeatured      Boolean  @default(false)
   createdAt       DateTime @default(now())

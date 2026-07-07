@@ -81,41 +81,43 @@ export default async function LabelRoyaltiesPage() {
  
              <div className="glass rounded-[2.5rem] border border-white/5 overflow-hidden">
                 {payments.length > 0 ? (
-                  <table className="w-full text-left">
-                    <thead>
-                        <tr className="bg-white/5">
-                          <th className="px-8 py-5 text-[10px] font-black uppercase tracking-widest text-white/20">Period</th>
-                          <th className="px-8 py-5 text-[10px] font-black uppercase tracking-widest text-white/20">Status</th>
-                          <th className="px-8 py-5 text-[10px] font-black uppercase tracking-widest text-white/20">Amount</th>
-                          <th className="px-8 py-5 text-right text-[10px] font-black uppercase tracking-widest text-white/20">Action</th>
-                        </tr>
-                    </thead>
-                    <tbody className="divide-y divide-white/5 font-sans">
-                        {payments.map((item, i) => (
-                          <tr key={i} className="group hover:bg-white/[0.02] transition-colors">
-                              <td className="px-8 py-6">
-                                <p className="text-sm font-bold text-white uppercase tracking-tight">{new Date(item.requestedAt).toLocaleDateString(undefined, { month: 'long', year: 'numeric' })}</p>
-                                <p className="text-[10px] font-black text-secondary tracking-widest uppercase">Verified</p>
-                              </td>
-                              <td className="px-8 py-6">
-                                <span className={`text-[10px] font-bold px-2 py-1 rounded-full uppercase ${
-                                  item.status === 'COMPLETED' ? 'bg-green-500/10 text-green-500' : 'bg-yellow-500/10 text-yellow-500'
-                                }`}>
-                                  {item.status}
-                                </span>
-                              </td>
-                              <td className="px-8 py-6 font-black text-white italic">
-                                ₹{item.amount.toLocaleString()}
-                              </td>
-                              <td className="px-8 py-6 text-right">
-                                <button className="inline-flex items-center gap-2 bg-white/5 px-5 py-2.5 rounded-xl border border-white/5 text-[10px] font-black uppercase tracking-widest text-white/40 hover:bg-secondary/20 hover:text-white hover:border-secondary transition-all">
-                                    <Download className="w-4 h-4" /> PDF
-                                </button>
-                              </td>
+                  <div className="overflow-x-auto">
+                    <table className="w-full text-left min-w-[500px]">
+                      <thead>
+                          <tr className="bg-white/5">
+                            <th className="px-8 py-5 text-[10px] font-black uppercase tracking-widest text-white/20">Period</th>
+                            <th className="px-8 py-5 text-[10px] font-black uppercase tracking-widest text-white/20">Status</th>
+                            <th className="px-8 py-5 text-[10px] font-black uppercase tracking-widest text-white/20">Amount</th>
+                            <th className="px-8 py-5 text-right text-[10px] font-black uppercase tracking-widest text-white/20">Action</th>
                           </tr>
-                        ))}
-                    </tbody>
-                  </table>
+                      </thead>
+                      <tbody className="divide-y divide-white/5 font-sans">
+                          {payments.map((item, i) => (
+                            <tr key={i} className="group hover:bg-white/[0.02] transition-colors">
+                                <td className="px-8 py-6">
+                                  <p className="text-sm font-bold text-white uppercase tracking-tight">{new Date(item.requestedAt).toLocaleDateString(undefined, { month: 'long', year: 'numeric' })}</p>
+                                  <p className="text-[10px] font-black text-secondary tracking-widest uppercase">Verified</p>
+                                </td>
+                                <td className="px-8 py-6">
+                                  <span className={`text-[10px] font-bold px-2 py-1 rounded-full uppercase ${
+                                    item.status === 'COMPLETED' ? 'bg-green-500/10 text-green-500' : 'bg-yellow-500/10 text-yellow-500'
+                                  }`}>
+                                    {item.status}
+                                  </span>
+                                </td>
+                                <td className="px-8 py-6 font-black text-white italic">
+                                  ₹{item.amount.toLocaleString()}
+                                </td>
+                                <td className="px-8 py-6 text-right">
+                                  <button className="inline-flex items-center gap-2 bg-white/5 px-5 py-2.5 rounded-xl border border-white/5 text-[10px] font-black uppercase tracking-widest text-white/40 hover:bg-secondary/20 hover:text-white hover:border-secondary transition-all">
+                                      <Download className="w-4 h-4" /> PDF
+                                  </button>
+                                </td>
+                            </tr>
+                          ))}
+                      </tbody>
+                    </table>
+                  </div>
                 ) : (
                   <div className="p-20 text-center space-y-4">
                     <div className="w-16 h-16 rounded-full bg-white/5 flex items-center justify-center mx-auto">

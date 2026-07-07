@@ -161,17 +161,21 @@ export default function ArtistApplicationForm() {
           {steps.map((step: any) => (
             <div key={step.id} className="relative z-10 flex flex-col items-center">
               <div 
-                className={`w-12 h-12 rounded-full flex items-center justify-center transition-all duration-500 ${
+                className={`w-9 h-9 sm:w-12 sm:h-12 rounded-full flex items-center justify-center transition-all duration-500 ${
                   currentStep >= step.id 
                     ? "bg-primary text-black" 
                     : "bg-surface-container-high text-white/40 border border-white/5"
                 }`}
               >
-                {currentStep > step.id ? <Check className="w-6 h-6" /> : step.icon}
+                {currentStep > step.id ? (
+                  <Check className="w-4 h-4 sm:w-6 sm:h-6" />
+                ) : (
+                  <span className="scale-75 sm:scale-100">{step.icon}</span>
+                )}
               </div>
-              <span className={`mt-3 text-xs font-bold uppercase tracking-widest ${
+              <span className={`mt-3 text-[10px] sm:text-xs font-bold uppercase tracking-widest ${
                 currentStep >= step.id ? "text-primary" : "text-white/30"
-              }`}>
+              } hidden sm:block`}>
                 {step.name}
               </span>
             </div>

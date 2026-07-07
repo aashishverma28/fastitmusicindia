@@ -84,62 +84,64 @@ export default function LabelRosterPage() {
              <p className="text-[10px] font-black uppercase tracking-widest text-white/20 italic">Scanning Satellite Roster...</p>
           </div>
         ) : filteredArtists.length > 0 ? (
-          <table className="w-full text-left">
-            <thead>
-              <tr className="bg-white/5">
-                <th className="px-8 py-6 text-[10px] font-black uppercase tracking-widest text-white/20">Talent Identity</th>
-                <th className="px-8 py-6 text-[10px] font-black uppercase tracking-widest text-white/20">Catalog</th>
-                <th className="px-8 py-6 text-[10px] font-black uppercase tracking-widest text-white/20">Performance</th>
-                <th className="px-8 py-6 text-[10px] font-black uppercase tracking-widest text-white/20">Economics</th>
-                <th className="px-8 py-6 text-right text-[10px] font-black uppercase tracking-widest text-white/20">Management</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-white/5">
-              {filteredArtists.map((artist) => (
-                <tr key={artist.id} className="group hover:bg-white/[0.02] transition-colors">
-                  <td className="px-8 py-6">
-                    <div className="flex items-center gap-4">
-                      <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-secondary/20 to-primary/20 border border-white/10 flex items-center justify-center font-black text-lg text-white">
-                        {artist.stageName[0]}
-                      </div>
-                      <div>
-                        <div className="flex items-center gap-2">
-                           <p className="font-bold text-white group-hover:text-secondary transition-colors">{artist.stageName}</p>
-                           {artist.isVerified && <div className="w-3 h-3 rounded-full bg-blue-400 border-2 border-background shadow-lg shadow-blue-400/20" title="Verified Artist" />}
-                        </div>
-                        <p className="text-[10px] font-mono text-white/40 tracking-tight">@{artist.username}</p>
-                      </div>
-                    </div>
-                  </td>
-                  <td className="px-8 py-6">
-                    <div className="space-y-1">
-                      <p className="text-sm font-bold text-white/60">{artist.releaseCount} Releases</p>
-                      <p className="text-[10px] font-black uppercase tracking-widest text-white/20">Active Catalog</p>
-                    </div>
-                  </td>
-                  <td className="px-8 py-6">
-                    <div className="flex items-center gap-2">
-                       <TrendingUp className="w-4 h-4 text-green-400" />
-                       <span className="text-sm font-black text-white italic">{formatNum(artist.streams)}</span>
-                       <span className="text-[10px] font-bold text-white/20 uppercase tracking-tighter">Plays</span>
-                    </div>
-                  </td>
-                  <td className="px-8 py-6">
-                     <p className="text-sm font-black text-secondary">₹{artist.revenue.toLocaleString()}</p>
-                     <p className="text-[10px] font-bold text-white/20 uppercase tracking-tighter">Gross Share</p>
-                  </td>
-                  <td className="px-8 py-6 text-right">
-                    <Link 
-                      href={`/dashboard/label/roster/${artist.id}`}
-                      className="inline-flex items-center gap-2 bg-white/5 px-5 py-2.5 rounded-xl border border-white/5 text-[10px] font-black uppercase tracking-widest text-white/40 hover:bg-secondary/20 hover:text-white hover:border-secondary transition-all"
-                    >
-                      Analytics <ChevronRight className="w-4 h-4" />
-                    </Link>
-                  </td>
+          <div className="overflow-x-auto">
+            <table className="w-full text-left min-w-[650px]">
+              <thead>
+                <tr className="bg-white/5">
+                  <th className="px-8 py-6 text-[10px] font-black uppercase tracking-widest text-white/20">Talent Identity</th>
+                  <th className="px-8 py-6 text-[10px] font-black uppercase tracking-widest text-white/20">Catalog</th>
+                  <th className="px-8 py-6 text-[10px] font-black uppercase tracking-widest text-white/20">Performance</th>
+                  <th className="px-8 py-6 text-[10px] font-black uppercase tracking-widest text-white/20">Economics</th>
+                  <th className="px-8 py-6 text-right text-[10px] font-black uppercase tracking-widest text-white/20">Management</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody className="divide-y divide-white/5">
+                {filteredArtists.map((artist) => (
+                  <tr key={artist.id} className="group hover:bg-white/[0.02] transition-colors">
+                    <td className="px-8 py-6">
+                      <div className="flex items-center gap-4">
+                        <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-secondary/20 to-primary/20 border border-white/10 flex items-center justify-center font-black text-lg text-white">
+                          {artist.stageName[0]}
+                        </div>
+                        <div>
+                          <div className="flex items-center gap-2">
+                             <p className="font-bold text-white group-hover:text-secondary transition-colors">{artist.stageName}</p>
+                             {artist.isVerified && <div className="w-3 h-3 rounded-full bg-blue-400 border-2 border-background shadow-lg shadow-blue-400/20" title="Verified Artist" />}
+                          </div>
+                          <p className="text-[10px] font-mono text-white/40 tracking-tight">@{artist.username}</p>
+                        </div>
+                      </div>
+                    </td>
+                    <td className="px-8 py-6">
+                      <div className="space-y-1">
+                        <p className="text-sm font-bold text-white/60">{artist.releaseCount} Releases</p>
+                        <p className="text-[10px] font-black uppercase tracking-widest text-white/20">Active Catalog</p>
+                      </div>
+                    </td>
+                    <td className="px-8 py-6">
+                      <div className="flex items-center gap-2">
+                         <TrendingUp className="w-4 h-4 text-green-400" />
+                         <span className="text-sm font-black text-white italic">{formatNum(artist.streams)}</span>
+                         <span className="text-[10px] font-bold text-white/20 uppercase tracking-tighter">Plays</span>
+                      </div>
+                    </td>
+                    <td className="px-8 py-6">
+                       <p className="text-sm font-black text-secondary">₹{artist.revenue.toLocaleString()}</p>
+                       <p className="text-[10px] font-bold text-white/20 uppercase tracking-tighter">Gross Share</p>
+                    </td>
+                    <td className="px-8 py-6 text-right">
+                      <Link 
+                        href={`/dashboard/label/roster/${artist.id}`}
+                        className="inline-flex items-center gap-2 bg-white/5 px-5 py-2.5 rounded-xl border border-white/5 text-[10px] font-black uppercase tracking-widest text-white/40 hover:bg-secondary/20 hover:text-white hover:border-secondary transition-all"
+                      >
+                        Analytics <ChevronRight className="w-4 h-4" />
+                      </Link>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         ) : (
           <div className="py-32 text-center space-y-6 flex-grow flex flex-col items-center justify-center">
             <div className="w-20 h-20 rounded-full bg-white/5 flex items-center justify-center mx-auto border border-white/5">

@@ -24,8 +24,7 @@ export async function POST(req: Request) {
       copyrightHolder, 
       copyrightYear, 
       isExplicit, 
-      tracks, 
-      artworkUrl 
+      youtubeUrl
     } = await req.json();
 
     // Find the profile ID for the current user
@@ -52,6 +51,17 @@ export async function POST(req: Request) {
       artistId = selectedArtistId;
     }
 
+    // Helper to get YouTube ID
+    const getYouTubeId = (url: string) => {
+      if (!url) return "";
+      const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+      const match = url.match(regExp);
+      return (match && match[2].length === 11) ? match[2] : "";
+    };
+
+    const ytId = getYouTubeId(youtubeUrl);
+    const coverArtUrl = ytId ? `https://img.youtube.com/vi/${ytId}/hqdefault.jpg` : null;
+
     // Create Release with Tracks in a single operation
     const result = await prisma.release.create({
       data: {
@@ -65,17 +75,19 @@ export async function POST(req: Request) {
         copyrightHolder,
         copyrightYear: parseInt(copyrightYear),
         isExplicit,
-        coverArtUrl: artworkUrl,
+        coverArtUrl,
+        youtubeUrl,
         status: "SUBMITTED",
         labelId: labelId,
         tracks: {
-          create: tracks.map((track: any, i: number) => ({
-            trackNumber: i + 1,
-            title: track.title,
-            audioFileUrl: track.audioUrl || "https://mock-audio-url.mp3",
-            duration: 180, // Placeholder
-            featuredArtists: track.artist,
-          }))
+          create: [
+            {
+              trackNumber: 1,
+              title: title,
+              audioFileUrl: youtubeUrl || "https://mock-audio-url.mp3",
+              duration: 180, // Placeholder
+            }
+          ]
         }
       }
     });
