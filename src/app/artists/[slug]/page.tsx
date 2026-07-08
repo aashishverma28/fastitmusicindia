@@ -60,7 +60,7 @@ export default function ArtistProfilePage({ params }: { params: Promise<{ slug: 
   }
 
   return (
-    <div className="min-h-screen pt-24 pb-20 relative overflow-hidden">
+    <div className="min-h-screen pt-24 pb-20 relative overflow-hidden bg-[#0a0a0c] text-white">
       {/* Hero Background with Blur */}
       <div className="absolute top-0 left-0 w-full h-[600px] overflow-hidden -z-10">
         <Image 
