@@ -12,13 +12,13 @@ export async function POST(req: Request) {
     }
 
     const body = await req.json();
-    const { name, genre, avatar, followers, slug, instagramUrl, spotifyUrl, youtubeUrl, twitterUrl } = body;
+    const { name, genre, avatar, followers, slug, instagramUrl, spotifyUrl, youtubeUrl, twitterUrl, selectedReleaseIds } = body;
 
     // @ts-ignore
     const artist = await (prisma as any)['publicArtist'].create({
       data: {
         name,
-        genre,
+        genre: genre || "Indie",
         avatar,
         followers: followers || "10K+",
         slug: slug || name.toLowerCase().replace(/ /g, '-'),
@@ -29,6 +29,18 @@ export async function POST(req: Request) {
         isVerified: true
       }
     });
+
+    if (selectedReleaseIds && selectedReleaseIds.length > 0) {
+      // @ts-ignore
+      await (prisma as any)['publicRelease'].updateMany({
+        where: {
+          id: { in: selectedReleaseIds }
+        },
+        data: {
+          artistName: name
+        }
+      });
+    }
 
     return NextResponse.json({ artist });
   } catch (error: any) {

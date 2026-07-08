@@ -44,12 +44,27 @@ export default function ArtistsPage() {
     twitterUrl: ""
   });
   const [isUploadingAvatar, setIsUploadingAvatar] = useState(false);
+  const [publicReleases, setPublicReleases] = useState<any[]>([]);
+  const [selectedReleaseIds, setSelectedReleaseIds] = useState<string[]>([]);
 
   const isAdminOrStaff = session?.user?.role === "ADMIN" || session?.user?.role === "EMPLOYEE";
 
   useEffect(() => {
     fetchArtists();
+    fetchPublicReleases();
   }, []);
+
+  const fetchPublicReleases = async () => {
+    try {
+      const res = await fetch("/api/releases/public");
+      const data = await res.json();
+      if (data.releases) {
+        setPublicReleases(data.releases);
+      }
+    } catch (err) {
+      console.error("Error fetching public releases:", err);
+    }
+  };
 
   const fetchArtists = async () => {
     setIsLoading(true);
@@ -108,7 +123,10 @@ export default function ArtistsPage() {
       const res = await fetch("/api/artists/manage", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData)
+        body: JSON.stringify({
+          ...formData,
+          selectedReleaseIds
+        })
       });
       if (res.ok) {
         const data = await res.json();
@@ -125,6 +143,7 @@ export default function ArtistsPage() {
           youtubeUrl: "",
           twitterUrl: ""
         });
+        setSelectedReleaseIds([]);
       } else {
         alert("Failed to add artist.");
       }
@@ -367,26 +386,31 @@ export default function ArtistsPage() {
                     />
                   </div>
 
-                  <div className="grid grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                      <label className="text-[10px] font-black uppercase tracking-widest text-white/40 ml-2">Genre</label>
-                      <select 
-                        className="w-full bg-black border-2 border-white rounded-none py-4 px-6 text-white focus:border-secondary outline-none transition-all font-sans appearance-none"
-                        value={formData.genre}
-                        onChange={(e) => setFormData({...formData, genre: e.target.value})}
-                      >
-                        {genres.filter(g => g !== "All").map(g => <option key={g} value={g} className="bg-[#1a1a1a]">{g}</option>)}
-                      </select>
-                    </div>
-                    <div className="space-y-2">
-                      <label className="text-[10px] font-black uppercase tracking-widest text-white/40 ml-2">Followers</label>
-                      <input 
-                        type="text" 
-                        placeholder="1.2M+"
-                        className="w-full bg-black border-2 border-white rounded-none py-4 px-6 text-white focus:border-secondary outline-none transition-all font-sans"
-                        value={formData.followers}
-                        onChange={(e) => setFormData({...formData, followers: e.target.value})}
-                      />
+                  {/* Select Artist Songs / Releases */}
+                  <div className="space-y-2">
+                    <label className="text-[10px] font-black uppercase tracking-widest text-white/40 ml-2">Select Artist Songs / Releases</label>
+                    <div className="w-full bg-black border-2 border-white rounded-none p-3.5 max-h-40 overflow-y-auto space-y-2.5">
+                      {publicReleases.length > 0 ? (
+                        publicReleases.map((rel: any) => (
+                          <label key={rel.id} className="flex items-center gap-3 text-white text-xs font-sans cursor-pointer hover:bg-white/5 p-1 select-none">
+                            <input 
+                              type="checkbox"
+                              checked={selectedReleaseIds.includes(rel.id)}
+                              onChange={(e) => {
+                                if (e.target.checked) {
+                                  setSelectedReleaseIds(prev => [...prev, rel.id]);
+                                } else {
+                                  setSelectedReleaseIds(prev => prev.filter(id => id !== rel.id));
+                                }
+                              }}
+                              className="rounded bg-black border-white/20 text-secondary focus:ring-0 w-4 h-4 cursor-pointer"
+                            />
+                            <span className="truncate">{rel.title} <span className="text-white/40 text-[10px]">({rel.artist})</span></span>
+                          </label>
+                        ))
+                      ) : (
+                        <p className="text-white/30 text-xs text-center py-4">No releases available to select</p>
+                      )}
                     </div>
                   </div>
 
