@@ -60,6 +60,23 @@ export default function RootLayout({
             `,
           }}
         />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "Organization",
+              "name": "Fastit Music India",
+              "url": "https://fastitmusicindia.com",
+              "logo": "https://fastitmusicindia.com/logo.png",
+              "description": "India's premier music distribution and financial management platform for independent artists and labels.",
+              "sameAs": [
+                "https://www.instagram.com/fastitmusicindia",
+                "https://youtube.com/@fastitmusicindia"
+              ]
+            })
+          }}
+        />
       </head>
       <body suppressHydrationWarning className="min-h-full flex flex-col bg-background text-foreground relative transition-colors duration-200">
         <div className="noise-bg" />
