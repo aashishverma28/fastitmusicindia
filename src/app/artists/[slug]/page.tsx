@@ -115,11 +115,6 @@ export default function ArtistProfilePage({ params }: { params: Promise<{ slug: 
               </h1>
               <div className="flex flex-wrap items-center justify-center lg:justify-start gap-8">
                  <div className="flex items-center gap-2">
-                    <Users className="w-6 h-6 text-white/20" />
-                    <span className="text-2xl font-black font-display text-white">{artist.followers}</span>
-                    <span className="text-white/40 font-bold uppercase text-[10px] tracking-widest mt-1">Followers</span>
-                 </div>
-                 <div className="flex items-center gap-2">
                     <Disc className="w-6 h-6 text-white/20" />
                     <span className="text-2xl font-black font-display text-white">{artist.totalStreams ? artist.totalStreams.toLocaleString() : "0"}</span>
                     <span className="text-white/40 font-bold uppercase text-[10px] tracking-widest mt-1">Total Plays</span>
