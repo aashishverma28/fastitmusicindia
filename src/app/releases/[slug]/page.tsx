@@ -82,7 +82,7 @@ export default function ReleaseDetailPage({ params }: { params: Promise<{ slug: 
   ].filter(link => link.url);
 
   return (
-    <div className="min-h-screen pt-24 pb-20 relative overflow-hidden bg-[#0a0a0c] text-white">
+    <div className="min-h-screen pt-24 pb-20 relative overflow-hidden bg-[#0a0a0c] text-zinc-100">
       {/* Dynamic Background Glow */}
       <div className="absolute top-[-20%] left-[-10%] w-[800px] h-[800px] bg-primary/10 rounded-full blur-[120px] -z-10"></div>
       <div className="absolute bottom-[-20%] right-[-10%] w-[600px] h-[600px] bg-secondary/10 rounded-full blur-[120px] -z-10"></div>

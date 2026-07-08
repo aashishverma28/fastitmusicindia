@@ -122,7 +122,7 @@ export const VinylCard: React.FC<VinylCardProps> = ({
             {/* Genre Sticker */}
             {displayGenre && (
               <div className="absolute top-3 left-4">
-                <span className="px-2.5 py-0.5 rounded-md bg-black/75 backdrop-blur-md border border-white/15 text-[9px] font-black uppercase tracking-widest text-white/80">
+                <span className="px-2.5 py-0.5 rounded-md bg-black/75 backdrop-blur-md border border-zinc-700/50 text-[9px] font-black uppercase tracking-widest text-zinc-200">
                   {displayGenre}
                 </span>
               </div>
