@@ -67,8 +67,8 @@ export default function RootLayout({
               "@context": "https://schema.org",
               "@type": "Organization",
               "name": "Fastit Music India",
-              "url": "https://fastitmusicindia.com",
-              "logo": "https://fastitmusicindia.com/logo.png",
+              "url": "https://fastitmusic.in",
+              "logo": "https://fastitmusic.in/logo.png",
               "description": "India's premier music distribution and financial management platform for independent artists and labels.",
               "sameAs": [
                 "https://www.instagram.com/fastitmusicindia",
