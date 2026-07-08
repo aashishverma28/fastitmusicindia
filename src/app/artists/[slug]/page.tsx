@@ -72,21 +72,21 @@ export default function ArtistProfilePage({ params }: { params: Promise<{ slug: 
         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#0e0e0e]/80 to-[#0e0e0e]"></div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-8">
-        <div className="mb-12">
+      <div className="max-w-7xl mx-auto px-4 sm:px-8">
+        <div className="mb-8 lg:mb-12">
           <Link href="/artists" className="flex items-center gap-2 text-white/40 hover:text-secondary transition-colors font-bold group">
             <ArrowLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" /> Back to Artists
           </Link>
         </div>
 
         {/* Profile Header */}
-        <section className="grid grid-cols-1 lg:grid-cols-12 gap-16 items-center mb-32">
+        <section className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16 items-center mb-16 lg:mb-32">
           <motion.div 
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             className="lg:col-span-4 flex justify-center lg:justify-start"
           >
-            <div className="relative w-72 h-72 md:w-96 md:h-96 rounded-full overflow-hidden border-8 border-surface-container-highest shadow-[0_40px_100px_rgba(0,0,0,0.8)]">
+            <div className="relative w-60 h-60 sm:w-72 sm:h-72 md:w-96 md:h-96 rounded-full overflow-hidden border-4 sm:border-8 border-surface-container-highest shadow-[0_20px_50px_rgba(0,0,0,0.8)]">
               <Image 
                 src={artist.avatar} 
                 alt={artist.name} 
@@ -99,7 +99,7 @@ export default function ArtistProfilePage({ params }: { params: Promise<{ slug: 
           <motion.div 
             initial={{ opacity: 0, x: 40 }}
             animate={{ opacity: 1, x: 0 }}
-            className="lg:col-span-8 space-y-8 text-center lg:text-left"
+            className="lg:col-span-8 space-y-6 lg:space-y-8 text-center lg:text-left"
           >
             <div className="space-y-4">
               <div className="flex flex-wrap items-center justify-center lg:justify-start gap-4">
@@ -110,7 +110,7 @@ export default function ArtistProfilePage({ params }: { params: Promise<{ slug: 
                     <Music className="w-3 h-3" /> {artist.genre}
                  </div>
               </div>
-              <h1 className="text-6xl md:text-8xl font-black font-display text-white tracking-tighter leading-none">
+              <h1 className="text-4xl sm:text-6xl md:text-8xl font-black font-display text-white tracking-tighter leading-tight lg:leading-none">
                 {artist.name}
               </h1>
               <div className="flex flex-wrap items-center justify-center lg:justify-start gap-8">
@@ -149,17 +149,17 @@ export default function ArtistProfilePage({ params }: { params: Promise<{ slug: 
         </section>
 
         {/* Content Section */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-20">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-20">
            {/* Discography */}
            <motion.div 
              initial={{ opacity: 0, y: 20 }}
              whileInView={{ opacity: 1, y: 0 }}
              viewport={{ once: true }}
-             className="lg:col-span-8 space-y-12"
+             className="lg:col-span-8 space-y-8 lg:space-y-12"
            >
               <div className="flex justify-between items-end border-b border-white/5 pb-8">
-                 <h2 className="text-4xl font-black font-display text-white tracking-tight">Main <span className="text-secondary">Catalog.</span></h2>
-                 <Link href="/releases" className="text-white/40 font-bold hover:text-secondary transition-colors text-sm">View all discs</Link>
+                 <h2 className="text-3xl sm:text-4xl font-black font-display text-white tracking-tight">Main <span className="text-secondary">Catalog.</span></h2>
+                 <Link href="/releases" className="text-white/40 font-bold hover:text-secondary transition-colors text-xs sm:text-sm">View all discs</Link>
               </div>
 
               <div className="space-y-4">
@@ -168,22 +168,22 @@ export default function ArtistProfilePage({ params }: { params: Promise<{ slug: 
                        <Link 
                         key={rel.id} 
                         href={`/releases/${rel.slug}`}
-                        className="group flex items-center gap-8 p-6 glass rounded-2xl border border-white/0 hover:border-secondary/20 hover:bg-secondary/5 transition-all"
+                        className="group flex items-center gap-4 sm:gap-8 p-4 sm:p-6 glass rounded-2xl border border-white/0 hover:border-secondary/20 hover:bg-secondary/5 transition-all"
                        >
-                          <div className="relative w-24 h-24 rounded-xl overflow-hidden shadow-lg border border-white/10">
+                          <div className="relative w-16 h-16 sm:w-24 sm:h-24 rounded-xl overflow-hidden shadow-lg border border-white/10 flex-shrink-0">
                              <Image src={rel.cover} alt={rel.title} fill className="object-cover group-hover:scale-110 transition-transform duration-500" />
                           </div>
-                          <div className="flex-grow">
-                             <h4 className="text-xl font-bold text-white group-hover:text-secondary transition-colors">{rel.title}</h4>
-                             <p className="text-white/40 text-sm font-sans tracking-tight">Released {new Date(rel.releaseDate).getFullYear()}</p>
+                          <div className="flex-grow min-w-0">
+                             <h4 className="text-lg sm:text-xl font-bold text-white group-hover:text-secondary transition-colors truncate">{rel.title}</h4>
+                             <p className="text-white/40 text-xs sm:text-sm font-sans tracking-tight">Released {new Date(rel.releaseDate).getFullYear()}</p>
                           </div>
-                          <div className="flex items-center gap-8 pr-4">
+                          <div className="flex items-center gap-4 sm:gap-8 pr-1 sm:pr-4 flex-shrink-0">
                              <div className="hidden md:flex flex-col items-end">
                                 <span className="text-[10px] font-black uppercase text-white/20 tracking-widest mb-1">Total Streams</span>
                                 <span className="font-mono text-white/60">{rel.streams ? rel.streams.toLocaleString() : "0"}</span>
                              </div>
-                             <div className="w-12 h-12 rounded-full border border-white/10 flex items-center justify-center group-hover:bg-secondary group-hover:text-black transition-all">
-                                <Play className="w-5 h-5 fill-current" />
+                             <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full border border-white/10 flex items-center justify-center group-hover:bg-secondary group-hover:text-black transition-all">
+                                <Play className="w-4 h-4 sm:w-5 sm:h-5 fill-current" />
                              </div>
                           </div>
                        </Link>
