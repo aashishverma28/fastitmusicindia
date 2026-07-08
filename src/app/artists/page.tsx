@@ -46,6 +46,70 @@ export default function ArtistsPage() {
   const [isUploadingAvatar, setIsUploadingAvatar] = useState(false);
   const [publicReleases, setPublicReleases] = useState<any[]>([]);
   const [selectedReleaseIds, setSelectedReleaseIds] = useState<string[]>([]);
+  const [editingArtist, setEditingArtist] = useState<any | null>(null);
+
+  const handleEditArtistClick = (e: React.MouseEvent, artist: any) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setEditingArtist({
+      id: artist.id,
+      name: artist.name || "",
+      avatar: artist.avatar || "",
+      slug: artist.slug || "",
+      instagramUrl: artist.instagramUrl || "",
+      spotifyUrl: artist.spotifyUrl || "",
+      youtubeUrl: artist.youtubeUrl || "",
+      twitterUrl: artist.twitterUrl || ""
+    });
+    
+    const associatedIds = publicReleases
+      .filter((rel: any) => rel.artist === artist.name || rel.artistName === artist.name)
+      .map((rel: any) => rel.id);
+    
+    setSelectedReleaseIds(associatedIds);
+  };
+
+  const handleEditArtistSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    try {
+      const res = await fetch(`/api/artists/manage/${editingArtist.id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          ...editingArtist,
+          selectedReleaseIds
+        })
+      });
+      if (res.ok) {
+        setEditingArtist(null);
+        setSelectedReleaseIds([]);
+        fetchArtists();
+      } else {
+        alert("Failed to update artist.");
+      }
+    } catch (err) {
+      console.error("Error updating artist:", err);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleEditAvatarUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setIsUploadingAvatar(true);
+    try {
+      const url = await uploadFile(file, "releases", "artists");
+      setEditingArtist(prev => ({ ...prev, avatar: url }));
+    } catch (err: any) {
+      console.error("Avatar upload failed:", err);
+      alert(`Upload failed: ${err.message}`);
+    } finally {
+      setIsUploadingAvatar(false);
+    }
+  };
 
   const isAdminOrStaff = session?.user?.role === "ADMIN" || session?.user?.role === "EMPLOYEE";
 
@@ -274,13 +338,24 @@ export default function ArtistsPage() {
                   className="flex flex-col items-center group relative"
                 >
                   {isAdminOrStaff && (
-                    <button 
-                      onClick={(e) => handleRemoveArtist(e, artist.id)}
-                      className="absolute -top-3 right-4 z-40 p-2 bg-red-600 border border-red-700 text-white rounded-xl hover:bg-red-700 transition-all shadow-xl opacity-0 group-hover:opacity-100"
-                      title="Remove Artist"
-                    >
-                      <Trash2 className="w-4.5 h-4.5" />
-                    </button>
+                    <div className="absolute -top-3 right-4 z-40 flex items-center gap-1.5 opacity-0 group-hover:opacity-100 transition-all">
+                      <button 
+                        onClick={(e) => handleEditArtistClick(e, artist)}
+                        className="p-2 bg-blue-600 border border-blue-700 text-white rounded-xl hover:bg-blue-700 transition-all shadow-xl"
+                        title="Edit Artist"
+                      >
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                        </svg>
+                      </button>
+                      <button 
+                        onClick={(e) => handleRemoveArtist(e, artist.id)}
+                        className="p-2 bg-red-600 border border-red-700 text-white rounded-xl hover:bg-red-700 transition-all shadow-xl"
+                        title="Remove Artist"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </button>
+                    </div>
                   )}
 
                   {/* Polaroid Photo Frame */}
@@ -515,6 +590,169 @@ export default function ArtistsPage() {
                       <><Check className="w-5 h-5" /> PUBLISH TO PAGE</>
                     )}
                   </button>
+                </form>
+              </motion.div>
+            </div>
+          )}
+          {editingArtist && (
+            <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-sm overflow-y-auto">
+              <motion.div 
+                initial={{ opacity: 0, scale: 0.9, y: 20 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.9, y: 20 }}
+                className="relative w-full max-w-md bg-[var(--card-bg)] p-5 sm:p-8 rounded-none border-3 border-[var(--foreground)] shadow-[8px_8px_0px_0px_#ffc301] z-10 my-8 max-h-[90vh] overflow-y-auto"
+              >
+                <div className="flex justify-between items-center mb-5 sm:mb-8">
+                  <h2 className="text-2xl font-black font-display text-[var(--foreground)]">Edit <span className="text-secondary">Artist</span></h2>
+                  <button onClick={() => { setEditingArtist(null); setSelectedReleaseIds([]); }} className="text-[var(--foreground)]/40 hover:text-[var(--foreground)] transition-colors">
+                    <X className="w-6 h-6" />
+                  </button>
+                </div>
+
+                <form onSubmit={handleEditArtistSubmit} className="space-y-6">
+                  <div className="space-y-2">
+                    <label className="text-[10px] font-black uppercase tracking-widest text-[var(--foreground)]/50 ml-2">Artist Name</label>
+                    <input 
+                      type="text" 
+                      required
+                      className="w-full bg-[var(--background)] border-2 border-[var(--foreground)] rounded-none py-4 px-6 text-[var(--foreground)] focus:border-secondary outline-none transition-all font-sans"
+                      value={editingArtist.name}
+                      onChange={(e) => setEditingArtist({...editingArtist, name: e.target.value})}
+                    />
+                  </div>
+
+                  {/* Select Artist Songs / Releases */}
+                  <div className="space-y-2">
+                    <label className="text-[10px] font-black uppercase tracking-widest text-[var(--foreground)]/50 ml-2">Select Artist Songs / Releases</label>
+                    <div className="w-full bg-[var(--background)] border-2 border-[var(--foreground)] rounded-none p-3.5 max-h-40 overflow-y-auto space-y-2.5">
+                      {publicReleases.length > 0 ? (
+                        publicReleases.map((rel: any) => (
+                          <label key={rel.id} className="flex items-center gap-3 text-[var(--foreground)] text-xs font-sans cursor-pointer hover:bg-[var(--foreground)]/5 p-1 select-none">
+                            <input 
+                              type="checkbox"
+                              checked={selectedReleaseIds.includes(rel.id)}
+                              onChange={(e) => {
+                                if (e.target.checked) {
+                                  setSelectedReleaseIds(prev => [...prev, rel.id]);
+                                } else {
+                                  setSelectedReleaseIds(prev => prev.filter(id => id !== rel.id));
+                                }
+                              }}
+                              className="rounded bg-[var(--background)] border-[var(--foreground)]/20 text-secondary focus:ring-0 w-4 h-4 cursor-pointer"
+                            />
+                            <span className="truncate">{rel.title} <span className="text-[var(--foreground)]/40 text-[10px]">({rel.artist})</span></span>
+                          </label>
+                        ))
+                      ) : (
+                        <p className="text-[var(--foreground)]/30 text-xs text-center py-4">No releases available to select</p>
+                      )}
+                    </div>
+                  </div>
+
+                  <div className="space-y-4">
+                    <label className="text-[10px] font-black uppercase tracking-widest text-[var(--foreground)]/50 ml-2">Artist Avatar</label>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div className="relative group aspect-square bg-[var(--background)] border-2 border-[var(--foreground)] rounded-none overflow-hidden flex flex-col items-center justify-center p-4">
+                        {editingArtist.avatar ? (
+                          <>
+                            <img src={editingArtist.avatar} className="absolute inset-0 w-full h-full object-cover opacity-50" alt="Preview" />
+                            <div className="relative z-10 text-center">
+                              <Check className="w-8 h-8 text-green-500 mx-auto mb-2" />
+                              <p className="text-[10px] font-bold text-[var(--foreground)] uppercase tracking-widest">Ready</p>
+                            </div>
+                          </>
+                        ) : (
+                          <>
+                            <Upload className="w-8 h-8 text-[var(--foreground)]/20 mb-2" />
+                            <p className="text-[10px] font-bold text-[var(--foreground)]/40 uppercase tracking-widest">Upload Photo</p>
+                          </>
+                        )}
+                        <input 
+                          type="file" 
+                          accept="image/*"
+                          className="absolute inset-0 opacity-0 cursor-pointer z-20"
+                          onChange={handleEditAvatarUpload}
+                          disabled={isUploadingAvatar}
+                        />
+                        {isUploadingAvatar && (
+                          <div className="absolute inset-0 bg-black/60 flex items-center justify-center z-35">
+                            <Loader2 className="w-6 h-6 text-secondary animate-spin" />
+                          </div>
+                        )}
+                      </div>
+                      
+                      <div className="flex flex-col justify-center space-y-2">
+                        <label className="text-[10px] font-black uppercase tracking-widest text-[var(--foreground)]/20 ml-2">Or Use Image Link</label>
+                        <input 
+                          type="url" 
+                          placeholder="https://..."
+                          className="w-full bg-[var(--background)] border-2 border-[var(--foreground)] rounded-none py-4 px-6 text-[var(--foreground)] focus:border-secondary outline-none transition-all font-sans text-xs"
+                          value={editingArtist.avatar}
+                          onChange={(e) => setEditingArtist({...editingArtist, avatar: e.target.value})}
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="space-y-4">
+                    <h3 className="text-[10px] font-black uppercase tracking-widest text-[var(--foreground)]/50 ml-2 pt-4 border-t border-[var(--foreground)]/5">Social Accounts</h3>
+                    <div className="grid grid-cols-2 gap-4">
+                      <div className="space-y-2">
+                        <div className="flex items-center gap-2 ml-2">
+                          <Instagram className="w-3 h-3 text-[var(--foreground)]/20" />
+                          <label className="text-[10px] font-black uppercase tracking-widest text-[var(--foreground)]/50">Instagram</label>
+                        </div>
+                        <input 
+                          type="url" 
+                          placeholder="Link"
+                          className="w-full bg-[var(--background)] border-2 border-[var(--foreground)] rounded-none py-3 px-4 text-[var(--foreground)] focus:border-secondary outline-none transition-all font-sans text-xs"
+                          value={editingArtist.instagramUrl}
+                          onChange={(e) => setEditingArtist({...editingArtist, instagramUrl: e.target.value})}
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <div className="flex items-center gap-2 ml-2">
+                          <Disc className="w-3 h-3 text-[var(--foreground)]/20" />
+                          <label className="text-[10px] font-black uppercase tracking-widest text-[var(--foreground)]/50">Spotify</label>
+                        </div>
+                        <input 
+                          type="url" 
+                          placeholder="Link"
+                          className="w-full bg-[var(--background)] border-2 border-[var(--foreground)] rounded-none py-3 px-4 text-[var(--foreground)] focus:border-secondary outline-none transition-all font-sans text-xs"
+                          value={editingArtist.spotifyUrl}
+                          onChange={(e) => setEditingArtist({...editingArtist, spotifyUrl: e.target.value})}
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="space-y-2">
+                    <label className="text-[10px] font-black uppercase tracking-widest text-[var(--foreground)]/50 ml-2">Custom Slug (Optional)</label>
+                    <input 
+                      type="text" 
+                      placeholder="artist-slug"
+                      className="w-full bg-[var(--background)] border-2 border-[var(--foreground)] rounded-none py-4 px-6 text-[var(--foreground)] focus:border-secondary outline-none transition-all font-sans"
+                      value={editingArtist.slug}
+                      onChange={(e) => setEditingArtist({...editingArtist, slug: e.target.value})}
+                    />
+                  </div>
+
+                  <div className="pt-4 flex gap-4">
+                    <button 
+                      type="button"
+                      onClick={() => { setEditingArtist(null); setSelectedReleaseIds([]); }}
+                      className="w-1/2 bg-[var(--background)] border-2 border-[var(--foreground)] text-[var(--foreground)] hover:bg-[var(--foreground)]/5 py-4 rounded-none text-xs font-black uppercase tracking-widest transition-all"
+                    >
+                      Cancel
+                    </button>
+                    <button 
+                      type="submit" 
+                      disabled={isSubmitting || isUploadingAvatar}
+                      className="w-1/2 btn-neubrutalist py-4 rounded-none font-black text-xs uppercase tracking-widest hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-2"
+                    >
+                      {isSubmitting ? <Loader2 className="w-4 h-4 animate-spin" /> : "Save Changes"}
+                    </button>
+                  </div>
                 </form>
               </motion.div>
             </div>
