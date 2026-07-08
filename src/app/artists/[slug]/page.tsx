@@ -127,28 +127,22 @@ export default function ArtistProfilePage({ params }: { params: Promise<{ slug: 
             </p>
 
             <div className="flex flex-wrap items-center justify-center lg:justify-start gap-4">
-               <button className="btn-gradient px-12 py-5 rounded-2xl font-black font-display text-xl flex items-center justify-center gap-3 hover:scale-[1.05] active:scale-[0.98] transition-all">
-                  <Play className="fill-current w-6 h-6" /> FOLLOW ARTIST
-               </button>
-               <div className="flex gap-4 ml-4">
+               <div className="flex gap-4">
                   {artist.links?.instagram && (
-                    <a href={artist.links.instagram} target="_blank" rel="noopener noreferrer" className="w-14 h-14 rounded-full bg-white/5 border border-white/5 flex items-center justify-center hover:bg-white/10 transition-all text-white/40 hover:text-white">
+                    <a href={artist.links.instagram} target="_blank" rel="noopener noreferrer" className="w-14 h-14 rounded-full bg-white/15 border border-white/25 flex items-center justify-center hover:bg-white/25 transition-all text-white hover:text-secondary" title="Instagram">
                        <Instagram className="w-6 h-6" />
                     </a>
                   )}
                   {artist.links?.twitter && (
-                    <a href={artist.links.twitter} target="_blank" rel="noopener noreferrer" className="w-14 h-14 rounded-full bg-white/5 border border-white/5 flex items-center justify-center hover:bg-white/10 transition-all text-white/40 hover:text-white">
+                    <a href={artist.links.twitter} target="_blank" rel="noopener noreferrer" className="w-14 h-14 rounded-full bg-white/15 border border-white/25 flex items-center justify-center hover:bg-white/25 transition-all text-white hover:text-secondary" title="Twitter">
                        <Twitter className="w-6 h-6" />
                     </a>
                   )}
                   {artist.links?.youtube && (
-                    <a href={artist.links.youtube} target="_blank" rel="noopener noreferrer" className="w-14 h-14 rounded-full bg-white/5 border border-white/5 flex items-center justify-center hover:bg-white/10 transition-all text-white/40 hover:text-white">
+                    <a href={artist.links.youtube} target="_blank" rel="noopener noreferrer" className="w-14 h-14 rounded-full bg-white/15 border border-white/25 flex items-center justify-center hover:bg-white/25 transition-all text-white hover:text-secondary" title="YouTube">
                        <Youtube className="w-6 h-6" />
                     </a>
                   )}
-                  <a href="#" className="w-14 h-14 rounded-full bg-white/5 border border-white/5 flex items-center justify-center hover:bg-white/10 transition-all text-white/40 hover:text-white">
-                     <Globe className="w-6 h-6" />
-                  </a>
                </div>
             </div>
           </motion.div>
