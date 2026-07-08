@@ -89,7 +89,7 @@ export default function ReleaseDetailPage({ params }: { params: Promise<{ slug: 
 
       <div className="max-w-7xl mx-auto px-8">
         <div className="mb-12">
-          <Link href="/releases" className="flex items-center gap-2 text-white/40 hover:text-primary transition-colors font-bold group">
+          <Link href="/releases" className="flex items-center gap-2 text-zinc-400 hover:text-primary transition-colors font-bold group">
             <ArrowLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" /> Back to Releases
           </Link>
         </div>
@@ -101,7 +101,7 @@ export default function ReleaseDetailPage({ params }: { params: Promise<{ slug: 
             animate={{ opacity: 1, x: 0 }}
             className="lg:col-span-7 relative group"
           >
-            <div className="relative aspect-video rounded-[2rem] overflow-hidden shadow-[0_40px_100px_rgba(0,0,0,0.6)] border border-white/10 bg-black">
+            <div className="relative aspect-video rounded-[2rem] overflow-hidden shadow-[0_40px_100px_rgba(0,0,0,0.6)] border border-zinc-800 bg-black">
               {release.youtubeUrl || release.audioUrl ? (
                 <iframe
                   className="absolute inset-0 w-full h-full border-none"
@@ -111,7 +111,7 @@ export default function ReleaseDetailPage({ params }: { params: Promise<{ slug: 
                   allowFullScreen
                 ></iframe>
               ) : (
-                <div className="absolute inset-0 flex items-center justify-center text-white/20">No Video Available</div>
+                <div className="absolute inset-0 flex items-center justify-center text-zinc-600">No Video Available</div>
               )}
             </div>
           </motion.div>
@@ -124,26 +124,26 @@ export default function ReleaseDetailPage({ params }: { params: Promise<{ slug: 
           >
             <div className="space-y-6">
                <div className="flex flex-wrap items-center gap-4">
-                  <span className="bg-white/5 border border-white/10 px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest text-primary">
+                  <span className="bg-zinc-900 border border-zinc-800 px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest text-primary">
                     {release.genre}
                   </span>
-                  <div className="flex items-center gap-2 text-white/40 text-[10px] font-black uppercase tracking-widest">
+                  <div className="flex items-center gap-2 text-zinc-400 text-[10px] font-black uppercase tracking-widest">
                     <Calendar className="w-3 h-3" /> Released {new Date(release.releaseDate).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
                   </div>
                </div>
                
-               <h1 className="text-4xl md:text-5xl font-black font-display text-white tracking-tighter leading-none">
+               <h1 className="text-4xl md:text-5xl font-black font-display text-zinc-100 tracking-tighter leading-none">
                  {release.title}
                </h1>
                
-               <p className="text-xl font-bold font-display text-white/60">
+               <p className="text-xl font-bold font-display text-zinc-300">
                  by <span className="text-primary">{release.artist}</span>
                </p>
             </div>
 
             {/* Streaming Links */}
             <div className="space-y-6">
-               <h3 className="text-sm font-black uppercase tracking-[0.2em] text-white/30">Watch / Listen Now</h3>
+               <h3 className="text-sm font-black uppercase tracking-[0.2em] text-zinc-400">Watch / Listen Now</h3>
                <div className="grid grid-cols-2 gap-4">
                   {streamingLinks.length > 0 ? streamingLinks.map((link) => (
                     <a 
@@ -151,24 +151,24 @@ export default function ReleaseDetailPage({ params }: { params: Promise<{ slug: 
                       href={link.url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex flex-col items-center justify-center gap-3 p-6 glass border border-white/5 rounded-2xl hover:border-primary/40 hover:bg-primary/5 transition-all group"
+                      className="flex flex-col items-center justify-center gap-3 p-6 glass border border-zinc-800/80 rounded-2xl hover:border-primary/40 hover:bg-primary/5 transition-all group"
                     >
-                      <div className="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center text-white/40 group-hover:text-primary transition-colors border border-white/5">
+                      <div className="w-12 h-12 rounded-full bg-zinc-900 flex items-center justify-center text-zinc-400 group-hover:text-primary transition-colors border border-zinc-800">
                         {link.icon}
                       </div>
-                      <span className="text-[10px] font-black uppercase tracking-widest text-white/60">{link.name}</span>
+                      <span className="text-[10px] font-black uppercase tracking-widest text-zinc-300">{link.name}</span>
                     </a>
                   )) : (
-                    <p className="text-white/40 text-xs italic col-span-2">Streaming links will be active once live on DSP platforms.</p>
+                    <p className="text-zinc-400 text-xs italic col-span-2">Streaming links will be active once live on DSP platforms.</p>
                   )}
                </div>
             </div>
 
             {/* Meta Info */}
-            <div className="pt-10 border-t border-white/5 text-[10px] font-bold text-white/20 uppercase tracking-[0.2em] flex flex-wrap gap-x-12 gap-y-4">
-               <div className="flex gap-2"><span className="text-white/40">Label:</span> {release.labelName}</div>
-               <div className="flex gap-2"><span className="text-white/40">Copyright:</span> © {new Date(release.releaseDate).getFullYear()} {release.copyrightHolder || "Fastit"}</div>
-               {release.upc && <div className="flex gap-2"><span className="text-white/40">UPC:</span> {release.upc}</div>}
+            <div className="pt-10 border-t border-zinc-800/80 text-[10px] font-bold text-zinc-500 uppercase tracking-[0.2em] flex flex-wrap gap-x-12 gap-y-4">
+               <div className="flex gap-2"><span className="text-zinc-400">Label:</span> {release.labelName}</div>
+               <div className="flex gap-2"><span className="text-zinc-400">Copyright:</span> © {new Date(release.releaseDate).getFullYear()} {release.copyrightHolder || "Fastit"}</div>
+               {release.upc && <div className="flex gap-2"><span className="text-zinc-400">UPC:</span> {release.upc}</div>}
             </div>
           </motion.div>
         </div>

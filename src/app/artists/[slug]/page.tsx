@@ -74,7 +74,7 @@ export default function ArtistProfilePage({ params }: { params: Promise<{ slug: 
 
       <div className="max-w-7xl mx-auto px-4 sm:px-8">
         <div className="mb-8 lg:mb-12">
-          <Link href="/artists" className="flex items-center gap-2 text-white/40 hover:text-secondary transition-colors font-bold group">
+          <Link href="/artists" className="flex items-center gap-2 text-zinc-400 hover:text-secondary transition-colors font-bold group">
             <ArrowLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" /> Back to Artists
           </Link>
         </div>
@@ -106,40 +106,40 @@ export default function ArtistProfilePage({ params }: { params: Promise<{ slug: 
                  <div className="flex items-center gap-2 px-4 py-1.5 rounded-full bg-secondary/10 border border-secondary/30 text-secondary font-black text-xs uppercase tracking-widest">
                     <Verified className="w-4 h-4 fill-current" /> Verified Artist
                  </div>
-                 <div className="flex items-center gap-2 text-white/40 font-bold uppercase text-[10px] tracking-widest">
+                 <div className="flex items-center gap-2 text-zinc-400 font-bold uppercase text-[10px] tracking-widest">
                     <Music className="w-3 h-3" /> {artist.genre}
                  </div>
               </div>
-              <h1 className="text-4xl sm:text-6xl md:text-8xl font-black font-display text-white tracking-tighter leading-tight lg:leading-none">
+              <h1 className="text-4xl sm:text-6xl md:text-8xl font-black font-display text-zinc-100 tracking-tighter leading-tight lg:leading-none">
                 {artist.name}
               </h1>
               <div className="flex flex-wrap items-center justify-center lg:justify-start gap-8">
                  <div className="flex items-center gap-2">
-                    <Disc className="w-6 h-6 text-white/20" />
-                    <span className="text-2xl font-black font-display text-white">{artist.totalStreams ? artist.totalStreams.toLocaleString() : "0"}</span>
-                    <span className="text-white/40 font-bold uppercase text-[10px] tracking-widest mt-1">Total Plays</span>
+                    <Disc className="w-6 h-6 text-zinc-500" />
+                    <span className="text-2xl font-black font-display text-zinc-100">{artist.totalStreams ? artist.totalStreams.toLocaleString() : "0"}</span>
+                    <span className="text-zinc-400 font-bold uppercase text-[10px] tracking-widest mt-1">Total Plays</span>
                  </div>
               </div>
             </div>
 
-            <p className="text-white/60 text-xl font-sans leading-relaxed max-w-2xl">
+            <p className="text-zinc-300 text-xl font-sans leading-relaxed max-w-2xl">
               {artist.bio}
             </p>
 
             <div className="flex flex-wrap items-center justify-center lg:justify-start gap-4">
                <div className="flex gap-4">
                   {artist.links?.instagram && (
-                    <a href={artist.links.instagram} target="_blank" rel="noopener noreferrer" className="w-14 h-14 rounded-full bg-white/15 border border-white/25 flex items-center justify-center hover:bg-white/25 transition-all text-white hover:text-secondary" title="Instagram">
+                    <a href={artist.links.instagram} target="_blank" rel="noopener noreferrer" className="w-14 h-14 rounded-full bg-white/15 border border-white/25 flex items-center justify-center hover:bg-white/25 transition-all text-zinc-100 hover:text-secondary" title="Instagram">
                        <Instagram className="w-6 h-6" />
                     </a>
                   )}
                   {artist.links?.twitter && (
-                    <a href={artist.links.twitter} target="_blank" rel="noopener noreferrer" className="w-14 h-14 rounded-full bg-white/15 border border-white/25 flex items-center justify-center hover:bg-white/25 transition-all text-white hover:text-secondary" title="Twitter">
+                    <a href={artist.links.twitter} target="_blank" rel="noopener noreferrer" className="w-14 h-14 rounded-full bg-white/15 border border-white/25 flex items-center justify-center hover:bg-white/25 transition-all text-zinc-100 hover:text-secondary" title="Twitter">
                        <Twitter className="w-6 h-6" />
                     </a>
                   )}
                   {artist.links?.youtube && (
-                    <a href={artist.links.youtube} target="_blank" rel="noopener noreferrer" className="w-14 h-14 rounded-full bg-white/15 border border-white/25 flex items-center justify-center hover:bg-white/25 transition-all text-white hover:text-secondary" title="YouTube">
+                    <a href={artist.links.youtube} target="_blank" rel="noopener noreferrer" className="w-14 h-14 rounded-full bg-white/15 border border-white/25 flex items-center justify-center hover:bg-white/25 transition-all text-zinc-100 hover:text-secondary" title="YouTube">
                        <Youtube className="w-6 h-6" />
                     </a>
                   )}
@@ -157,9 +157,9 @@ export default function ArtistProfilePage({ params }: { params: Promise<{ slug: 
              viewport={{ once: true }}
              className="lg:col-span-8 space-y-8 lg:space-y-12"
            >
-              <div className="flex justify-between items-end border-b border-white/5 pb-8">
-                 <h2 className="text-3xl sm:text-4xl font-black font-display text-white tracking-tight">Main <span className="text-secondary">Catalog.</span></h2>
-                 <Link href="/releases" className="text-white/40 font-bold hover:text-secondary transition-colors text-xs sm:text-sm">View all discs</Link>
+              <div className="flex justify-between items-end border-b border-zinc-800/80 pb-8">
+                 <h2 className="text-3xl sm:text-4xl font-black font-display text-zinc-100 tracking-tight">Main <span className="text-secondary">Catalog.</span></h2>
+                 <Link href="/releases" className="text-zinc-400 font-bold hover:text-secondary transition-colors text-xs sm:text-sm">View all discs</Link>
               </div>
 
               <div className="space-y-4">
@@ -170,28 +170,28 @@ export default function ArtistProfilePage({ params }: { params: Promise<{ slug: 
                         href={`/releases/${rel.slug}`}
                         className="group flex items-center gap-4 sm:gap-8 p-4 sm:p-6 glass rounded-2xl border border-white/0 hover:border-secondary/20 hover:bg-secondary/5 transition-all"
                        >
-                          <div className="relative w-16 h-16 sm:w-24 sm:h-24 rounded-xl overflow-hidden shadow-lg border border-white/10 flex-shrink-0">
+                          <div className="relative w-16 h-16 sm:w-24 sm:h-24 rounded-xl overflow-hidden shadow-lg border border-zinc-800 flex-shrink-0">
                              <Image src={rel.cover} alt={rel.title} fill className="object-cover group-hover:scale-110 transition-transform duration-500" />
                           </div>
                           <div className="flex-grow min-w-0">
-                             <h4 className="text-lg sm:text-xl font-bold text-white group-hover:text-secondary transition-colors truncate">{rel.title}</h4>
-                             <p className="text-white/40 text-xs sm:text-sm font-sans tracking-tight">Released {new Date(rel.releaseDate).getFullYear()}</p>
+                             <h4 className="text-lg sm:text-xl font-bold text-zinc-100 group-hover:text-secondary transition-colors truncate">{rel.title}</h4>
+                             <p className="text-zinc-400 text-xs sm:text-sm font-sans tracking-tight">Released {new Date(rel.releaseDate).getFullYear()}</p>
                           </div>
                           <div className="flex items-center gap-4 sm:gap-8 pr-1 sm:pr-4 flex-shrink-0">
                              <div className="hidden md:flex flex-col items-end">
-                                <span className="text-[10px] font-black uppercase text-white/20 tracking-widest mb-1">Total Streams</span>
-                                <span className="font-mono text-white/60">{rel.streams ? rel.streams.toLocaleString() : "0"}</span>
+                                <span className="text-[10px] font-black uppercase text-zinc-500 tracking-widest mb-1">Total Streams</span>
+                                <span className="font-mono text-zinc-300">{rel.streams ? rel.streams.toLocaleString() : "0"}</span>
                              </div>
-                             <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full border border-white/10 flex items-center justify-center group-hover:bg-secondary group-hover:text-black transition-all">
+                             <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full border border-zinc-800 flex items-center justify-center group-hover:bg-secondary group-hover:text-black transition-all">
                                 <Play className="w-4 h-4 sm:w-5 sm:h-5 fill-current" />
                              </div>
                           </div>
                        </Link>
                     ))
                  ) : (
-                    <div className="py-20 text-center glass rounded-3xl border border-white/5 space-y-4">
-                       <Disc className="w-12 h-12 text-white/10 mx-auto" />
-                       <p className="text-white/40 font-bold">New music coming soon.</p>
+                    <div className="py-20 text-center glass rounded-3xl border border-zinc-800/80 space-y-4">
+                       <Disc className="w-12 h-12 text-zinc-600 mx-auto" />
+                       <p className="text-zinc-400 font-bold">New music coming soon.</p>
                     </div>
                  )}
               </div>
@@ -204,19 +204,19 @@ export default function ArtistProfilePage({ params }: { params: Promise<{ slug: 
              viewport={{ once: true }}
              className="lg:col-span-4 space-y-12"
            >
-               <div className="glass p-8 rounded-3xl border border-white/5 space-y-8">
-                  <h3 className="text-sm font-black uppercase tracking-[0.2em] text-white/30">Artist Stats</h3>
+               <div className="glass p-8 rounded-3xl border border-zinc-800/80 space-y-8">
+                  <h3 className="text-sm font-black uppercase tracking-[0.2em] text-zinc-400">Artist Stats</h3>
                   <div className="space-y-6">
                      <div className="flex justify-between items-center">
-                        <span className="text-white/40 text-sm font-sans">Monthly Listeners</span>
-                        <span className="text-white font-bold font-mono">{artist.monthlyListeners ? artist.monthlyListeners.toLocaleString() : "0"}</span>
+                        <span className="text-zinc-400 text-sm font-sans">Monthly Listeners</span>
+                        <span className="text-zinc-100 font-bold font-mono">{artist.monthlyListeners ? artist.monthlyListeners.toLocaleString() : "0"}</span>
                      </div>
                      <div className="flex justify-between items-center">
-                        <span className="text-white/40 text-sm font-sans">Track Plays</span>
-                        <span className="text-white font-bold font-mono">{artist.totalStreams ? artist.totalStreams.toLocaleString() : "0"}</span>
+                        <span className="text-zinc-400 text-sm font-sans">Track Plays</span>
+                        <span className="text-zinc-100 font-bold font-mono">{artist.totalStreams ? artist.totalStreams.toLocaleString() : "0"}</span>
                      </div>
                      <div className="flex justify-between items-center">
-                        <span className="text-white/40 text-sm font-sans">Global Rank</span>
+                        <span className="text-zinc-400 text-sm font-sans">Global Rank</span>
                         <span className="text-secondary font-black font-display uppercase tracking-widest text-xs">
                           {artist.totalStreams ? (artist.totalStreams > 400000 ? "Top 1%" : artist.totalStreams > 250000 ? "Top 5%" : artist.totalStreams > 100000 ? "Top 10%" : "Top 25%") : "Top 25%"}
                         </span>
@@ -225,13 +225,13 @@ export default function ArtistProfilePage({ params }: { params: Promise<{ slug: 
                </div>
 
                {artist.platformStats && artist.platformStats.length > 0 && (
-                 <div className="glass p-8 rounded-3xl border border-white/5 space-y-8">
-                    <h3 className="text-sm font-black uppercase tracking-[0.2em] text-white/30">Platform Breakdown</h3>
+                 <div className="glass p-8 rounded-3xl border border-zinc-800/80 space-y-8">
+                    <h3 className="text-sm font-black uppercase tracking-[0.2em] text-zinc-400">Platform Breakdown</h3>
                     <div className="space-y-6">
                        {artist.platformStats.map((stat: any) => (
                           <div key={stat.platform} className="flex justify-between items-center">
-                             <span className="text-white/40 text-sm font-sans">{stat.platform}</span>
-                             <span className="text-white font-bold font-mono">{stat.streams.toLocaleString()} plays</span>
+                             <span className="text-zinc-400 text-sm font-sans">{stat.platform}</span>
+                             <span className="text-zinc-100 font-bold font-mono">{stat.streams.toLocaleString()} plays</span>
                           </div>
                        ))}
                     </div>
@@ -240,7 +240,7 @@ export default function ArtistProfilePage({ params }: { params: Promise<{ slug: 
 
               <div className="glass p-8 rounded-3xl border border-secondary/10 bg-secondary/5 space-y-6">
                  <h3 className="text-sm font-black uppercase tracking-[0.2em] text-secondary">Join the Roster</h3>
-                 <p className="text-white/60 text-sm font-sans italic leading-relaxed">
+                 <p className="text-zinc-300 text-sm font-sans italic leading-relaxed">
                    Are you the next <b>{artist.name}</b>? We are currently reviewing new applications for the Summer distribution cycle.
                  </p>
                  <Link href="/apply" className="flex items-center justify-center gap-2 bg-secondary text-black py-4 rounded-xl font-bold w-full hover:shadow-[0_0_20px_rgba(255,215,9,0.3)] transition-all">
