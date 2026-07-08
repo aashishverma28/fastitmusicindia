@@ -113,11 +113,16 @@ export default function ArtistProfilePage({ params }: { params: Promise<{ slug: 
               <h1 className="text-6xl md:text-8xl font-black font-display text-white tracking-tighter leading-none">
                 {artist.name}
               </h1>
-              <div className="flex items-center justify-center lg:justify-start gap-8">
+              <div className="flex flex-wrap items-center justify-center lg:justify-start gap-8">
                  <div className="flex items-center gap-2">
                     <Users className="w-6 h-6 text-white/20" />
                     <span className="text-2xl font-black font-display text-white">{artist.followers}</span>
                     <span className="text-white/40 font-bold uppercase text-[10px] tracking-widest mt-1">Followers</span>
+                 </div>
+                 <div className="flex items-center gap-2">
+                    <Disc className="w-6 h-6 text-white/20" />
+                    <span className="text-2xl font-black font-display text-white">{artist.totalStreams ? artist.totalStreams.toLocaleString() : "0"}</span>
+                    <span className="text-white/40 font-bold uppercase text-[10px] tracking-widest mt-1">Total Plays</span>
                  </div>
               </div>
             </div>
@@ -186,7 +191,7 @@ export default function ArtistProfilePage({ params }: { params: Promise<{ slug: 
                           <div className="flex items-center gap-8 pr-4">
                              <div className="hidden md:flex flex-col items-end">
                                 <span className="text-[10px] font-black uppercase text-white/20 tracking-widest mb-1">Total Streams</span>
-                                <span className="font-mono text-white/60">2.4M</span>
+                                <span className="font-mono text-white/60">{rel.streams ? rel.streams.toLocaleString() : "0"}</span>
                              </div>
                              <div className="w-12 h-12 rounded-full border border-white/10 flex items-center justify-center group-hover:bg-secondary group-hover:text-black transition-all">
                                 <Play className="w-5 h-5 fill-current" />
@@ -210,23 +215,39 @@ export default function ArtistProfilePage({ params }: { params: Promise<{ slug: 
              viewport={{ once: true }}
              className="lg:col-span-4 space-y-12"
            >
-              <div className="glass p-8 rounded-3xl border border-white/5 space-y-8">
-                 <h3 className="text-sm font-black uppercase tracking-[0.2em] text-white/30">Artist Stats</h3>
-                 <div className="space-y-6">
-                    <div className="flex justify-between items-center">
-                       <span className="text-white/40 text-sm font-sans">Monthly Listeners</span>
-                       <span className="text-white font-bold font-mono">1.2M+</span>
-                    </div>
-                    <div className="flex justify-between items-center">
-                       <span className="text-white/40 text-sm font-sans">Track Plays</span>
-                       <span className="text-white font-bold font-mono">15M+</span>
-                    </div>
-                    <div className="flex justify-between items-center">
-                       <span className="text-white/40 text-sm font-sans">Global Rank</span>
-                       <span className="text-secondary font-black font-display uppercase tracking-widest text-xs">Top 1%</span>
+               <div className="glass p-8 rounded-3xl border border-white/5 space-y-8">
+                  <h3 className="text-sm font-black uppercase tracking-[0.2em] text-white/30">Artist Stats</h3>
+                  <div className="space-y-6">
+                     <div className="flex justify-between items-center">
+                        <span className="text-white/40 text-sm font-sans">Monthly Listeners</span>
+                        <span className="text-white font-bold font-mono">{artist.monthlyListeners ? artist.monthlyListeners.toLocaleString() : "0"}</span>
+                     </div>
+                     <div className="flex justify-between items-center">
+                        <span className="text-white/40 text-sm font-sans">Track Plays</span>
+                        <span className="text-white font-bold font-mono">{artist.totalStreams ? artist.totalStreams.toLocaleString() : "0"}</span>
+                     </div>
+                     <div className="flex justify-between items-center">
+                        <span className="text-white/40 text-sm font-sans">Global Rank</span>
+                        <span className="text-secondary font-black font-display uppercase tracking-widest text-xs">
+                          {artist.totalStreams ? (artist.totalStreams > 400000 ? "Top 1%" : artist.totalStreams > 250000 ? "Top 5%" : artist.totalStreams > 100000 ? "Top 10%" : "Top 25%") : "Top 25%"}
+                        </span>
+                     </div>
+                  </div>
+               </div>
+
+               {artist.platformStats && artist.platformStats.length > 0 && (
+                 <div className="glass p-8 rounded-3xl border border-white/5 space-y-8">
+                    <h3 className="text-sm font-black uppercase tracking-[0.2em] text-white/30">Platform Breakdown</h3>
+                    <div className="space-y-6">
+                       {artist.platformStats.map((stat: any) => (
+                          <div key={stat.platform} className="flex justify-between items-center">
+                             <span className="text-white/40 text-sm font-sans">{stat.platform}</span>
+                             <span className="text-white font-bold font-mono">{stat.streams.toLocaleString()} plays</span>
+                          </div>
+                       ))}
                     </div>
                  </div>
-              </div>
+               )}
 
               <div className="glass p-8 rounded-3xl border border-secondary/10 bg-secondary/5 space-y-6">
                  <h3 className="text-sm font-black uppercase tracking-[0.2em] text-secondary">Join the Roster</h3>
