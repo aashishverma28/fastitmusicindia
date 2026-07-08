@@ -19,8 +19,70 @@ const caveat = Caveat({
 });
 
 export const metadata: Metadata = {
-  title: "Fastit Music India | Premier Music Distribution",
-  description: "India's most powerful music distribution and financial management platform for independent artists and labels.",
+  metadataBase: new URL("https://fastitmusic.in"),
+  title: {
+    default: "Fastit Music India | Premier Music Distribution",
+    template: "%s | Fastit Music India",
+  },
+  description:
+    "India's most powerful music distribution platform. Upload music to Spotify, Apple Music, YouTube Music, JioSaavn & more. Keep 100% of your royalties. Built for independent artists and labels.",
+  keywords: [
+    "music distribution india",
+    "independent artist india",
+    "fastit music",
+    "upload music to spotify india",
+    "music label india",
+    "royalty management india",
+    "digital music distribution",
+    "indian music platform",
+    "release music online india",
+    "music distribution platform",
+  ],
+  authors: [{ name: "Fastit Music India", url: "https://fastitmusic.in" }],
+  creator: "Fastit Music India",
+  publisher: "Fastit Music India",
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
+  openGraph: {
+    type: "website",
+    locale: "en_IN",
+    url: "https://fastitmusic.in",
+    siteName: "Fastit Music India",
+    title: "Fastit Music India | Premier Music Distribution",
+    description:
+      "Upload your music to Spotify, Apple Music, YouTube Music, JioSaavn & 150+ stores. Keep 100% royalties. India's premier music distribution platform.",
+    images: [
+      {
+        url: "/logo.png",
+        width: 1200,
+        height: 630,
+        alt: "Fastit Music India",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Fastit Music India | Premier Music Distribution",
+    description:
+      "Upload your music to Spotify, Apple Music, YouTube Music, JioSaavn & 150+ stores. Keep 100% royalties. India's premier music distribution platform.",
+    images: ["/logo.png"],
+    creator: "@fastitmusicindia",
+  },
+  alternates: {
+    canonical: "https://fastitmusic.in",
+  },
+  icons: {
+    icon: "/favicon.ico",
+    apple: "/favicon.ico",
+  },
 };
 
 import Navbar from "@/components/layout/Navbar";
