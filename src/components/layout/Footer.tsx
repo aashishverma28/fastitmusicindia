@@ -12,7 +12,7 @@ export default function Footer() {
       {/* Top stripes line divider */}
       <div className="h-2 w-full pop-stripes border-b-2 border-white" />
 
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-12 px-12 py-20 w-full max-w-[1920px] mx-auto">
+      <div className="grid grid-cols-1 md:grid-cols-5 gap-12 px-12 py-20 w-full max-w-[1920px] mx-auto">
         <div className="space-y-6">
           <Link href="/" className="flex items-center gap-3">
             <div className="relative w-10 h-10 border border-white/20 p-0.5 bg-black">
@@ -30,7 +30,7 @@ export default function Footer() {
             </div>
           </Link>
           <p className="text-white/60 leading-relaxed font-sans font-medium text-sm">
-            The sonic heartbeat of India's independent music movement. We don't just distribute; we accelerate careers.
+            The sonic heartbeat of India&apos;s independent music movement. We don&apos;t just distribute; we accelerate careers.
           </p>
         </div>
         <div className="space-y-4">
@@ -50,6 +50,19 @@ export default function Footer() {
             <Link className="text-white/50 hover:text-secondary transition-colors hover:translate-x-1 font-semibold text-sm" href="/privacy">Privacy Policy</Link>
             <Link className="text-white/50 hover:text-secondary transition-colors hover:translate-x-1 font-semibold text-sm" href="/terms">Terms of Service</Link>
             <span className="text-white/40 font-semibold text-sm">Office: Assam, India</span>
+          </nav>
+        </div>
+        <div className="space-y-4">
+          <h4 className="text-white font-black uppercase tracking-widest text-xs">Useful Links</h4>
+          <nav className="flex flex-col gap-3">
+            <a 
+              className="text-white/50 hover:text-secondary transition-colors hover:translate-x-1 font-semibold text-sm" 
+              href="https://smartlink.fastitmusic.in/" 
+              target="_blank" 
+              rel="noopener noreferrer"
+            >
+              Smartlink
+            </a>
           </nav>
         </div>
         <div className="space-y-4">
