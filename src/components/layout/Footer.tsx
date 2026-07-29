@@ -98,7 +98,16 @@ export default function Footer() {
       </div>
       <div className="mt-8 border-t border-white/10 px-12 py-8 flex flex-col md:flex-row justify-between items-center gap-4 max-w-[1920px] mx-auto">
         <p className="text-white/50 text-xs font-medium">© 2026 Fastit Music India. All Rights Reserved.</p>
-        <p className="text-white/40 text-xs font-medium">Made with <span className="text-red-500">❤️</span> by Fastit Group Solutions Pvt.Ltd</p>
+        <p className="text-white/40 text-xs font-medium">
+          <a 
+            href="https://fastitgroup.in/" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="hover:text-white/70 transition-colors"
+          >
+            Made with <span className="text-red-500">❤️</span> by Fastit Group of Solutions Pvt.Ltd
+          </a>
+        </p>
         <div className="flex gap-8 items-center">
           <Link className="text-primary text-xs font-black uppercase tracking-wider" href="/login">Artist Portal</Link>
           <Link className="text-white/40 text-xs font-semibold" href="/support">Support Center</Link>
