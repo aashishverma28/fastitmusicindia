@@ -39,7 +39,7 @@ export async function PUT(
 
     const { id } = await params;
     const body = await req.json();
-    const { name, avatar, slug, instagramUrl, spotifyUrl, youtubeUrl, twitterUrl, selectedReleaseIds } = body;
+    const { name, avatar, slug, bio, email, instagramUrl, spotifyUrl, youtubeUrl, twitterUrl, selectedReleaseIds } = body;
 
     const oldArtist = await prisma.publicArtist.findUnique({
       where: { id }
@@ -55,6 +55,8 @@ export async function PUT(
         name,
         avatar,
         slug: slug || name.toLowerCase().replace(/ /g, '-'),
+        bio: bio !== undefined ? bio : oldArtist.bio,
+        email: email !== undefined ? email : oldArtist.email,
         instagramUrl,
         spotifyUrl,
         youtubeUrl,

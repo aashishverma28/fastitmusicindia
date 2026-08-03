@@ -24,6 +24,7 @@ export default function SignArtistModal({ isOpen, onClose, onArtistAdded }: {
     stageName: "",
     fullName: "",
     email: "",
+    bio: "",
     password: ""
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -155,6 +156,16 @@ export default function SignArtistModal({ isOpen, onClose, onArtistAdded }: {
                         onChange={(e) => setFormData({...formData, email: e.target.value})}
                       />
                     </div>
+                  </div>
+                  <div className="md:col-span-2 space-y-2">
+                    <label className="text-[10px] font-black uppercase tracking-widest text-white/30 ml-2">Artist Bio (Optional)</label>
+                    <textarea 
+                      rows={2}
+                      placeholder="Brief background or biography of the artist..."
+                      className="w-full bg-black/40 border border-white/5 rounded-2xl p-4 text-white text-sm focus:border-secondary/50 outline-none transition-all resize-none font-sans"
+                      value={formData.bio}
+                      onChange={(e) => setFormData({...formData, bio: e.target.value})}
+                    />
                   </div>
                   <div className="md:col-span-2 space-y-2">
                     <label className="text-[10px] font-black uppercase tracking-widest text-white/30 ml-2">Custom Password (Optional)</label>

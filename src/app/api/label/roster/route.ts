@@ -95,7 +95,7 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const { stageName, email, fullName, password } = await req.json();
+    const { stageName, email, fullName, password, bio } = await req.json();
 
     if (!stageName || !email || !fullName) {
       return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
@@ -121,7 +121,10 @@ export async function POST(req: Request) {
         
         await prisma.artistProfile.update({
           where: { id: artistProfile.id },
-          data: { labelId: label.id }
+          data: { 
+            labelId: label.id,
+            ...(bio ? { bio } : {})
+          }
         });
         
         return NextResponse.json({ success: true, message: "Existing artist added to roster" });
@@ -144,6 +147,7 @@ export async function POST(req: Request) {
           create: {
             stageName,
             fullName,
+            bio: bio || null,
             primaryGenre: "Pop", // Default
             primaryLanguage: "Hindi", // Default
             city: "Unknown",

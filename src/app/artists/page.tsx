@@ -15,7 +15,8 @@ import {
   X,
   Check,
   Upload,
-  Instagram
+  Instagram,
+  Mail
 } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { uploadFile } from "@/lib/supabase";
@@ -34,6 +35,8 @@ export default function ArtistsPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
+    email: "",
+    bio: "",
     genre: "Pop",
     avatar: "",
     followers: "10K+",
@@ -54,6 +57,8 @@ export default function ArtistsPage() {
     setEditingArtist({
       id: artist.id,
       name: artist.name || "",
+      email: artist.email || "",
+      bio: artist.bio || "",
       avatar: artist.avatar || "",
       slug: artist.slug || "",
       instagramUrl: artist.instagramUrl || "",
@@ -198,6 +203,8 @@ export default function ArtistsPage() {
         setIsModalOpen(false);
         setFormData({ 
           name: "", 
+          email: "",
+          bio: "",
           genre: "Pop", 
           avatar: "", 
           followers: "10K+", 
@@ -461,6 +468,28 @@ export default function ArtistsPage() {
                     />
                   </div>
 
+                  <div className="space-y-2">
+                    <label className="text-[10px] font-black uppercase tracking-widest text-white/40 ml-2">Artist Email</label>
+                    <input 
+                      type="email" 
+                      placeholder="e.g. artist@fastitmusic.com"
+                      className="w-full bg-black border-2 border-white rounded-none py-4 px-6 text-white focus:border-secondary outline-none transition-all font-sans text-xs"
+                      value={formData.email}
+                      onChange={(e) => setFormData({...formData, email: e.target.value})}
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <label className="text-[10px] font-black uppercase tracking-widest text-white/40 ml-2">Artist Bio</label>
+                    <textarea 
+                      rows={3}
+                      placeholder="Tell the world about this artist's story and music style..."
+                      className="w-full bg-black border-2 border-white rounded-none py-3 px-6 text-white focus:border-secondary outline-none transition-all font-sans text-xs resize-none"
+                      value={formData.bio}
+                      onChange={(e) => setFormData({...formData, bio: e.target.value})}
+                    />
+                  </div>
+
                   {/* Select Artist Songs / Releases */}
                   <div className="space-y-2">
                     <label className="text-[10px] font-black uppercase tracking-widest text-white/40 ml-2">Select Artist Songs / Releases</label>
@@ -618,6 +647,28 @@ export default function ArtistsPage() {
                       className="w-full bg-[var(--background)] border-2 border-[var(--foreground)] rounded-none py-4 px-6 text-[var(--foreground)] focus:border-secondary outline-none transition-all font-sans"
                       value={editingArtist.name}
                       onChange={(e) => setEditingArtist({...editingArtist, name: e.target.value})}
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <label className="text-[10px] font-black uppercase tracking-widest text-[var(--foreground)]/50 ml-2">Artist Email</label>
+                    <input 
+                      type="email" 
+                      placeholder="artist@example.com"
+                      className="w-full bg-[var(--background)] border-2 border-[var(--foreground)] rounded-none py-4 px-6 text-[var(--foreground)] focus:border-secondary outline-none transition-all font-sans text-xs"
+                      value={editingArtist.email}
+                      onChange={(e) => setEditingArtist({...editingArtist, email: e.target.value})}
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <label className="text-[10px] font-black uppercase tracking-widest text-[var(--foreground)]/50 ml-2">Artist Bio</label>
+                    <textarea 
+                      rows={3}
+                      placeholder="Tell the world about this artist's story and music style..."
+                      className="w-full bg-[var(--background)] border-2 border-[var(--foreground)] rounded-none py-3 px-6 text-[var(--foreground)] focus:border-secondary outline-none transition-all font-sans text-xs resize-none"
+                      value={editingArtist.bio}
+                      onChange={(e) => setEditingArtist({...editingArtist, bio: e.target.value})}
                     />
                   </div>
 

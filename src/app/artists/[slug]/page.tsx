@@ -17,7 +17,8 @@ import {
   Disc,
   ArrowRight,
   Verified,
-  Loader2
+  Loader2,
+  Mail
 } from "lucide-react";
 import { useAudioStore } from "@/lib/store/useAudioStore";
 import { notFound } from "next/navigation";
@@ -122,12 +123,17 @@ export default function ArtistProfilePage({ params }: { params: Promise<{ slug: 
               </div>
             </div>
 
-            <p className="text-zinc-300 text-xl font-sans leading-relaxed max-w-2xl">
+            <p className="text-zinc-300 text-xl font-sans leading-relaxed max-w-2xl whitespace-pre-line">
               {artist.bio}
             </p>
 
             <div className="flex flex-wrap items-center justify-center lg:justify-start gap-4">
-               <div className="flex gap-4">
+               <div className="flex gap-4 items-center">
+                  {artist.email && (
+                    <a href={`mailto:${artist.email}`} className="w-14 h-14 rounded-full bg-white/15 border border-white/25 flex items-center justify-center hover:bg-white/25 transition-all text-zinc-100 hover:text-secondary" title={`Contact: ${artist.email}`}>
+                       <Mail className="w-6 h-6" />
+                    </a>
+                  )}
                   {artist.links?.instagram && (
                     <a href={artist.links.instagram} target="_blank" rel="noopener noreferrer" className="w-14 h-14 rounded-full bg-white/15 border border-white/25 flex items-center justify-center hover:bg-white/25 transition-all text-zinc-100 hover:text-secondary" title="Instagram">
                        <Instagram className="w-6 h-6" />

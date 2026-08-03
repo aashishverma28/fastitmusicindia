@@ -12,7 +12,7 @@ export async function POST(req: Request) {
     }
 
     const body = await req.json();
-    const { name, genre, avatar, followers, slug, instagramUrl, spotifyUrl, youtubeUrl, twitterUrl, selectedReleaseIds } = body;
+    const { name, genre, avatar, followers, slug, bio, email, instagramUrl, spotifyUrl, youtubeUrl, twitterUrl, selectedReleaseIds } = body;
 
     // @ts-ignore
     const artist = await (prisma as any)['publicArtist'].create({
@@ -22,6 +22,8 @@ export async function POST(req: Request) {
         avatar,
         followers: followers || "10K+",
         slug: slug || name.toLowerCase().replace(/ /g, '-'),
+        bio: bio || null,
+        email: email || null,
         instagramUrl,
         spotifyUrl,
         youtubeUrl,
