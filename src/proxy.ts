@@ -15,7 +15,13 @@ const authMiddleware = withAuth(
 
     // Admin Route Protection
     if (path.startsWith("/dashboard/admin") && token?.role !== "ADMIN") {
-      return NextResponse.redirect(new URL("/login", req.url));
+      const gateCookie = req.cookies.get("fastit_admin_gate")?.value;
+      if (gateCookie === "granted") {
+        return NextResponse.redirect(new URL("/sysadmin/login", req.url));
+      }
+      const notFoundUrl = req.nextUrl.clone();
+      notFoundUrl.pathname = "/not-found";
+      return NextResponse.rewrite(notFoundUrl, { status: 404 });
     }
 
     // Artist Route Protection
@@ -72,6 +78,36 @@ export default function proxy(req: NextRequest, event: any) {
     url.pathname.includes('.')
   ) {
     return NextResponse.next();
+  }
+
+  // --- EXECUTIVE ADMIN PORTAL SECURITY GATE ---
+  const ADMIN_GATE_SECRET = process.env.ADMIN_PORTAL_SECRET || "Fastit_Founder_2026";
+  const isAdminPath = url.pathname.startsWith("/sysadmin") || url.pathname.startsWith("/admin");
+
+  if (isAdminPath) {
+    const accessKey = url.searchParams.get("access_key") || url.searchParams.get("key") || url.searchParams.get("secret");
+    const gateCookie = req.cookies.get("fastit_admin_gate")?.value;
+
+    const isGateAuthorized = (accessKey === ADMIN_GATE_SECRET) || (gateCookie === "granted");
+
+    if (!isGateAuthorized) {
+      // Completely cloak the portal: render standard 404 Not Found
+      url.pathname = "/not-found";
+      return NextResponse.rewrite(url, { status: 404 });
+    }
+
+    // If authorized via secret key parameter, issue 30-day device cookie
+    if (accessKey === ADMIN_GATE_SECRET && gateCookie !== "granted") {
+      const response = NextResponse.next();
+      response.cookies.set("fastit_admin_gate", "granted", {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "lax",
+        maxAge: 60 * 60 * 24 * 30, // 30 days
+        path: "/",
+      });
+      return response;
+    }
   }
 
   if (isCareerSubdomain) {

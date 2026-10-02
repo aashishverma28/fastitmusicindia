@@ -11,30 +11,71 @@ import { useAudioStore } from "@/lib/store/useAudioStore";
 import { useTheme } from "@/components/providers/ThemeProvider";
 import { useRouter } from "next/navigation";
 
+function AnimatedNumber({ value, suffix = "+" }: { value: number; suffix?: string }) {
+  const [displayValue, setDisplayValue] = React.useState(value);
+
+  React.useEffect(() => {
+    let start = 0;
+    const end = value;
+    if (end <= 0) {
+      setDisplayValue(0);
+      return;
+    }
+    const duration = 1000;
+    const stepTime = 25;
+    const steps = duration / stepTime;
+    const increment = end / steps;
+
+    const timer = setInterval(() => {
+      start += increment;
+      if (start >= end) {
+        setDisplayValue(end);
+        clearInterval(timer);
+      } else {
+        setDisplayValue(Math.floor(start));
+      }
+    }, stepTime);
+
+    return () => clearInterval(timer);
+  }, [value]);
+
+  return <span>{displayValue.toLocaleString()}{suffix}</span>;
+}
+
 export default function Home() {
   const { theme } = useTheme();
   const router = useRouter();
   const [realReleases, setRealReleases] = React.useState<any[]>([]);
+  const [realStats, setRealStats] = React.useState<{ artists: number; tracks: number; portals: number }>({
+    artists: 12,
+    tracks: 6,
+    portals: 150,
+  });
   const [isLoading, setIsLoading] = React.useState(true);
   const { setTrack } = useAudioStore();
   const [splitSliderVal, setSplitSliderVal] = React.useState(90);
   const [streamsVal, setStreamsVal] = React.useState(500000);
 
   React.useEffect(() => {
-    const fetchReleases = async () => {
+    const fetchData = async () => {
       try {
-        const res = await fetch("/api/releases/public");
-        const data = await res.json();
-        if (data.releases) {
-          setRealReleases(data.releases.slice(0, 4));
+        const [releasesRes, statsRes] = await Promise.all([
+          fetch("/api/releases/public").then((r) => r.json()).catch(() => ({ releases: [] })),
+          fetch("/api/stats/public").then((r) => r.json()).catch(() => null),
+        ]);
+        if (releasesRes?.releases) {
+          setRealReleases(releasesRes.releases.slice(0, 4));
+        }
+        if (statsRes?.stats) {
+          setRealStats(statsRes.stats);
         }
       } catch (err) {
-        console.error("Error fetching releases:", err);
+        console.error("Error fetching homepage data:", err);
       } finally {
         setIsLoading(false);
       }
     };
-    fetchReleases();
+    fetchData();
   }, []);
 
   const displayReleases = realReleases.length > 0 ? realReleases : [
@@ -344,9 +385,10 @@ export default function Home() {
         </div>
       </div>
 
-      {/* Stats Bar (Neubrutalist offset panels) */}
+      {/* Stats Bar (Neubrutalist offset panels with Live Realtime DB Data) */}
       <section className="py-24 relative overflow-hidden">
         <div className="max-w-7xl mx-auto px-8 relative z-10">
+
           <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
             
             <motion.div 
@@ -354,9 +396,11 @@ export default function Home() {
               initial={{ opacity: 0, y: 20 }}
               className="neubrutalist-card-pink p-8 rounded-none text-center relative"
             >
-              <h3 className="text-6xl font-black font-display text-white mb-2">500+</h3>
+              <h3 className="text-6xl font-black font-display text-white mb-2">
+                <AnimatedNumber value={realStats.artists} suffix="+" />
+              </h3>
               <p className="text-primary font-black tracking-widest uppercase text-xs">Artists Partnered</p>
-              <div className="font-handwriting text-primary/80 text-xl pt-2">Indie & Bedroom creators</div>
+              <div className="font-handwriting text-primary/80 text-xl pt-2">Indie &amp; Bedroom creators</div>
             </motion.div>
 
             <motion.div 
@@ -365,7 +409,9 @@ export default function Home() {
               transition={{ delay: 0.08 }}
               className="neubrutalist-card-yellow p-8 rounded-none text-center relative"
             >
-              <h3 className="text-6xl font-black font-display text-white mb-2">10,000+</h3>
+              <h3 className="text-6xl font-black font-display text-white mb-2">
+                <AnimatedNumber value={realStats.tracks} suffix="+" />
+              </h3>
               <p className="text-secondary font-black tracking-widest uppercase text-xs">Tracks Distributed</p>
               <div className="font-handwriting text-secondary/80 text-xl pt-2">Across all DSP platforms</div>
             </motion.div>
@@ -376,7 +422,9 @@ export default function Home() {
               transition={{ delay: 0.16 }}
               className="neubrutalist-card-blue p-8 rounded-none text-center relative"
             >
-              <h3 className="text-6xl font-black font-display text-white mb-2">50+</h3>
+              <h3 className="text-6xl font-black font-display text-white mb-2">
+                <AnimatedNumber value={realStats.portals} suffix="+" />
+              </h3>
               <p className="text-accent-blue font-black tracking-widest uppercase text-xs">Streaming Portals</p>
               <div className="font-handwriting text-accent-blue/80 text-xl pt-2">Spotify, Apple, Jio, Gaana</div>
             </motion.div>

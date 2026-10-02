@@ -10,12 +10,11 @@ import {
   Calendar, 
   Music, 
   Globe, 
-  Share2, 
   Disc, 
   Mic2,
   ListMusic,
-  Plus,
-  Loader2
+  Loader2,
+  Headphones
 } from "lucide-react";
 import { useAudioStore } from "@/lib/store/useAudioStore";
 import { notFound } from "next/navigation";
@@ -47,7 +46,7 @@ export default function ReleaseDetailPage({ params }: { params: Promise<{ slug: 
 
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-background">
+      <div className="min-h-screen flex items-center justify-center bg-background text-foreground">
         <Loader2 className="w-12 h-12 text-primary animate-spin" />
       </div>
     );
@@ -63,7 +62,7 @@ export default function ReleaseDetailPage({ params }: { params: Promise<{ slug: 
       title: trackTitle || release.title,
       artist: release.artist,
       cover: release.cover,
-      url: trackUrl || release.tracks[0]?.audioUrl || "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"
+      url: trackUrl || release.tracks?.[0]?.audioUrl || release.audioUrl || "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"
     });
   };
 
@@ -81,69 +80,126 @@ export default function ReleaseDetailPage({ params }: { params: Promise<{ slug: 
     { name: "JioSaavn", url: release.jioSaavnUrl, icon: <ListMusic className="w-5 h-5" /> },
   ].filter(link => link.url);
 
-  return (
-    <div className="min-h-screen pt-24 pb-20 relative overflow-hidden bg-[#0a0a0c] text-zinc-100">
-      {/* Dynamic Background Glow */}
-      <div className="absolute top-[-20%] left-[-10%] w-[800px] h-[800px] bg-primary/10 rounded-full blur-[120px] -z-10"></div>
-      <div className="absolute bottom-[-20%] right-[-10%] w-[600px] h-[600px] bg-secondary/10 rounded-full blur-[120px] -z-10"></div>
+  const youtubeVideoId = getYouTubeId(release.youtubeUrl || release.audioUrl);
 
-      <div className="max-w-7xl mx-auto px-8">
-        <div className="mb-12">
-          <Link href="/releases" className="flex items-center gap-2 text-zinc-400 hover:text-primary transition-colors font-bold group">
-            <ArrowLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" /> Back to Releases
+  return (
+    <div className="min-h-screen pt-24 pb-20 relative overflow-hidden bg-background text-foreground transition-colors duration-300">
+      {/* Dynamic Background Glow with Blur */}
+      <div className="absolute top-0 left-0 w-full h-[650px] overflow-hidden -z-10 pointer-events-none select-none">
+        {release.cover && (
+          <Image 
+            src={release.cover} 
+            alt={release.title} 
+            fill 
+            priority
+            className="object-cover opacity-15 dark:opacity-25 blur-[90px] scale-110" 
+          />
+        )}
+        {/* Seamless theme-matching gradient mask */}
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-background/70 to-background dark:via-[#080809]/80 dark:to-[#080809]" />
+        
+        {/* Ambient Neubrutalist flares */}
+        <div className="absolute top-[-10%] right-[-10%] w-[550px] h-[550px] bg-primary/15 dark:bg-primary/15 rounded-full blur-[140px] pointer-events-none" />
+        <div className="absolute top-[20%] left-[-10%] w-[450px] h-[450px] bg-secondary/15 dark:bg-secondary/15 rounded-full blur-[130px] pointer-events-none" />
+      </div>
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-8">
+        <div className="mb-8 lg:mb-12">
+          <Link 
+            href="/releases" 
+            className="inline-flex items-center gap-2 text-foreground/70 hover:text-foreground dark:text-zinc-400 dark:hover:text-primary transition-colors font-bold group text-sm sm:text-base px-3 py-1.5 rounded-lg hover:bg-foreground/5 dark:hover:bg-white/5"
+          >
+            <ArrowLeft className="w-5 h-5 group-hover:-translate-x-1.5 transition-transform" /> Back to Releases
           </Link>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 items-start">
-          {/* Left Column: YouTube Video */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-start">
+          {/* Left Column: Media Player (YouTube or High-Res Vinyl Cover) */}
           <motion.div 
-            initial={{ opacity: 0, x: -40 }}
+            initial={{ opacity: 0, x: -30 }}
             animate={{ opacity: 1, x: 0 }}
-            className="lg:col-span-7 relative group"
+            className="lg:col-span-7 space-y-6"
           >
-            <div className="relative aspect-video rounded-[2rem] overflow-hidden shadow-[0_40px_100px_rgba(0,0,0,0.6)] border border-zinc-800 bg-black">
-              {release.youtubeUrl || release.audioUrl ? (
+            <div className="relative aspect-video rounded-3xl overflow-hidden border-3 sm:border-4 border-foreground/15 dark:border-white/15 shadow-[8px_8px_0px_0px_#ffc301] dark:shadow-[8px_8px_0px_0px_#ffc301] bg-black">
+              {youtubeVideoId ? (
                 <iframe
                   className="absolute inset-0 w-full h-full border-none"
-                  src={`https://www.youtube.com/embed/${getYouTubeId(release.youtubeUrl || release.audioUrl)}`}
+                  src={`https://www.youtube.com/embed/${youtubeVideoId}`}
                   title={release.title}
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                   allowFullScreen
-                ></iframe>
+                />
               ) : (
-                <div className="absolute inset-0 flex items-center justify-center text-zinc-600">No Video Available</div>
+                <div className="relative w-full h-full">
+                  <Image 
+                    src={release.cover} 
+                    alt={release.title} 
+                    fill 
+                    className="object-cover" 
+                  />
+                  <div className="absolute inset-0 bg-black/40 backdrop-blur-[2px] flex items-center justify-center">
+                    <button
+                      onClick={() => handlePlay()}
+                      className="w-20 h-20 rounded-full bg-secondary text-black flex items-center justify-center shadow-2xl hover:scale-110 active:scale-95 transition-all cursor-pointer"
+                    >
+                      <Play className="w-8 h-8 fill-current ml-1" />
+                    </button>
+                  </div>
+                </div>
               )}
+            </div>
+
+            {/* Quick Fastit Audio Stream Bar */}
+            <div className="p-4 sm:p-5 rounded-2xl bg-card-bg dark:bg-[#111113] border-2 border-foreground/15 dark:border-white/15 shadow-[4px_4px_0px_0px_#00b0fc] flex items-center justify-between gap-4">
+              <div className="flex items-center gap-3 min-w-0">
+                <div className="w-12 h-12 rounded-xl overflow-hidden relative flex-shrink-0 border border-foreground/10 dark:border-white/10 bg-background">
+                  <Image src={release.cover} alt={release.title} fill className="object-cover" />
+                </div>
+                <div className="min-w-0">
+                  <h4 className="font-bold text-sm text-foreground truncate">{release.title}</h4>
+                  <p className="text-xs text-foreground/60 dark:text-zinc-400 truncate">{release.artist}</p>
+                </div>
+              </div>
+
+              <button
+                onClick={() => handlePlay()}
+                className="btn-neubrutalist py-2.5 px-5 rounded-none flex items-center gap-2 font-black text-xs uppercase tracking-widest shadow-[2px_2px_0px_0px_#f00a88] flex-shrink-0 cursor-pointer"
+              >
+                <Play className="w-3.5 h-3.5 fill-current" /> Stream Track
+              </button>
             </div>
           </motion.div>
 
-          {/* Right Column: Info */}
+          {/* Right Column: Release Information & DSP Links */}
           <motion.div 
-            initial={{ opacity: 0, x: 40 }}
+            initial={{ opacity: 0, x: 30 }}
             animate={{ opacity: 1, x: 0 }}
-            className="lg:col-span-5 space-y-12"
+            className="lg:col-span-5 space-y-8 lg:space-y-10"
           >
-            <div className="space-y-6">
-               <div className="flex flex-wrap items-center gap-4">
-                  <span className="bg-zinc-900 border border-zinc-800 px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest text-primary">
+            <div className="space-y-4">
+               <div className="flex flex-wrap items-center gap-3">
+                  <span className="bg-primary/15 dark:bg-primary/10 border-2 border-primary text-primary px-3.5 py-1 rounded-full text-xs font-black uppercase tracking-widest shadow-[2px_2px_0px_0px_#f00a88]">
                     {release.genre}
                   </span>
-                  <div className="flex items-center gap-2 text-zinc-400 text-[10px] font-black uppercase tracking-widest">
-                    <Calendar className="w-3 h-3" /> Released {new Date(release.releaseDate).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
+                  <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-foreground/5 dark:bg-white/5 border border-foreground/15 dark:border-white/15 text-foreground/75 dark:text-zinc-300 text-xs font-bold uppercase tracking-wider">
+                    <Calendar className="w-3.5 h-3.5 text-primary" /> {new Date(release.releaseDate).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
                   </div>
                </div>
                
-               <h1 className="text-4xl md:text-5xl font-black font-display text-zinc-100 tracking-tighter leading-none">
+               <h1 className="text-4xl md:text-5xl lg:text-6xl font-black font-display text-foreground tracking-tighter leading-tight">
                  {release.title}
                </h1>
                
-               <p className="text-xl font-bold font-display text-zinc-300">
-                 by <span className="text-primary">{release.artist}</span>
+               <p className="text-xl sm:text-2xl font-bold font-display text-foreground/80 dark:text-zinc-200">
+                 by <span className="text-primary hover:underline">{release.artist}</span>
                </p>
             </div>
 
             {/* Streaming Links */}
-            <div className="space-y-6">
-               <h3 className="text-sm font-black uppercase tracking-[0.2em] text-zinc-400">Watch / Listen Now</h3>
+            <div className="space-y-5">
+               <h3 className="text-xs font-black uppercase tracking-[0.2em] text-foreground/60 dark:text-zinc-400 flex items-center gap-2">
+                 <Headphones className="w-4 h-4 text-primary" /> Watch / Listen Now
+               </h3>
                <div className="grid grid-cols-2 gap-4">
                   {streamingLinks.length > 0 ? streamingLinks.map((link) => (
                     <a 
@@ -151,24 +207,26 @@ export default function ReleaseDetailPage({ params }: { params: Promise<{ slug: 
                       href={link.url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex flex-col items-center justify-center gap-3 p-6 glass border border-zinc-800/80 rounded-2xl hover:border-primary/40 hover:bg-primary/5 transition-all group"
+                      className="flex flex-col items-center justify-center gap-3 p-5 sm:p-6 bg-card-bg dark:bg-[#111113] border-2 border-foreground/15 dark:border-white/15 rounded-2xl hover:border-primary dark:hover:border-secondary hover:shadow-[5px_5px_0px_0px_#f00a88] dark:hover:shadow-[5px_5px_0px_0px_#ffc301] transition-all group"
                     >
-                      <div className="w-12 h-12 rounded-full bg-zinc-900 flex items-center justify-center text-zinc-400 group-hover:text-primary transition-colors border border-zinc-800">
+                      <div className="w-12 h-12 rounded-2xl bg-foreground/5 dark:bg-white/5 flex items-center justify-center text-foreground dark:text-zinc-200 group-hover:text-primary dark:group-hover:text-secondary group-hover:bg-primary/10 transition-colors border border-foreground/10 dark:border-white/10">
                         {link.icon}
                       </div>
-                      <span className="text-[10px] font-black uppercase tracking-widest text-zinc-300">{link.name}</span>
+                      <span className="text-[11px] font-black uppercase tracking-widest text-foreground dark:text-zinc-200 group-hover:text-primary dark:group-hover:text-secondary transition-colors text-center">{link.name}</span>
                     </a>
                   )) : (
-                    <p className="text-zinc-400 text-xs italic col-span-2">Streaming links will be active once live on DSP platforms.</p>
+                    <div className="col-span-2 p-6 rounded-2xl bg-card-bg/60 dark:bg-[#111113]/60 border-2 border-dashed border-foreground/15 dark:border-white/15 text-center">
+                      <p className="text-foreground/60 dark:text-zinc-400 text-xs italic">Streaming links will be active once live on DSP platforms.</p>
+                    </div>
                   )}
                </div>
             </div>
 
             {/* Meta Info */}
-            <div className="pt-10 border-t border-zinc-800/80 text-[10px] font-bold text-zinc-500 uppercase tracking-[0.2em] flex flex-wrap gap-x-12 gap-y-4">
-               <div className="flex gap-2"><span className="text-zinc-400">Label:</span> {release.labelName}</div>
-               <div className="flex gap-2"><span className="text-zinc-400">Copyright:</span> © {new Date(release.releaseDate).getFullYear()} {release.copyrightHolder || "Fastit"}</div>
-               {release.upc && <div className="flex gap-2"><span className="text-zinc-400">UPC:</span> {release.upc}</div>}
+            <div className="pt-8 border-t-2 border-foreground/10 dark:border-white/10 text-[11px] font-bold text-foreground/60 dark:text-zinc-400 uppercase tracking-widest flex flex-wrap gap-x-10 gap-y-3">
+               <div><span className="text-foreground dark:text-zinc-200 font-black">Label:</span> {release.labelName}</div>
+               <div><span className="text-foreground dark:text-zinc-200 font-black">Copyright:</span> © {new Date(release.releaseDate).getFullYear()} {release.copyrightHolder || "Fastit"}</div>
+               {release.upc && <div><span className="text-foreground dark:text-zinc-200 font-black">UPC:</span> {release.upc}</div>}
             </div>
           </motion.div>
         </div>

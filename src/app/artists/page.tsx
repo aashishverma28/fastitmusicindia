@@ -39,7 +39,7 @@ export default function ArtistsPage() {
     bio: "",
     genre: "Pop",
     avatar: "",
-    followers: "10K+",
+    followers: "0",
     slug: "",
     instagramUrl: "",
     spotifyUrl: "",
@@ -261,14 +261,14 @@ export default function ArtistsPage() {
             <motion.div 
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
-              className="inline-block px-4 py-1.5 border-2 border-white text-secondary font-bold text-xs tracking-widest uppercase bg-black shadow-[3px_3px_0px_0px_#ffc301]"
+              className="inline-block px-4 py-1.5 border-2 border-foreground dark:border-white text-secondary font-bold text-xs tracking-widest uppercase bg-black shadow-[3px_3px_0px_0px_#ffc301]"
             >
               Independent & Global
             </motion.div>
             <motion.h1 
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
-              className="text-5xl md:text-7xl font-black font-display text-white tracking-tighter leading-none relative inline-block"
+              className="text-5xl md:text-7xl font-black font-display text-foreground tracking-tighter leading-none relative inline-block"
             >
               The <span className="relative inline-block pr-1 text-primary">Artists.<ScribbleUnderlineDouble color="#00b0fc" /></span>
               
@@ -280,7 +280,7 @@ export default function ArtistsPage() {
                 </span>
               </div>
             </motion.h1>
-            <p className="text-white/70 text-lg max-w-xl font-sans font-semibold">
+            <p className="text-foreground/75 dark:text-white/70 text-lg max-w-xl font-sans font-semibold">
               Meet the independent creators defining the next wave of Indian music. Distributed and supported by Fastit.
             </p>
           </div>
@@ -300,23 +300,23 @@ export default function ArtistsPage() {
               className="flex flex-col sm:flex-row gap-4 w-full"
             >
               <div className="relative">
-                <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-white/40" />
+                <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-foreground/40 dark:text-white/40" />
                 <input 
                   type="text" 
                   placeholder="Search artists..."
-                  className="w-full sm:w-[280px] bg-black border-2 border-white rounded-none py-3 pl-12 pr-4 text-white shadow-[3px_3px_0px_0px_#f00a88] outline-none transition-all font-sans text-sm font-semibold"
+                  className="w-full sm:w-[280px] bg-[var(--card-bg)] border-2 border-[var(--foreground)] rounded-none py-3 pl-12 pr-4 text-[var(--foreground)] placeholder:text-[var(--foreground)]/40 shadow-[3px_3px_0px_0px_#f00a88] outline-none transition-all font-sans text-sm font-semibold"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                 />
               </div>
-              <div className="flex items-center gap-2 bg-black border-2 border-white rounded-none px-4 py-2 shadow-[3px_3px_0px_0px_#00b0fc]">
-                <Filter className="w-4 h-4 text-white/40" />
+              <div className="flex items-center gap-2 bg-[var(--card-bg)] border-2 border-[var(--foreground)] rounded-none px-4 py-2 shadow-[3px_3px_0px_0px_#00b0fc]">
+                <Filter className="w-4 h-4 text-foreground/40 dark:text-white/40" />
                 <select 
-                  className="bg-transparent text-white text-xs font-bold outline-none cursor-pointer pr-4"
+                  className="bg-transparent text-[var(--foreground)] text-xs font-bold outline-none cursor-pointer pr-4"
                   value={selectedGenre}
                   onChange={(e) => setSelectedGenre(e.target.value)}
                 >
-                  {genres.map(g => <option key={g} value={g} className="bg-[#0b0b0c]">{g}</option>)}
+                  {genres.map(g => <option key={g} value={g} className="bg-[var(--card-bg)] text-[var(--foreground)]">{g}</option>)}
                 </select>
               </div>
             </motion.div>
@@ -327,7 +327,7 @@ export default function ArtistsPage() {
         {isLoading ? (
           <div className="py-40 flex flex-col items-center justify-center gap-4">
             <Loader2 className="w-12 h-12 text-secondary animate-spin" />
-            <p className="text-white/40 font-bold font-display uppercase tracking-widest">Discovering Talents...</p>
+            <p className="text-foreground/50 dark:text-white/40 font-bold font-display uppercase tracking-widest">Discovering Talents...</p>
           </div>
         ) : filteredArtists.length > 0 ? (
           <motion.div 
@@ -391,25 +391,34 @@ export default function ArtistsPage() {
 
                   {/* Polaroid Footer/Indicators */}
                   <div className="flex justify-between items-center w-full max-w-[280px] px-3 mt-4 group-hover:-translate-y-1 transition-transform">
-                    <div className="flex items-center gap-1.5">
-                      <Users className="w-3.5 h-3.5 text-white/25" />
-                      <span className="text-white/45 text-xs font-mono">{artist.followers} fans</span>
+                    <div 
+                      className="flex items-center gap-1.5 cursor-default"
+                      title={
+                        artist.fansBreakdown && (artist.fansBreakdown.instagram > 0 || artist.fansBreakdown.spotify > 0)
+                          ? `Instagram: ${artist.fansBreakdown.instagram.toLocaleString()} • Spotify: ${artist.fansBreakdown.spotify.toLocaleString()}`
+                          : undefined
+                      }
+                    >
+                      <Users className="w-3.5 h-3.5 text-foreground/40 dark:text-white/25" />
+                      <span className="text-foreground/70 dark:text-white/45 text-xs font-mono">
+                        {artist.followers === "0" || !artist.followers ? "0 fans" : `${artist.followers} fans`}
+                      </span>
                     </div>
                     <div className="flex gap-2">
                       {artist.instagramUrl && (
-                        <a href={artist.instagramUrl} target="_blank" rel="noopener noreferrer" className="w-7 h-7 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white/40 hover:text-secondary hover:border-secondary/50 transition-all">
+                        <a href={artist.instagramUrl} target="_blank" rel="noopener noreferrer" className="w-7 h-7 rounded-full bg-foreground/5 dark:bg-white/5 border border-foreground/15 dark:border-white/10 flex items-center justify-center text-foreground/60 dark:text-white/40 hover:text-secondary hover:border-secondary/50 transition-all">
                           <Instagram className="w-3.5 h-3.5" />
                         </a>
                       )}
                       {artist.spotifyUrl && (
-                        <a href={artist.spotifyUrl} target="_blank" rel="noopener noreferrer" className="w-7 h-7 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white/40 hover:text-primary hover:border-primary/50 transition-all">
+                        <a href={artist.spotifyUrl} target="_blank" rel="noopener noreferrer" className="w-7 h-7 rounded-full bg-foreground/5 dark:bg-white/5 border border-foreground/15 dark:border-white/10 flex items-center justify-center text-foreground/60 dark:text-white/40 hover:text-primary hover:border-primary/50 transition-all">
                           <Disc className="w-3.5 h-3.5" />
                         </a>
                       )}
                     </div>
                     <Link 
                       href={`/artists/${artist.slug}`}
-                      className="w-7 h-7 rounded-full border border-white/10 flex items-center justify-center text-white/40 hover:text-secondary hover:border-secondary/50 transition-all"
+                      className="w-7 h-7 rounded-full border border-foreground/15 dark:border-white/10 flex items-center justify-center text-foreground/60 dark:text-white/40 hover:text-secondary hover:border-secondary/50 transition-all"
                     >
                       <Music className="w-3.5 h-3.5" />
                     </Link>
@@ -420,8 +429,8 @@ export default function ArtistsPage() {
           </motion.div>
         ) : (
           <div className="py-40 text-center space-y-4">
-            <Users className="w-16 h-16 text-white/10 mx-auto" />
-            <h3 className="text-2xl font-display font-bold text-white/40">No artists found in this category.</h3>
+            <Users className="w-16 h-16 text-foreground/20 dark:text-white/10 mx-auto" />
+            <h3 className="text-2xl font-display font-bold text-foreground/50 dark:text-white/40">No artists found in this category.</h3>
             <button 
               onClick={() => {setSearchQuery(""); setSelectedGenre("All")}}
               className="text-secondary font-bold hover:underline"
@@ -446,45 +455,45 @@ export default function ArtistsPage() {
                 initial={{ opacity: 0, scale: 0.9, y: 20 }}
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.9, y: 20 }}
-                className="relative w-full max-w-md bg-[#111113] p-5 sm:p-8 rounded-none border-3 border-white shadow-[8px_8px_0px_0px_#ffc301] z-10"
+                className="relative w-full max-w-md bg-[var(--card-bg)] p-5 sm:p-8 rounded-none border-3 border-[var(--foreground)] shadow-[8px_8px_0px_0px_#ffc301] z-10 max-h-[90vh] overflow-y-auto"
               >
                 <div className="flex justify-between items-center mb-5 sm:mb-8">
-                  <h2 className="text-2xl font-black font-display text-white">Add <span className="text-secondary">Manual</span> Artist</h2>
-                  <button onClick={() => setIsModalOpen(false)} className="text-white/40 hover:text-white transition-colors">
+                  <h2 className="text-2xl font-black font-display text-[var(--foreground)]">Add <span className="text-secondary">Manual</span> Artist</h2>
+                  <button onClick={() => setIsModalOpen(false)} className="text-[var(--foreground)]/40 hover:text-[var(--foreground)] transition-colors">
                     <X className="w-6 h-6" />
                   </button>
                 </div>
 
                 <form onSubmit={handleAddArtist} className="space-y-6">
                   <div className="space-y-2">
-                    <label className="text-[10px] font-black uppercase tracking-widest text-white/40 ml-2">Artist Name</label>
+                    <label className="text-[10px] font-black uppercase tracking-widest text-[var(--foreground)]/50 ml-2">Artist Name</label>
                     <input 
                       type="text" 
                       required
                       placeholder="e.g. Aashish Verma"
-                      className="w-full bg-black border-2 border-white rounded-none py-4 px-6 text-white focus:border-secondary outline-none transition-all font-sans"
+                      className="w-full bg-[var(--background)] border-2 border-[var(--foreground)] rounded-none py-4 px-6 text-[var(--foreground)] focus:border-secondary outline-none transition-all font-sans"
                       value={formData.name}
                       onChange={(e) => setFormData({...formData, name: e.target.value})}
                     />
                   </div>
 
                   <div className="space-y-2">
-                    <label className="text-[10px] font-black uppercase tracking-widest text-white/40 ml-2">Artist Email</label>
+                    <label className="text-[10px] font-black uppercase tracking-widest text-[var(--foreground)]/50 ml-2">Artist Email</label>
                     <input 
                       type="email" 
                       placeholder="e.g. artist@fastitmusic.com"
-                      className="w-full bg-black border-2 border-white rounded-none py-4 px-6 text-white focus:border-secondary outline-none transition-all font-sans text-xs"
+                      className="w-full bg-[var(--background)] border-2 border-[var(--foreground)] rounded-none py-4 px-6 text-[var(--foreground)] focus:border-secondary outline-none transition-all font-sans text-xs"
                       value={formData.email}
                       onChange={(e) => setFormData({...formData, email: e.target.value})}
                     />
                   </div>
 
                   <div className="space-y-2">
-                    <label className="text-[10px] font-black uppercase tracking-widest text-white/40 ml-2">Artist Bio</label>
+                    <label className="text-[10px] font-black uppercase tracking-widest text-[var(--foreground)]/50 ml-2">Artist Bio</label>
                     <textarea 
                       rows={3}
                       placeholder="Tell the world about this artist's story and music style..."
-                      className="w-full bg-black border-2 border-white rounded-none py-3 px-6 text-white focus:border-secondary outline-none transition-all font-sans text-xs resize-none"
+                      className="w-full bg-[var(--background)] border-2 border-[var(--foreground)] rounded-none py-3 px-6 text-[var(--foreground)] focus:border-secondary outline-none transition-all font-sans text-xs resize-none"
                       value={formData.bio}
                       onChange={(e) => setFormData({...formData, bio: e.target.value})}
                     />
@@ -492,11 +501,11 @@ export default function ArtistsPage() {
 
                   {/* Select Artist Songs / Releases */}
                   <div className="space-y-2">
-                    <label className="text-[10px] font-black uppercase tracking-widest text-white/40 ml-2">Select Artist Songs / Releases</label>
-                    <div className="w-full bg-black border-2 border-white rounded-none p-3.5 max-h-40 overflow-y-auto space-y-2.5">
+                    <label className="text-[10px] font-black uppercase tracking-widest text-[var(--foreground)]/50 ml-2">Select Artist Songs / Releases</label>
+                    <div className="w-full bg-[var(--background)] border-2 border-[var(--foreground)] rounded-none p-3.5 max-h-40 overflow-y-auto space-y-2.5">
                       {publicReleases.length > 0 ? (
                         publicReleases.map((rel: any) => (
-                          <label key={rel.id} className="flex items-center gap-3 text-white text-xs font-sans cursor-pointer hover:bg-white/5 p-1 select-none">
+                          <label key={rel.id} className="flex items-center gap-3 text-[var(--foreground)] text-xs font-sans cursor-pointer hover:bg-[var(--foreground)]/5 p-1 select-none">
                             <input 
                               type="checkbox"
                               checked={selectedReleaseIds.includes(rel.id)}
@@ -507,33 +516,33 @@ export default function ArtistsPage() {
                                   setSelectedReleaseIds(prev => prev.filter(id => id !== rel.id));
                                 }
                               }}
-                              className="rounded bg-black border-white/20 text-secondary focus:ring-0 w-4 h-4 cursor-pointer"
+                              className="rounded bg-[var(--background)] border-[var(--foreground)]/20 text-secondary focus:ring-0 w-4 h-4 cursor-pointer"
                             />
-                            <span className="truncate">{rel.title} <span className="text-white/40 text-[10px]">({rel.artist})</span></span>
+                            <span className="truncate">{rel.title} <span className="text-[var(--foreground)]/40 text-[10px]">({rel.artist})</span></span>
                           </label>
                         ))
                       ) : (
-                        <p className="text-white/30 text-xs text-center py-4">No releases available to select</p>
+                        <p className="text-[var(--foreground)]/30 text-xs text-center py-4">No releases available to select</p>
                       )}
                     </div>
                   </div>
 
                   <div className="space-y-4">
-                    <label className="text-[10px] font-black uppercase tracking-widest text-white/40 ml-2">Artist Avatar</label>
+                    <label className="text-[10px] font-black uppercase tracking-widest text-[var(--foreground)]/50 ml-2">Artist Avatar</label>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <div className="relative group aspect-square bg-black border-2 border-white rounded-none overflow-hidden flex flex-col items-center justify-center p-4">
+                      <div className="relative group aspect-square bg-[var(--background)] border-2 border-[var(--foreground)] rounded-none overflow-hidden flex flex-col items-center justify-center p-4">
                         {formData.avatar ? (
                           <>
                             <img src={formData.avatar} className="absolute inset-0 w-full h-full object-cover opacity-50" alt="Preview" />
                             <div className="relative z-10 text-center">
                               <Check className="w-8 h-8 text-green-500 mx-auto mb-2" />
-                              <p className="text-[10px] font-bold text-white uppercase tracking-widest">Ready</p>
+                              <p className="text-[10px] font-bold text-[var(--foreground)] uppercase tracking-widest">Ready</p>
                             </div>
                           </>
                         ) : (
                           <>
-                            <Upload className="w-8 h-8 text-white/20 mb-2" />
-                            <p className="text-[10px] font-bold text-white/40 uppercase tracking-widest">Upload Photo</p>
+                            <Upload className="w-8 h-8 text-[var(--foreground)]/20 mb-2" />
+                            <p className="text-[10px] font-bold text-[var(--foreground)]/40 uppercase tracking-widest">Upload Photo</p>
                           </>
                         )}
                         <input 
@@ -551,11 +560,11 @@ export default function ArtistsPage() {
                       </div>
                       
                       <div className="flex flex-col justify-center space-y-2">
-                        <label className="text-[10px] font-black uppercase tracking-widest text-white/20 ml-2">Or Use Image Link</label>
+                        <label className="text-[10px] font-black uppercase tracking-widest text-[var(--foreground)]/20 ml-2">Or Use Image Link</label>
                         <input 
                           type="url" 
                           placeholder="https://..."
-                          className="w-full bg-black border-2 border-white rounded-none py-4 px-6 text-white focus:border-secondary outline-none transition-all font-sans text-xs"
+                          className="w-full bg-[var(--background)] border-2 border-[var(--foreground)] rounded-none py-4 px-6 text-[var(--foreground)] focus:border-secondary outline-none transition-all font-sans text-xs"
                           value={formData.avatar}
                           onChange={(e) => setFormData({...formData, avatar: e.target.value})}
                         />
@@ -564,30 +573,30 @@ export default function ArtistsPage() {
                   </div>
 
                   <div className="space-y-4">
-                    <h3 className="text-[10px] font-black uppercase tracking-widest text-white/40 ml-2 pt-4 border-t border-white/5">Social Accounts</h3>
+                    <h3 className="text-[10px] font-black uppercase tracking-widest text-[var(--foreground)]/50 ml-2 pt-4 border-t border-[var(--foreground)]/10">Social Accounts</h3>
                     <div className="grid grid-cols-2 gap-4">
                       <div className="space-y-2">
                         <div className="flex items-center gap-2 ml-2">
-                          <Instagram className="w-3 h-3 text-white/20" />
-                          <label className="text-[10px] font-black uppercase tracking-widest text-white/40">Instagram</label>
+                          <Instagram className="w-3 h-3 text-[var(--foreground)]/30" />
+                          <label className="text-[10px] font-black uppercase tracking-widest text-[var(--foreground)]/50">Instagram</label>
                         </div>
                         <input 
                           type="url" 
                           placeholder="Link"
-                          className="w-full bg-black border-2 border-white rounded-none py-3 px-4 text-white focus:border-secondary outline-none transition-all font-sans text-xs"
+                          className="w-full bg-[var(--background)] border-2 border-[var(--foreground)] rounded-none py-3 px-4 text-[var(--foreground)] focus:border-secondary outline-none transition-all font-sans text-xs"
                           value={formData.instagramUrl}
                           onChange={(e) => setFormData({...formData, instagramUrl: e.target.value})}
                         />
                       </div>
                       <div className="space-y-2">
                         <div className="flex items-center gap-2 ml-2">
-                          <Disc className="w-3 h-3 text-white/20" />
-                          <label className="text-[10px] font-black uppercase tracking-widest text-white/40">Spotify</label>
+                          <Disc className="w-3 h-3 text-[var(--foreground)]/30" />
+                          <label className="text-[10px] font-black uppercase tracking-widest text-[var(--foreground)]/50">Spotify</label>
                         </div>
                         <input 
                           type="url" 
                           placeholder="Link"
-                          className="w-full bg-black border-2 border-white rounded-none py-3 px-4 text-white focus:border-secondary outline-none transition-all font-sans text-xs"
+                          className="w-full bg-[var(--background)] border-2 border-[var(--foreground)] rounded-none py-3 px-4 text-[var(--foreground)] focus:border-secondary outline-none transition-all font-sans text-xs"
                           value={formData.spotifyUrl}
                           onChange={(e) => setFormData({...formData, spotifyUrl: e.target.value})}
                         />
@@ -596,11 +605,11 @@ export default function ArtistsPage() {
                   </div>
 
                   <div className="space-y-2">
-                    <label className="text-[10px] font-black uppercase tracking-widest text-white/40 ml-2">Custom Slug (Optional)</label>
+                    <label className="text-[10px] font-black uppercase tracking-widest text-[var(--foreground)]/50 ml-2">Custom Slug (Optional)</label>
                     <input 
                       type="text" 
                       placeholder="artist-slug"
-                      className="w-full bg-black border-2 border-white rounded-none py-4 px-6 text-white focus:border-secondary outline-none transition-all font-sans"
+                      className="w-full bg-[var(--background)] border-2 border-[var(--foreground)] rounded-none py-4 px-6 text-[var(--foreground)] focus:border-secondary outline-none transition-all font-sans"
                       value={formData.slug}
                       onChange={(e) => setFormData({...formData, slug: e.target.value})}
                     />

@@ -87,9 +87,9 @@ export default function AdminLoginPage() {
               </div>
             </div>
             
-            <h1 className="text-3xl font-display font-black text-white tracking-wider uppercase">System Admin</h1>
+            <h1 className="text-3xl font-display font-black text-white tracking-wider uppercase">Executive Portal</h1>
             <div className="mt-2 text-[#f00a88] font-mono text-[10px] tracking-[0.25em] uppercase bg-[#f00a88]/10 px-4 py-1.5 rounded-md border border-[#f00a88]/30">
-              Restricted Terminal
+              Founder &amp; Co-Founder Terminal
             </div>
           </div>
 
@@ -106,36 +106,36 @@ export default function AdminLoginPage() {
             )}
 
             <div className="space-y-2">
-              <label className="text-xs font-bold tracking-widest text-white/60 uppercase ml-1">Admin Identifier</label>
+              <label className="text-xs font-bold tracking-widest text-white/80 uppercase ml-1">Executive Email</label>
               <div className="relative group">
-                <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-white/30 group-focus-within:text-[#f00a88] transition-colors" />
+                <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-white/40 group-focus-within:text-[#f00a88] transition-colors" />
                 <input 
-                  type="text" 
+                  type="email" 
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
-                  placeholder="admin@sys.local"
-                  className="w-full bg-black/50 border-2 border-white/10 rounded-xl py-4 pl-12 pr-4 text-white font-mono placeholder:text-white/20 focus:border-[#f00a88] focus:ring-0 transition-all duration-300 outline-none"
+                  placeholder="e.g. aasishverma2807@gmail.com"
+                  className="w-full bg-[#161619] border-2 border-white/20 hover:border-white/40 rounded-xl py-4 pl-12 pr-4 text-white font-mono placeholder:text-white/40 focus:border-[#f00a88] focus:ring-0 transition-all duration-300 outline-none"
                 />
               </div>
             </div>
 
             <div className="space-y-2">
-              <label className="text-xs font-bold tracking-widest text-white/60 uppercase ml-1">Security Key</label>
+              <label className="text-xs font-bold tracking-widest text-white/80 uppercase ml-1">Password</label>
               <div className="relative group">
-                <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-white/30 group-focus-within:text-[#f00a88] transition-colors" />
+                <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-white/40 group-focus-within:text-[#f00a88] transition-colors" />
                 <input 
                   type={showPassword ? "text" : "password"}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
                   placeholder="••••••••"
-                  className="w-full bg-black/50 border-2 border-white/10 rounded-xl py-4 pl-12 pr-12 text-white font-mono placeholder:text-white/20 focus:border-[#f00a88] focus:ring-0 transition-all duration-300 outline-none"
+                  className="w-full bg-[#161619] border-2 border-white/20 hover:border-white/40 rounded-xl py-4 pl-12 pr-12 text-white font-mono placeholder:text-white/40 focus:border-[#f00a88] focus:ring-0 transition-all duration-300 outline-none"
                 />
                 <button 
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-4 top-1/2 -translate-y-1/2 text-white/30 hover:text-[#f00a88] transition-colors duration-200"
+                  className="absolute right-4 top-1/2 -translate-y-1/2 text-white/40 hover:text-[#f00a88] transition-colors duration-200 cursor-pointer"
                 >
                   {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                 </button>

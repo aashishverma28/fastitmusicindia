@@ -6,6 +6,7 @@ import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { Sun, Moon, Menu, X } from "lucide-react";
 import { useTheme } from "@/components/providers/ThemeProvider";
+import { shouldHideHeaderFooter } from "@/lib/layout-utils";
 
 export default function Navbar() {
   const { theme, toggleTheme } = useTheme();
@@ -23,6 +24,11 @@ export default function Navbar() {
       }
     }
   }, []);
+
+  // Hide Navbar for Admin and Staff login portals & dashboards
+  if (shouldHideHeaderFooter(pathname)) {
+    return null;
+  }
 
   const isActive = (href: string) => {
     if (href === "/") {

@@ -4,6 +4,8 @@ import { prisma } from "@/lib/db";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/lib/auth";
 
+import { calculateRealFans } from "@/lib/social-fans";
+
 export async function POST(req: Request) {
   try {
     const session = await getServerSession(authOptions);
@@ -12,7 +14,10 @@ export async function POST(req: Request) {
     }
 
     const body = await req.json();
-    const { name, genre, avatar, followers, slug, bio, email, instagramUrl, spotifyUrl, youtubeUrl, twitterUrl, selectedReleaseIds } = body;
+    const { name, genre, avatar, slug, bio, email, instagramUrl, spotifyUrl, youtubeUrl, twitterUrl, selectedReleaseIds } = body;
+
+    // Calculate real fans from Instagram and Spotify accounts
+    const fansInfo = await calculateRealFans(instagramUrl, spotifyUrl);
 
     // @ts-ignore
     const artist = await (prisma as any)['publicArtist'].create({
@@ -20,7 +25,7 @@ export async function POST(req: Request) {
         name,
         genre: genre || "Indie",
         avatar,
-        followers: followers || "10K+",
+        followers: fansInfo.formatted,
         slug: slug || name.toLowerCase().replace(/ /g, '-'),
         bio: bio || null,
         email: email || null,

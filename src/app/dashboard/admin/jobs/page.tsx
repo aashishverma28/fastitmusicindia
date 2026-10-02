@@ -5,7 +5,7 @@ import {
   Plus, Trash2, Edit, Check, X, Eye, ExternalLink, 
   Briefcase, Mail, User, Clock, AlertTriangle, 
   FolderGit2, CheckCircle2, RefreshCw, ChevronRight,
-  MapPin
+  MapPin, ChevronDown
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -557,130 +557,192 @@ export default function AdminJobsDashboard() {
       {/* CREATE JOB MODAL */}
       <AnimatePresence>
         {showCreateModal && (
-          <div className="fixed inset-0 bg-black/80 z-[100] flex items-center justify-center p-4">
+          <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-[100] flex items-center justify-center p-4">
             <motion.div
               initial={{ scale: 0.95, y: 20 }} animate={{ scale: 1, y: 0 }} exit={{ scale: 0.95, y: 20 }}
-              className="w-full max-w-2xl bg-[#141414] border-3 border-black p-8 shadow-[8px_8px_0px_0px_#f00a88] max-h-[90vh] overflow-y-auto"
+              className="w-full max-w-2xl bg-[#141416] border-2 border-white/20 rounded-2xl p-6 sm:p-8 shadow-[8px_8px_0px_0px_#f00a88] max-h-[90vh] overflow-y-auto"
             >
-              <div className="flex justify-between items-center mb-6">
-                <h2 className="text-2xl font-black text-white font-display uppercase tracking-tight">New Job Opening</h2>
-                <button onClick={() => setShowCreateModal(false)} className="p-1 text-white/40 hover:text-white"><X className="w-6 h-6" /></button>
+              <div className="flex justify-between items-center mb-6 border-b border-white/10 pb-4">
+                <div>
+                  <h2 className="text-2xl font-black text-white font-display uppercase tracking-tight">New Job Opening</h2>
+                  <p className="text-xs text-white/60 font-sans mt-0.5">Post an official vacancy to the Fastit careers portal</p>
+                </div>
+                <button 
+                  onClick={() => setShowCreateModal(false)} 
+                  className="p-2 rounded-xl text-white/60 hover:text-white hover:bg-white/10 transition-colors"
+                >
+                  <X className="w-6 h-6" />
+                </button>
               </div>
 
               {error && (
-                <div className="mb-6 p-4 border border-red-500 bg-red-500/10 text-red-400 text-xs font-semibold flex items-center gap-2">
+                <div className="mb-6 p-4 rounded-xl border border-red-500 bg-red-500/10 text-red-400 text-xs font-semibold flex items-center gap-2">
                   <AlertTriangle className="w-4 h-4 flex-shrink-0" /> {error}
                 </div>
               )}
 
               <form onSubmit={handleCreateJob} className="space-y-5">
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                  {/* Job Title */}
                   <div className="space-y-1 sm:col-span-2">
-                    <label className="text-[10px] font-black uppercase tracking-wider text-white/40 ml-1">Job Title *</label>
+                    <label className="text-xs sm:text-sm font-black uppercase tracking-wider text-white flex items-center gap-1">
+                      Job Title <span className="text-[#f00a88] font-black text-sm">*</span>
+                    </label>
                     <input 
-                      type="text" required value={form.title} onChange={e => setForm({...form, title: e.target.value})}
+                      type="text" 
+                      required 
+                      value={form.title} 
+                      onChange={e => setForm({...form, title: e.target.value})}
                       placeholder="e.g. Lead Frontend React Engineer"
-                      className="w-full bg-black border-2 border-foreground/10 p-3 text-white text-sm focus:border-primary outline-none"
+                      className="w-full bg-[#1e1e22] border-2 border-white/20 hover:border-white/40 focus:border-[#f00a88] p-3.5 text-white placeholder:text-white/45 text-sm rounded-xl outline-none transition-colors"
                     />
                   </div>
 
+                  {/* Department */}
                   <div className="space-y-1">
-                    <label className="text-[10px] font-black uppercase tracking-wider text-white/40 ml-1">Department *</label>
-                    <select 
-                      value={form.department} onChange={e => setForm({...form, department: e.target.value})}
-                      className="w-full bg-black border-2 border-foreground/10 p-3 text-white text-sm focus:border-primary outline-none appearance-none cursor-pointer"
-                    >
-                      {DEPARTMENTS.map(d => <option key={d} value={d} className="bg-[#141414]">{d}</option>)}
-                    </select>
+                    <label className="text-xs sm:text-sm font-black uppercase tracking-wider text-white flex items-center gap-1">
+                      Department <span className="text-[#f00a88] font-black text-sm">*</span>
+                    </label>
+                    <div className="relative">
+                      <select 
+                        value={form.department} 
+                        onChange={e => setForm({...form, department: e.target.value})}
+                        className="w-full bg-[#1e1e22] border-2 border-white/20 hover:border-white/40 focus:border-[#f00a88] p-3.5 pr-10 text-white text-sm rounded-xl outline-none appearance-none cursor-pointer transition-colors"
+                      >
+                        {DEPARTMENTS.map(d => <option key={d} value={d} className="bg-[#1e1e22] text-white py-1">{d}</option>)}
+                      </select>
+                      <ChevronDown className="absolute right-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-white/60 pointer-events-none" />
+                    </div>
                   </div>
 
+                  {/* Job Type */}
                   <div className="space-y-1">
-                    <label className="text-[10px] font-black uppercase tracking-wider text-white/40 ml-1">Job Type *</label>
-                    <select 
-                      value={form.type} onChange={e => setForm({...form, type: e.target.value})}
-                      className="w-full bg-black border-2 border-foreground/10 p-3 text-white text-sm focus:border-primary outline-none appearance-none cursor-pointer"
-                    >
-                      {JOB_TYPES.map(t => <option key={t} value={t} className="bg-[#141414]">{t}</option>)}
-                    </select>
+                    <label className="text-xs sm:text-sm font-black uppercase tracking-wider text-white flex items-center gap-1">
+                      Job Type <span className="text-[#f00a88] font-black text-sm">*</span>
+                    </label>
+                    <div className="relative">
+                      <select 
+                        value={form.type} 
+                        onChange={e => setForm({...form, type: e.target.value})}
+                        className="w-full bg-[#1e1e22] border-2 border-white/20 hover:border-white/40 focus:border-[#f00a88] p-3.5 pr-10 text-white text-sm rounded-xl outline-none appearance-none cursor-pointer transition-colors"
+                      >
+                        {JOB_TYPES.map(t => <option key={t} value={t} className="bg-[#1e1e22] text-white py-1">{t}</option>)}
+                      </select>
+                      <ChevronDown className="absolute right-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-white/60 pointer-events-none" />
+                    </div>
                   </div>
 
+                  {/* Location */}
                   <div className="space-y-1">
-                    <label className="text-[10px] font-black uppercase tracking-wider text-white/40 ml-1">Location *</label>
+                    <label className="text-xs sm:text-sm font-black uppercase tracking-wider text-white flex items-center gap-1">
+                      Location <span className="text-[#f00a88] font-black text-sm">*</span>
+                    </label>
                     <input 
-                      type="text" required value={form.location} onChange={e => setForm({...form, location: e.target.value})}
-                      placeholder="e.g. Assam / Hybrid"
-                      className="w-full bg-black border-2 border-foreground/10 p-3 text-white text-sm focus:border-primary outline-none"
+                      type="text" 
+                      required 
+                      value={form.location} 
+                      onChange={e => setForm({...form, location: e.target.value})}
+                      placeholder="e.g. Assam / Remote"
+                      className="w-full bg-[#1e1e22] border-2 border-white/20 hover:border-white/40 focus:border-[#f00a88] p-3.5 text-white placeholder:text-white/45 text-sm rounded-xl outline-none transition-colors"
                     />
                   </div>
 
+                  {/* Required Experience */}
                   <div className="space-y-1">
-                    <label className="text-[10px] font-black uppercase tracking-wider text-white/40 ml-1">Required Experience *</label>
+                    <label className="text-xs sm:text-sm font-black uppercase tracking-wider text-white flex items-center gap-1">
+                      Required Experience <span className="text-[#f00a88] font-black text-sm">*</span>
+                    </label>
                     <input 
-                      type="text" required value={form.experience} onChange={e => setForm({...form, experience: e.target.value})}
-                      placeholder="e.g. 2+ Years or Strong Portfolio"
-                      className="w-full bg-black border-2 border-foreground/10 p-3 text-white text-sm focus:border-primary outline-none"
+                      type="text" 
+                      required 
+                      value={form.experience} 
+                      onChange={e => setForm({...form, experience: e.target.value})}
+                      placeholder="e.g. 1+ Years"
+                      className="w-full bg-[#1e1e22] border-2 border-white/20 hover:border-white/40 focus:border-[#f00a88] p-3.5 text-white placeholder:text-white/45 text-sm rounded-xl outline-none transition-colors"
                     />
                   </div>
                 </div>
 
-                <div className="space-y-1">
-                  <label className="text-[10px] font-black uppercase tracking-wider text-white/40 ml-1">Job Description *</label>
+                {/* Job Description */}
+                <div className="space-y-1 pt-1">
+                  <label className="text-xs sm:text-sm font-black uppercase tracking-wider text-white flex items-center gap-1">
+                    Job Description <span className="text-[#f00a88] font-black text-sm">*</span>
+                  </label>
                   <textarea 
-                    required rows={4} value={form.description} onChange={e => setForm({...form, description: e.target.value})}
+                    required 
+                    rows={4} 
+                    value={form.description} 
+                    onChange={e => setForm({...form, description: e.target.value})}
                     placeholder="Provide a general overview of the role, team environment, and daily goals..."
-                    className="w-full bg-black border-2 border-foreground/10 p-3 text-white text-sm focus:border-primary outline-none resize-none font-sans"
+                    className="w-full bg-[#1e1e22] border-2 border-white/20 hover:border-white/40 focus:border-[#f00a88] p-3.5 text-white placeholder:text-white/45 text-sm rounded-xl outline-none resize-none font-sans transition-colors"
                   />
                 </div>
 
-                <div className="space-y-1">
-                  <label className="text-[10px] font-black uppercase tracking-wider text-white/40 ml-1">Job Requirements * (One per line)</label>
+                {/* Job Requirements */}
+                <div className="space-y-1 pt-1">
+                  <label className="text-xs sm:text-sm font-black uppercase tracking-wider text-white flex items-center gap-1">
+                    Job Requirements <span className="text-[#f00a88] font-black text-sm">*</span> 
+                    <span className="text-white/50 text-xs font-normal normal-case ml-1">(One per line)</span>
+                  </label>
                   <textarea 
-                    required rows={4} value={form.requirements} onChange={e => setForm({...form, requirements: e.target.value})}
+                    required 
+                    rows={4} 
+                    value={form.requirements} 
+                    onChange={e => setForm({...form, requirements: e.target.value})}
                     placeholder="Enter requirements newline-separated, for example:&#10;Proficiency in React and Next.js&#10;Experience with Tailwind CSS&#10;A sharp eye for premium web aesthetics"
-                    className="w-full bg-black border-2 border-foreground/10 p-3 text-white text-sm focus:border-primary outline-none resize-none font-sans"
+                    className="w-full bg-[#1e1e22] border-2 border-white/20 hover:border-white/40 focus:border-[#f00a88] p-3.5 text-white placeholder:text-white/45 text-sm rounded-xl outline-none resize-none font-sans transition-colors"
                   />
                 </div>
 
-                {/* Accent Color Preset Selector */}
-                <div className="space-y-2">
-                  <label className="text-[10px] font-black uppercase tracking-wider text-white/40 ml-1 block">Branding Theme Color (Accent)</label>
-                  <div className="flex gap-3 flex-wrap">
+                {/* Branding Theme Color (Accent) */}
+                <div className="space-y-2 pt-2">
+                  <label className="text-xs sm:text-sm font-black uppercase tracking-wider text-white flex items-center gap-1">
+                    Branding Theme Color (Accent)
+                  </label>
+                  <div className="flex gap-3 flex-wrap items-center">
                     {COLOR_PRESETS.map((preset) => (
                       <button
                         type="button"
                         key={preset.hex}
                         onClick={() => setForm({ ...form, accentColor: preset.hex })}
-                        className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-black uppercase border-2 border-black transition-all ${
-                          form.accentColor === preset.hex ? "shadow-[2px_2px_0px_0px_#000]" : "opacity-60 scale-95"
+                        className={`flex items-center gap-1.5 px-3.5 py-2 text-xs font-black uppercase rounded-xl border-2 transition-all cursor-pointer ${
+                          form.accentColor === preset.hex 
+                            ? "border-white ring-2 ring-white/50 scale-105 shadow-md" 
+                            : "border-transparent opacity-70 hover:opacity-100"
                         }`}
                         style={{ backgroundColor: preset.hex, color: preset.hex === "#ffc301" ? "#000" : "#fff" }}
                       >
-                        {form.accentColor === preset.hex && <Check className="w-3.5 h-3.5" />}
+                        {form.accentColor === preset.hex && <Check className="w-3.5 h-3.5 stroke-[3]" />}
                         {preset.name}
                       </button>
                     ))}
                     
                     {/* Custom input */}
-                    <input 
-                      type="text"
-                      value={form.accentColor}
-                      onChange={e => setForm({...form, accentColor: e.target.value})}
-                      placeholder="#hex"
-                      className="bg-black border-2 border-foreground/10 text-white font-semibold font-sans text-xs px-3 py-1 w-24 text-center focus:border-primary outline-none"
-                    />
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs text-white/60 font-bold">Custom:</span>
+                      <input 
+                        type="text"
+                        value={form.accentColor}
+                        onChange={e => setForm({...form, accentColor: e.target.value})}
+                        placeholder="#hex"
+                        className="bg-[#1e1e22] border-2 border-white/20 hover:border-white/40 focus:border-[#f00a88] text-white placeholder:text-white/45 font-semibold font-sans text-xs px-3 py-2 rounded-xl w-24 text-center outline-none transition-colors"
+                      />
+                    </div>
                   </div>
                 </div>
 
-                <div className="flex gap-4 pt-4 border-t border-white/5">
+                <div className="flex gap-4 pt-4 border-t border-white/10">
                   <button 
-                    type="button" onClick={() => setShowCreateModal(false)}
-                    className="flex-1 py-3 border-2 border-black bg-white text-black font-black uppercase text-xs tracking-widest hover:bg-neutral-100 transition-all shadow-[4px_4px_0px_0px_#000]"
+                    type="button" 
+                    onClick={() => setShowCreateModal(false)}
+                    className="flex-1 py-3.5 rounded-xl border-2 border-white/20 bg-white/5 hover:bg-white/10 text-white font-black uppercase text-xs tracking-widest transition-all cursor-pointer"
                   >
                     Cancel
                   </button>
                   <button 
-                    type="submit" disabled={submitting}
-                    className="flex-1 py-3 border-2 border-black bg-[#f00a88] text-white font-black uppercase text-xs tracking-widest disabled:opacity-50 hover:bg-[#d80577] transition-all shadow-[4px_4px_0px_0px_#000]"
+                    type="submit" 
+                    disabled={submitting}
+                    className="flex-1 py-3.5 rounded-xl border-2 border-black bg-[#f00a88] hover:bg-[#d80577] text-white font-black uppercase text-xs tracking-widest disabled:opacity-50 transition-all shadow-[4px_4px_0px_0px_#ffc301] hover:translate-x-[-1px] hover:translate-y-[-1px] cursor-pointer"
                   >
                     {submitting ? "Posting..." : "Post Job Opening"}
                   </button>
@@ -694,130 +756,192 @@ export default function AdminJobsDashboard() {
       {/* EDIT JOB MODAL */}
       <AnimatePresence>
         {showEditModal && selectedJob && (
-          <div className="fixed inset-0 bg-black/80 z-[100] flex items-center justify-center p-4">
+          <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-[100] flex items-center justify-center p-4">
             <motion.div
               initial={{ scale: 0.95, y: 20 }} animate={{ scale: 1, y: 0 }} exit={{ scale: 0.95, y: 20 }}
-              className="w-full max-w-2xl bg-[#141414] border-3 border-black p-8 shadow-[8px_8px_0px_0px_#ffc301] max-h-[90vh] overflow-y-auto"
+              className="w-full max-w-2xl bg-[#141416] border-2 border-white/20 rounded-2xl p-6 sm:p-8 shadow-[8px_8px_0px_0px_#ffc301] max-h-[90vh] overflow-y-auto"
             >
-              <div className="flex justify-between items-center mb-6">
-                <h2 className="text-2xl font-black text-white font-display uppercase tracking-tight">Edit Job Opening</h2>
-                <button onClick={() => { setShowEditModal(false); setSelectedJob(null); }} className="p-1 text-white/40 hover:text-white"><X className="w-6 h-6" /></button>
+              <div className="flex justify-between items-center mb-6 border-b border-white/10 pb-4">
+                <div>
+                  <h2 className="text-2xl font-black text-white font-display uppercase tracking-tight">Edit Job Opening</h2>
+                  <p className="text-xs text-white/60 font-sans mt-0.5">Modify vacancy requirements and details</p>
+                </div>
+                <button 
+                  onClick={() => { setShowEditModal(false); setSelectedJob(null); }} 
+                  className="p-2 rounded-xl text-white/60 hover:text-white hover:bg-white/10 transition-colors"
+                >
+                  <X className="w-6 h-6" />
+                </button>
               </div>
 
               {error && (
-                <div className="mb-6 p-4 border border-red-500 bg-red-500/10 text-red-400 text-xs font-semibold flex items-center gap-2">
+                <div className="mb-6 p-4 rounded-xl border border-red-500 bg-red-500/10 text-red-400 text-xs font-semibold flex items-center gap-2">
                   <AlertTriangle className="w-4 h-4 flex-shrink-0" /> {error}
                 </div>
               )}
 
               <form onSubmit={handleEditJob} className="space-y-5">
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                  {/* Job Title */}
                   <div className="space-y-1 sm:col-span-2">
-                    <label className="text-[10px] font-black uppercase tracking-wider text-white/40 ml-1">Job Title *</label>
+                    <label className="text-xs sm:text-sm font-black uppercase tracking-wider text-white flex items-center gap-1">
+                      Job Title <span className="text-[#ffc301] font-black text-sm">*</span>
+                    </label>
                     <input 
-                      type="text" required value={form.title} onChange={e => setForm({...form, title: e.target.value})}
+                      type="text" 
+                      required 
+                      value={form.title} 
+                      onChange={e => setForm({...form, title: e.target.value})}
                       placeholder="e.g. Lead Frontend React Engineer"
-                      className="w-full bg-black border-2 border-foreground/10 p-3 text-white text-sm focus:border-secondary outline-none"
+                      className="w-full bg-[#1e1e22] border-2 border-white/20 hover:border-white/40 focus:border-[#ffc301] p-3.5 text-white placeholder:text-white/45 text-sm rounded-xl outline-none transition-colors"
                     />
                   </div>
 
+                  {/* Department */}
                   <div className="space-y-1">
-                    <label className="text-[10px] font-black uppercase tracking-wider text-white/40 ml-1">Department *</label>
-                    <select 
-                      value={form.department} onChange={e => setForm({...form, department: e.target.value})}
-                      className="w-full bg-black border-2 border-foreground/10 p-3 text-white text-sm focus:border-secondary outline-none appearance-none cursor-pointer"
-                    >
-                      {DEPARTMENTS.map(d => <option key={d} value={d} className="bg-[#141414]">{d}</option>)}
-                    </select>
+                    <label className="text-xs sm:text-sm font-black uppercase tracking-wider text-white flex items-center gap-1">
+                      Department <span className="text-[#ffc301] font-black text-sm">*</span>
+                    </label>
+                    <div className="relative">
+                      <select 
+                        value={form.department} 
+                        onChange={e => setForm({...form, department: e.target.value})}
+                        className="w-full bg-[#1e1e22] border-2 border-white/20 hover:border-white/40 focus:border-[#ffc301] p-3.5 pr-10 text-white text-sm rounded-xl outline-none appearance-none cursor-pointer transition-colors"
+                      >
+                        {DEPARTMENTS.map(d => <option key={d} value={d} className="bg-[#1e1e22] text-white py-1">{d}</option>)}
+                      </select>
+                      <ChevronDown className="absolute right-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-white/60 pointer-events-none" />
+                    </div>
                   </div>
 
+                  {/* Job Type */}
                   <div className="space-y-1">
-                    <label className="text-[10px] font-black uppercase tracking-wider text-white/40 ml-1">Job Type *</label>
-                    <select 
-                      value={form.type} onChange={e => setForm({...form, type: e.target.value})}
-                      className="w-full bg-black border-2 border-foreground/10 p-3 text-white text-sm focus:border-secondary outline-none appearance-none cursor-pointer"
-                    >
-                      {JOB_TYPES.map(t => <option key={t} value={t} className="bg-[#141414]">{t}</option>)}
-                    </select>
+                    <label className="text-xs sm:text-sm font-black uppercase tracking-wider text-white flex items-center gap-1">
+                      Job Type <span className="text-[#ffc301] font-black text-sm">*</span>
+                    </label>
+                    <div className="relative">
+                      <select 
+                        value={form.type} 
+                        onChange={e => setForm({...form, type: e.target.value})}
+                        className="w-full bg-[#1e1e22] border-2 border-white/20 hover:border-white/40 focus:border-[#ffc301] p-3.5 pr-10 text-white text-sm rounded-xl outline-none appearance-none cursor-pointer transition-colors"
+                      >
+                        {JOB_TYPES.map(t => <option key={t} value={t} className="bg-[#1e1e22] text-white py-1">{t}</option>)}
+                      </select>
+                      <ChevronDown className="absolute right-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-white/60 pointer-events-none" />
+                    </div>
                   </div>
 
+                  {/* Location */}
                   <div className="space-y-1">
-                    <label className="text-[10px] font-black uppercase tracking-wider text-white/40 ml-1">Location *</label>
+                    <label className="text-xs sm:text-sm font-black uppercase tracking-wider text-white flex items-center gap-1">
+                      Location <span className="text-[#ffc301] font-black text-sm">*</span>
+                    </label>
                     <input 
-                      type="text" required value={form.location} onChange={e => setForm({...form, location: e.target.value})}
+                      type="text" 
+                      required 
+                      value={form.location} 
+                      onChange={e => setForm({...form, location: e.target.value})}
                       placeholder="e.g. Assam / Hybrid"
-                      className="w-full bg-black border-2 border-foreground/10 p-3 text-white text-sm focus:border-secondary outline-none"
+                      className="w-full bg-[#1e1e22] border-2 border-white/20 hover:border-white/40 focus:border-[#ffc301] p-3.5 text-white placeholder:text-white/45 text-sm rounded-xl outline-none transition-colors"
                     />
                   </div>
 
+                  {/* Required Experience */}
                   <div className="space-y-1">
-                    <label className="text-[10px] font-black uppercase tracking-wider text-white/40 ml-1">Required Experience *</label>
+                    <label className="text-xs sm:text-sm font-black uppercase tracking-wider text-white flex items-center gap-1">
+                      Required Experience <span className="text-[#ffc301] font-black text-sm">*</span>
+                    </label>
                     <input 
-                      type="text" required value={form.experience} onChange={e => setForm({...form, experience: e.target.value})}
+                      type="text" 
+                      required 
+                      value={form.experience} 
+                      onChange={e => setForm({...form, experience: e.target.value})}
                       placeholder="e.g. 2+ Years or Strong Portfolio"
-                      className="w-full bg-black border-2 border-foreground/10 p-3 text-white text-sm focus:border-secondary outline-none"
+                      className="w-full bg-[#1e1e22] border-2 border-white/20 hover:border-white/40 focus:border-[#ffc301] p-3.5 text-white placeholder:text-white/45 text-sm rounded-xl outline-none transition-colors"
                     />
                   </div>
                 </div>
 
-                <div className="space-y-1">
-                  <label className="text-[10px] font-black uppercase tracking-wider text-white/40 ml-1">Job Description *</label>
+                {/* Job Description */}
+                <div className="space-y-1 pt-1">
+                  <label className="text-xs sm:text-sm font-black uppercase tracking-wider text-white flex items-center gap-1">
+                    Job Description <span className="text-[#ffc301] font-black text-sm">*</span>
+                  </label>
                   <textarea 
-                    required rows={4} value={form.description} onChange={e => setForm({...form, description: e.target.value})}
+                    required 
+                    rows={4} 
+                    value={form.description} 
+                    onChange={e => setForm({...form, description: e.target.value})}
                     placeholder="Provide a general overview of the role, team environment, and daily goals..."
-                    className="w-full bg-black border-2 border-foreground/10 p-3 text-white text-sm focus:border-secondary outline-none resize-none font-sans"
+                    className="w-full bg-[#1e1e22] border-2 border-white/20 hover:border-white/40 focus:border-[#ffc301] p-3.5 text-white placeholder:text-white/45 text-sm rounded-xl outline-none resize-none font-sans transition-colors"
                   />
                 </div>
 
-                <div className="space-y-1">
-                  <label className="text-[10px] font-black uppercase tracking-wider text-white/40 ml-1">Job Requirements * (One per line)</label>
+                {/* Job Requirements */}
+                <div className="space-y-1 pt-1">
+                  <label className="text-xs sm:text-sm font-black uppercase tracking-wider text-white flex items-center gap-1">
+                    Job Requirements <span className="text-[#ffc301] font-black text-sm">*</span>
+                    <span className="text-white/50 text-xs font-normal normal-case ml-1">(One per line)</span>
+                  </label>
                   <textarea 
-                    required rows={4} value={form.requirements} onChange={e => setForm({...form, requirements: e.target.value})}
+                    required 
+                    rows={4} 
+                    value={form.requirements} 
+                    onChange={e => setForm({...form, requirements: e.target.value})}
                     placeholder="Enter requirements newline-separated"
-                    className="w-full bg-black border-2 border-foreground/10 p-3 text-white text-sm focus:border-secondary outline-none resize-none font-sans"
+                    className="w-full bg-[#1e1e22] border-2 border-white/20 hover:border-white/40 focus:border-[#ffc301] p-3.5 text-white placeholder:text-white/45 text-sm rounded-xl outline-none resize-none font-sans transition-colors"
                   />
                 </div>
 
                 {/* Accent Color Preset Selector */}
-                <div className="space-y-2">
-                  <label className="text-[10px] font-black uppercase tracking-wider text-white/40 ml-1 block">Branding Theme Color (Accent)</label>
-                  <div className="flex gap-3 flex-wrap">
+                <div className="space-y-2 pt-2">
+                  <label className="text-xs sm:text-sm font-black uppercase tracking-wider text-white flex items-center gap-1">
+                    Branding Theme Color (Accent)
+                  </label>
+                  <div className="flex gap-3 flex-wrap items-center">
                     {COLOR_PRESETS.map((preset) => (
                       <button
                         type="button"
                         key={preset.hex}
                         onClick={() => setForm({ ...form, accentColor: preset.hex })}
-                        className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-black uppercase border-2 border-black transition-all ${
-                          form.accentColor === preset.hex ? "shadow-[2px_2px_0px_0px_#000]" : "opacity-60 scale-95"
+                        className={`flex items-center gap-1.5 px-3.5 py-2 text-xs font-black uppercase rounded-xl border-2 transition-all cursor-pointer ${
+                          form.accentColor === preset.hex 
+                            ? "border-white ring-2 ring-white/50 scale-105 shadow-md" 
+                            : "border-transparent opacity-70 hover:opacity-100"
                         }`}
                         style={{ backgroundColor: preset.hex, color: preset.hex === "#ffc301" ? "#000" : "#fff" }}
                       >
-                        {form.accentColor === preset.hex && <Check className="w-3.5 h-3.5" />}
+                        {form.accentColor === preset.hex && <Check className="w-3.5 h-3.5 stroke-[3]" />}
                         {preset.name}
                       </button>
                     ))}
                     
                     {/* Custom input */}
-                    <input 
-                      type="text"
-                      value={form.accentColor}
-                      onChange={e => setForm({...form, accentColor: e.target.value})}
-                      placeholder="#hex"
-                      className="bg-black border-2 border-foreground/10 text-white font-semibold font-sans text-xs px-3 py-1 w-24 text-center focus:border-secondary outline-none"
-                    />
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs text-white/60 font-bold">Custom:</span>
+                      <input 
+                        type="text"
+                        value={form.accentColor}
+                        onChange={e => setForm({...form, accentColor: e.target.value})}
+                        placeholder="#hex"
+                        className="bg-[#1e1e22] border-2 border-white/20 hover:border-white/40 focus:border-[#ffc301] text-white placeholder:text-white/45 font-semibold font-sans text-xs px-3 py-2 rounded-xl w-24 text-center outline-none transition-colors"
+                      />
+                    </div>
                   </div>
                 </div>
 
-                <div className="flex gap-4 pt-4 border-t border-white/5">
+                <div className="flex gap-4 pt-4 border-t border-white/10">
                   <button 
-                    type="button" onClick={() => { setShowEditModal(false); setSelectedJob(null); }}
-                    className="flex-1 py-3 border-2 border-black bg-white text-black font-black uppercase text-xs tracking-widest hover:bg-neutral-100 transition-all shadow-[4px_4px_0px_0px_#000]"
+                    type="button" 
+                    onClick={() => { setShowEditModal(false); setSelectedJob(null); }}
+                    className="flex-1 py-3.5 rounded-xl border-2 border-white/20 bg-white/5 hover:bg-white/10 text-white font-black uppercase text-xs tracking-widest transition-all cursor-pointer"
                   >
                     Cancel
                   </button>
                   <button 
-                    type="submit" disabled={submitting}
-                    className="flex-1 py-3 border-2 border-black bg-[#ffc301] text-black font-black uppercase text-xs tracking-widest disabled:opacity-50 hover:bg-[#e0ab00] transition-all shadow-[4px_4px_0px_0px_#000]"
+                    type="submit" 
+                    disabled={submitting}
+                    className="flex-1 py-3.5 rounded-xl border-2 border-black bg-[#ffc301] hover:bg-[#e0ab00] text-black font-black uppercase text-xs tracking-widest disabled:opacity-50 transition-all shadow-[4px_4px_0px_0px_#f00a88] hover:translate-x-[-1px] hover:translate-y-[-1px] cursor-pointer"
                   >
                     {submitting ? "Saving..." : "Save Job Changes"}
                   </button>

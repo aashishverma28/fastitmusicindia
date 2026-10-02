@@ -27,6 +27,8 @@ export async function DELETE(
   }
 }
 
+import { calculateRealFans } from "@/lib/social-fans";
+
 export async function PUT(
   req: Request,
   { params }: { params: Promise<{ id: string }> }
@@ -49,11 +51,17 @@ export async function PUT(
       return NextResponse.json({ error: "Artist not found" }, { status: 404 });
     }
 
+    // Calculate real fans from social links
+    const targetInsta = instagramUrl !== undefined ? instagramUrl : oldArtist.instagramUrl;
+    const targetSpotify = spotifyUrl !== undefined ? spotifyUrl : oldArtist.spotifyUrl;
+    const fansInfo = await calculateRealFans(targetInsta, targetSpotify);
+
     const updatedArtist = await prisma.publicArtist.update({
       where: { id },
       data: {
         name,
         avatar,
+        followers: fansInfo.formatted,
         slug: slug || name.toLowerCase().replace(/ /g, '-'),
         bio: bio !== undefined ? bio : oldArtist.bio,
         email: email !== undefined ? email : oldArtist.email,

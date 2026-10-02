@@ -3,6 +3,13 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import { prisma } from "@/lib/db";
 import { compare } from "bcryptjs";
 
+export const AUTHORIZED_ADMIN_EMAILS = [
+  "aasishverma2807@gmail.com",
+  "sahilmustakhussain260@gmail.com",
+  "admin@fastitmusic.in",
+  "co-founder@fastitmusic.in",
+];
+
 export const authOptions: NextAuthOptions = {
   session: {
     strategy: "jwt",
@@ -54,9 +61,18 @@ export const authOptions: NextAuthOptions = {
           console.log(`[AUTH] Admin blocked from public portal: ${credentials?.email}`);
           throw new Error("Admin login is not allowed from this portal.");
         }
-        if (user.role !== "ADMIN" && isAdminPortal) {
-          console.log(`[AUTH] Non-admin blocked from admin portal: ${credentials?.email}`);
-          throw new Error("Only administrators can access this portal.");
+        if (isAdminPortal) {
+          if (user.role !== "ADMIN") {
+            console.log(`[AUTH] Non-admin blocked from admin portal: ${credentials?.email}`);
+            throw new Error("Only administrators can access this portal.");
+          }
+
+          // Zero-Trust Founder & Co-Founder Whitelist
+          const normalizedEmail = (user.email || "").toLowerCase().trim();
+          if (!AUTHORIZED_ADMIN_EMAILS.includes(normalizedEmail)) {
+            console.warn(`[SECURITY ALERT] Unauthorized admin login attempt blocked for: ${normalizedEmail}`);
+            throw new Error("Access denied. This email is not authorized for executive administrator access.");
+          }
         }
 
         // EMPLOYEE: must use /staff/login

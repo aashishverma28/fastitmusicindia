@@ -2,10 +2,18 @@
 
 import Link from "next/link";
 import Image from "next/image";
+import { usePathname } from "next/navigation";
 import { useTheme } from "@/components/providers/ThemeProvider";
+import { shouldHideHeaderFooter } from "@/lib/layout-utils";
 
 export default function Footer() {
   const { theme } = useTheme();
+  const pathname = usePathname();
+
+  // Hide Footer for Admin and Staff login portals & dashboards
+  if (shouldHideHeaderFooter(pathname)) {
+    return null;
+  }
 
   return (
     <footer className="bg-[#080809] w-full relative overflow-visible border-t-3 border-white">

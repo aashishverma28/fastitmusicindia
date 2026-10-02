@@ -258,14 +258,14 @@ export default function ReleasesPage() {
             <motion.div 
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
-              className="inline-block px-4 py-1.5 border-2 border-white text-primary font-bold text-xs tracking-widest uppercase bg-black shadow-[3px_3px_0px_0px_#f00a88]"
+              className="inline-block px-4 py-1.5 border-2 border-foreground dark:border-white text-primary font-bold text-xs tracking-widest uppercase bg-black shadow-[3px_3px_0px_0px_#f00a88]"
             >
               The Sound of Fastit
             </motion.div>
             <motion.h1 
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
-              className="text-5xl md:text-7xl font-black font-display text-white tracking-tighter leading-none relative inline-block"
+              className="text-5xl md:text-7xl font-black font-display text-foreground tracking-tighter leading-none relative inline-block"
             >
               Our <span className="relative inline-block pr-1 text-secondary">Releases.<ScribbleUnderlineDouble color="#00b0fc" /></span>
               
@@ -277,7 +277,7 @@ export default function ReleasesPage() {
                 </span>
               </div>
             </motion.h1>
-            <p className="text-white/70 text-lg max-w-xl font-sans font-semibold">
+            <p className="text-foreground/75 dark:text-white/70 text-lg max-w-xl font-sans font-semibold">
               Discover the latest independent music from across India, delivered globally through the Fastit network.
             </p>
           </div>
@@ -297,23 +297,23 @@ export default function ReleasesPage() {
               className="flex flex-col sm:flex-row gap-4 w-full"
             >
               <div className="relative">
-                <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-white/40" />
+                <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-foreground/40 dark:text-white/40" />
                 <input 
                   type="text" 
                   placeholder="Search tracks, artists..."
-                  className="w-full sm:w-[280px] bg-black border-2 border-white focus:border-secondary rounded-none py-3 pl-12 pr-4 text-white shadow-[3px_3px_0px_0px_#f00a88] outline-none transition-all font-sans text-sm font-semibold"
+                  className="w-full sm:w-[280px] bg-[var(--card-bg)] border-2 border-[var(--foreground)] focus:border-secondary rounded-none py-3 pl-12 pr-4 text-[var(--foreground)] placeholder:text-[var(--foreground)]/40 shadow-[3px_3px_0px_0px_#f00a88] outline-none transition-all font-sans text-sm font-semibold"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                 />
               </div>
-              <div className="flex items-center gap-2 bg-black border-2 border-white rounded-none px-4 py-2 shadow-[3px_3px_0px_0px_#00b0fc]">
-                <Filter className="w-4 h-4 text-white/40" />
+              <div className="flex items-center gap-2 bg-[var(--card-bg)] border-2 border-[var(--foreground)] rounded-none px-4 py-2 shadow-[3px_3px_0px_0px_#00b0fc]">
+                <Filter className="w-4 h-4 text-foreground/40 dark:text-white/40" />
                 <select 
-                  className="bg-transparent text-white text-xs font-bold outline-none cursor-pointer pr-4"
+                  className="bg-transparent text-[var(--foreground)] text-xs font-bold outline-none cursor-pointer pr-4"
                   value={selectedGenre}
                   onChange={(e) => setSelectedGenre(e.target.value)}
                 >
-                  {genres.map(g => <option key={g} value={g} className="bg-[#080809]">{g}</option>)}
+                  {genres.map(g => <option key={g} value={g} className="bg-[var(--card-bg)] text-[var(--foreground)]">{g}</option>)}
                 </select>
               </div>
             </motion.div>
@@ -324,7 +324,7 @@ export default function ReleasesPage() {
         {isLoading ? (
           <div className="py-40 flex flex-col items-center justify-center gap-4">
             <Loader2 className="w-12 h-12 text-primary animate-spin" />
-            <p className="text-white/40 font-bold font-display uppercase tracking-widest">Loading Catalog...</p>
+            <p className="text-foreground/50 dark:text-white/40 font-bold font-display uppercase tracking-widest">Loading Catalog...</p>
           </div>
         ) : filteredReleases.length > 0 ? (
           <motion.div 
@@ -353,8 +353,8 @@ export default function ReleasesPage() {
           </motion.div>
         ) : (
           <div className="py-40 text-center space-y-4">
-            <X className="w-16 h-16 text-white/10 mx-auto" />
-            <h3 className="text-2xl font-display font-bold text-white/40">No releases found matching your search.</h3>
+            <X className="w-16 h-16 text-foreground/20 dark:text-white/10 mx-auto" />
+            <h3 className="text-2xl font-display font-bold text-foreground/50 dark:text-white/40">No releases found matching your search.</h3>
             <button 
               onClick={() => {setSearchQuery(""); setSelectedGenre("All")}}
               className="text-primary font-bold hover:underline"
@@ -379,11 +379,11 @@ export default function ReleasesPage() {
                 initial={{ opacity: 0, scale: 0.9, y: 20 }}
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.9, y: 20 }}
-                className="relative w-full max-w-lg bg-[#111113] p-5 sm:p-8 rounded-none border-3 border-white shadow-[8px_8px_0px_0px_#f00a88] overflow-y-auto max-h-[90vh] z-10"
+                className="relative w-full max-w-lg bg-[var(--card-bg)] p-5 sm:p-8 rounded-none border-3 border-[var(--foreground)] shadow-[8px_8px_0px_0px_#f00a88] overflow-y-auto max-h-[90vh] z-10"
               >
                 <div className="flex justify-between items-center mb-5 sm:mb-8">
-                  <h2 className="text-2xl font-black font-display text-white">Add <span className="text-primary">Manual</span> Release</h2>
-                  <button onClick={() => setIsModalOpen(false)} className="text-white/40 hover:text-white transition-colors">
+                  <h2 className="text-2xl font-black font-display text-[var(--foreground)]">Add <span className="text-primary">Manual</span> Release</h2>
+                  <button onClick={() => setIsModalOpen(false)} className="text-[var(--foreground)]/40 hover:text-[var(--foreground)] transition-colors">
                     <X className="w-6 h-6" />
                   </button>
                 </div>
@@ -391,22 +391,22 @@ export default function ReleasesPage() {
                 <form onSubmit={handleAddRelease} className="space-y-6">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="space-y-2">
-                      <label className="text-[10px] font-black uppercase tracking-widest text-white/40 ml-2">Track Title</label>
+                      <label className="text-[10px] font-black uppercase tracking-widest text-[var(--foreground)]/50 ml-2">Track Title</label>
                       <input 
                         type="text" 
                         required
-                        className="w-full bg-black border-2 border-white rounded-none py-4 px-6 text-white focus:border-primary outline-none transition-all font-sans"
+                        className="w-full bg-[var(--background)] border-2 border-[var(--foreground)] rounded-none py-4 px-6 text-[var(--foreground)] focus:border-primary outline-none transition-all font-sans"
                         value={formData.title}
                         onChange={(e) => setFormData({...formData, title: e.target.value})}
                       />
                     </div>
                     <div className="space-y-2">
-                      <label className="text-[10px] font-black uppercase tracking-widest text-white/40 ml-2">Artist Name(s)</label>
+                      <label className="text-[10px] font-black uppercase tracking-widest text-[var(--foreground)]/50 ml-2">Artist Name(s)</label>
                       <input 
                         type="text" 
                         required
                         placeholder="e.g. Artist A"
-                        className="w-full bg-black border-2 border-white rounded-none py-4 px-6 text-white focus:border-primary outline-none transition-all font-sans"
+                        className="w-full bg-[var(--background)] border-2 border-[var(--foreground)] rounded-none py-4 px-6 text-[var(--foreground)] focus:border-primary outline-none transition-all font-sans"
                         value={formData.artistName}
                         onChange={(e) => setFormData({...formData, artistName: e.target.value})}
                       />
@@ -415,20 +415,20 @@ export default function ReleasesPage() {
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="space-y-2">
-                      <label className="text-[10px] font-black uppercase tracking-widest text-white/40 ml-2">Genre</label>
+                      <label className="text-[10px] font-black uppercase tracking-widest text-[var(--foreground)]/50 ml-2">Genre</label>
                       <select 
-                        className="w-full bg-black border-2 border-white rounded-none py-4 px-6 text-white focus:border-primary outline-none transition-all font-sans appearance-none"
+                        className="w-full bg-[var(--background)] border-2 border-[var(--foreground)] rounded-none py-4 px-6 text-[var(--foreground)] focus:border-primary outline-none transition-all font-sans appearance-none"
                         value={formData.genre}
                         onChange={(e) => setFormData({...formData, genre: e.target.value})}
                       >
-                        {genres.filter(g => g !== "All").map(g => <option key={g} value={g} className="bg-[#1a1a1a]">{g}</option>)}
+                        {genres.filter(g => g !== "All").map(g => <option key={g} value={g} className="bg-[var(--card-bg)] text-[var(--foreground)]">{g}</option>)}
                       </select>
                     </div>
                     <div className="space-y-2">
-                      <label className="text-[10px] font-black uppercase tracking-widest text-white/40 ml-2">Release Date</label>
+                      <label className="text-[10px] font-black uppercase tracking-widest text-[var(--foreground)]/50 ml-2">Release Date</label>
                       <input 
                         type="date" 
-                        className="w-full bg-black border-2 border-white rounded-none py-4 px-6 text-white focus:border-primary outline-none transition-all font-sans"
+                        className="w-full bg-[var(--background)] border-2 border-[var(--foreground)] rounded-none py-4 px-6 text-[var(--foreground)] focus:border-primary outline-none transition-all font-sans"
                         value={formData.releaseDate}
                         onChange={(e) => setFormData({...formData, releaseDate: e.target.value})}
                       />
@@ -436,33 +436,33 @@ export default function ReleasesPage() {
                   </div>
 
                   <div className="space-y-2">
-                    <label className="text-[10px] font-black uppercase tracking-widest text-white/40 ml-2">YouTube Video URL</label>
+                    <label className="text-[10px] font-black uppercase tracking-widest text-[var(--foreground)]/50 ml-2">YouTube Video URL</label>
                      <input 
                        type="url" 
                        required
                        placeholder="https://www.youtube.com/watch?v=..."
-                       className="w-full bg-black border-2 border-white rounded-none py-4 px-6 text-white focus:border-primary outline-none transition-all font-sans"
+                       className="w-full bg-[var(--background)] border-2 border-[var(--foreground)] rounded-none py-4 px-6 text-[var(--foreground)] focus:border-primary outline-none transition-all font-sans"
                        value={formData.youtubeUrl}
                        onChange={(e) => setFormData({...formData, youtubeUrl: e.target.value})}
                      />
                    </div>
 
                    <div className="space-y-4">
-                     <label className="text-[10px] font-black uppercase tracking-widest text-white/40 ml-2">Track Artwork (Optional)</label>
+                     <label className="text-[10px] font-black uppercase tracking-widest text-[var(--foreground)]/50 ml-2">Track Artwork (Optional)</label>
                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                       <div className="relative group aspect-square bg-black border-2 border-white rounded-none overflow-hidden flex flex-col items-center justify-center p-4">
+                       <div className="relative group aspect-square bg-[var(--background)] border-2 border-[var(--foreground)] rounded-none overflow-hidden flex flex-col items-center justify-center p-4">
                          {formData.coverArtUrl ? (
                            <>
                              <img src={formData.coverArtUrl} className="absolute inset-0 w-full h-full object-cover opacity-50" alt="Preview" />
                              <div className="relative z-10 text-center">
                                <Check className="w-8 h-8 text-green-500 mx-auto mb-2" />
-                               <p className="text-[10px] font-bold text-white uppercase tracking-widest">Ready</p>
+                               <p className="text-[10px] font-bold text-[var(--foreground)] uppercase tracking-widest">Ready</p>
                              </div>
                            </>
                          ) : (
                            <>
-                             <Upload className="w-8 h-8 text-white/20 mb-2" />
-                             <p className="text-[10px] font-bold text-white/40 uppercase tracking-widest">Upload Image</p>
+                             <Upload className="w-8 h-8 text-[var(--foreground)]/20 mb-2" />
+                             <p className="text-[10px] font-bold text-[var(--foreground)]/40 uppercase tracking-widest">Upload Image</p>
                            </>
                          )}
                          <input 
@@ -480,11 +480,11 @@ export default function ReleasesPage() {
                        </div>
                        
                        <div className="flex flex-col justify-center space-y-2">
-                         <label className="text-[10px] font-black uppercase tracking-widest text-white/20 ml-2">Or Use Image Link</label>
+                         <label className="text-[10px] font-black uppercase tracking-widest text-[var(--foreground)]/20 ml-2">Or Use Image Link</label>
                          <input 
                            type="url" 
                            placeholder="https://..."
-                           className="w-full bg-black border-2 border-white rounded-none py-4 px-6 text-white focus:border-primary outline-none transition-all font-sans text-xs"
+                           className="w-full bg-[var(--background)] border-2 border-[var(--foreground)] rounded-none py-4 px-6 text-[var(--foreground)] focus:border-primary outline-none transition-all font-sans text-xs"
                            value={formData.coverArtUrl}
                            onChange={(e) => setFormData({...formData, coverArtUrl: e.target.value})}
                          />
@@ -493,44 +493,44 @@ export default function ReleasesPage() {
                    </div>
 
                    <div className="space-y-4">
-                     <label className="text-[10px] font-black uppercase tracking-widest text-white/40 ml-2">Streaming Platforms (Optional)</label>
+                     <label className="text-[10px] font-black uppercase tracking-widest text-[var(--foreground)]/50 ml-2">Streaming Platforms (Optional)</label>
                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                        <div className="space-y-1">
-                          <label className="text-[9px] font-bold text-white/30 ml-2">Spotify Link</label>
+                          <label className="text-[9px] font-bold text-[var(--foreground)]/40 ml-2">Spotify Link</label>
                           <input 
                             type="url" 
                             placeholder="https://..."
-                            className="w-full bg-black border-2 border-white rounded-none py-3 px-4 text-white focus:border-primary outline-none transition-all font-sans text-xs"
+                            className="w-full bg-[var(--background)] border-2 border-[var(--foreground)] rounded-none py-3 px-4 text-[var(--foreground)] focus:border-primary outline-none transition-all font-sans text-xs"
                             value={formData.spotifyUrl}
                             onChange={(e) => setFormData({...formData, spotifyUrl: e.target.value})}
                           />
                        </div>
                        <div className="space-y-1">
-                          <label className="text-[9px] font-bold text-white/30 ml-2">Apple Music Link</label>
+                          <label className="text-[9px] font-bold text-[var(--foreground)]/40 ml-2">Apple Music Link</label>
                           <input 
                             type="url" 
                             placeholder="https://..."
-                            className="w-full bg-black border-2 border-white rounded-none py-3 px-4 text-white focus:border-primary outline-none transition-all font-sans text-xs"
+                            className="w-full bg-[var(--background)] border-2 border-[var(--foreground)] rounded-none py-3 px-4 text-[var(--foreground)] focus:border-primary outline-none transition-all font-sans text-xs"
                             value={formData.appleMusicUrl}
                             onChange={(e) => setFormData({...formData, appleMusicUrl: e.target.value})}
                           />
                        </div>
                        <div className="space-y-1">
-                          <label className="text-[9px] font-bold text-white/30 ml-2">YouTube Music Link</label>
+                          <label className="text-[9px] font-bold text-[var(--foreground)]/40 ml-2">YouTube Music Link</label>
                           <input 
                             type="url" 
                             placeholder="https://..."
-                            className="w-full bg-black border-2 border-white rounded-none py-3 px-4 text-white focus:border-primary outline-none transition-all font-sans text-xs"
+                            className="w-full bg-[var(--background)] border-2 border-[var(--foreground)] rounded-none py-3 px-4 text-[var(--foreground)] focus:border-primary outline-none transition-all font-sans text-xs"
                             value={formData.ytMusicUrl}
                             onChange={(e) => setFormData({...formData, ytMusicUrl: e.target.value})}
                           />
                        </div>
                        <div className="space-y-1">
-                          <label className="text-[9px] font-bold text-white/30 ml-2">JioSaavn Link</label>
+                          <label className="text-[9px] font-bold text-[var(--foreground)]/40 ml-2">JioSaavn Link</label>
                           <input 
                             type="url" 
                             placeholder="https://..."
-                            className="w-full bg-black border-2 border-white rounded-none py-3 px-4 text-white focus:border-primary outline-none transition-all font-sans text-xs"
+                            className="w-full bg-[var(--background)] border-2 border-[var(--foreground)] rounded-none py-3 px-4 text-[var(--foreground)] focus:border-primary outline-none transition-all font-sans text-xs"
                             value={formData.jioSaavnUrl}
                             onChange={(e) => setFormData({...formData, jioSaavnUrl: e.target.value})}
                           />

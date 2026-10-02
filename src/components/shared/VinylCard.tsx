@@ -134,12 +134,12 @@ export const VinylCard: React.FC<VinylCardProps> = ({
       {/* Info */}
       <div className="space-y-1 relative z-25 group-hover:-translate-x-3 transition-transform duration-500">
         <Link href={detailLink} className="block">
-          <h4 className="font-display font-black text-lg text-white group-hover:text-primary transition-colors truncate leading-tight">
+          <h4 className="font-display font-black text-lg text-foreground group-hover:text-primary transition-colors truncate leading-tight">
             {title}
           </h4>
         </Link>
-        <p className="text-white/50 text-xs font-sans font-bold uppercase tracking-wider flex items-center gap-1.5 truncate">
-          <Music className="w-3.5 h-3.5 text-white/30" /> {artist}
+        <p className="text-foreground/70 dark:text-white/50 text-xs font-sans font-bold uppercase tracking-wider flex items-center gap-1.5 truncate">
+          <Music className="w-3.5 h-3.5 text-foreground/50 dark:text-white/30" /> {artist}
         </p>
       </div>
     </div>

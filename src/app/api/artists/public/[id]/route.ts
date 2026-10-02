@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
+import { calculateRealFans } from "@/lib/social-fans";
 
 export const dynamic = "force-dynamic";
 
@@ -42,6 +43,10 @@ export async function GET(
         }
       }
     });
+
+    const targetInsta = artist.instagramUrl || artistProfile?.instagramUrl || null;
+    const targetSpotify = artist.spotifyUrl || artistProfile?.spotifyUrl || null;
+    const fansInfo = await calculateRealFans(targetInsta, targetSpotify);
 
     let totalStreams = 0;
     let monthlyListeners = 0;
@@ -125,13 +130,18 @@ export async function GET(
       avatar: artist.avatar || "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=400&q=80",
       bio: artist.bio || artistProfile?.bio || "Independent artist making waves from the heart of India.",
       email: artist.email || artistProfile?.user?.email || null,
-      followers: artist.followers,
+      followers: fansInfo.formatted,
+      fansTotal: fansInfo.total,
+      fansBreakdown: {
+        instagram: fansInfo.instagramCount,
+        spotify: fansInfo.spotifyCount
+      },
       totalStreams,
       monthlyListeners,
       platformStats,
       links: {
-        instagram: artist.instagramUrl || null,
-        spotify: artist.spotifyUrl || null,
+        instagram: targetInsta,
+        spotify: targetSpotify,
         youtube: artist.youtubeUrl || null,
         twitter: artist.twitterUrl || null
       },
