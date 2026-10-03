@@ -42,6 +42,9 @@ export async function GET(
           equals: artist.name,
           mode: 'insensitive'
         }
+      },
+      include: {
+        user: true
       }
     });
 
