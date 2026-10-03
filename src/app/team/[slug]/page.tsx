@@ -44,8 +44,7 @@ const teamData: Record<
     name: "Aashish Verma",
     role: "Founder & CEO",
     tagline: "Visionary. Technologist. Music Advocate.",
-    image:
-      "/founder.png",
+    image: "/aashish-verma.png",
     coverGradient: "from-primary/40 via-primary/10 to-transparent",
     accentColor: "text-primary",
     instagram: "https://www.instagram.com/aashishverma_28",
@@ -111,8 +110,7 @@ const teamData: Record<
     name: "Sahil Mustak Hussain",
     role: "Co-Founder & CMD",
     tagline: "Strategist. Creative Director. Operations Leader.",
-    image:
-      "https://www.image2url.com/r2/default/images/1776594140680-0f049e12-f731-4e5e-a8f8-9b699c190676.png",
+    image: "/sahil-mustak-hussain.png",
     coverGradient: "from-secondary/40 via-secondary/10 to-transparent",
     accentColor: "text-secondary",
     instagram: "https://www.instagram.com/sahil.mustaak",
@@ -221,15 +219,24 @@ export default function TeamMemberPage() {
             <div
               className={`absolute -inset-4 rounded-3xl bg-gradient-to-b ${member.coverGradient} blur-xl -z-10`}
             />
-            <div className="relative rounded-3xl overflow-hidden border border-white/10 shadow-2xl aspect-[4/5]">
+            <figure 
+              itemScope 
+              itemType="https://schema.org/Person"
+              className="relative rounded-3xl overflow-hidden border border-white/10 shadow-2xl aspect-[4/5] bg-zinc-900"
+            >
+              <meta itemProp="name" content={member.name} />
+              <meta itemProp="jobTitle" content={member.role} />
+              <meta itemProp="worksFor" content="Fastit Music India Pvt. Ltd." />
               <Image
                 src={member.image}
-                alt={member.name}
+                alt={`${member.name} - ${member.role} of Fastit Music India`}
+                title={`${member.name} - ${member.role} of Fastit Music India`}
                 fill
+                itemProp="image"
                 className="object-cover object-top"
                 priority
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a]/80 via-transparent to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a]/80 via-transparent to-transparent pointer-events-none" />
 
               {/* Social badges */}
               <div className="absolute bottom-6 left-6 flex gap-3">
@@ -244,7 +251,7 @@ export default function TeamMemberPage() {
                   <ExternalLink className="w-3 h-3 opacity-60" />
                 </a>
               </div>
-            </div>
+            </figure>
           </motion.div>
 
           {/* Info */}

@@ -42,7 +42,7 @@ export default function AboutPage() {
       name: "Aashish Verma",
       role: "Founder & CEO",
       description: "Btech-CSE Student with a vision to revolutionize the independent music scene in India.",
-      image: "/founder.png",
+      image: "/aashish-verma.png",
       instagram: "https://www.instagram.com/aashishverma_28",
       profileSlug: "aashish-verma",
       tilt: "-rotate-2",
@@ -54,7 +54,7 @@ export default function AboutPage() {
       name: "Sahil Mustak Hussain",
       role: "Co-Founder & CMD",
       description: "BCA Student and creative strategist driving the operational excellence of Fastit Music India.",
-      image: "https://www.image2url.com/r2/default/images/1776594140680-0f049e12-f731-4e5e-a8f8-9b699c190676.png",
+      image: "/sahil-mustak-hussain.png",
       instagram: "https://www.instagram.com/sahil.mustaak",
       profileSlug: "sahil-mustak-hussain",
       tilt: "rotate-2",
@@ -245,30 +245,44 @@ export default function AboutPage() {
                 transition={{ delay: i * 0.15 }}
                 className="flex flex-col items-center space-y-6"
               >
-                {/* Physical Polaroid card container */}
-                <div className={`polaroid-card w-full max-w-[340px] ${member.tilt} relative`}>
+                {/* Physical Polaroid card container with Schema.org Person microdata */}
+                <figure 
+                  itemScope 
+                  itemType="https://schema.org/Person"
+                  className={`polaroid-card w-full max-w-[340px] ${member.tilt} relative`}
+                >
+                  <meta itemProp="worksFor" content="Fastit Music India Pvt. Ltd." />
+                  <meta itemProp="url" content={`https://fastitmusic.in/team/${member.profileSlug}`} />
+
                   {/* Duct Tape overlay on Polaroid */}
                   <div className="absolute -top-3 left-[20%] z-40 rotate-[-4deg]">
                     <div className={`tape-badge ${member.badgeColor}`}>{member.badgeText}</div>
                   </div>
 
-                  <Link href={`/team/${member.profileSlug}`} className="block">
-                    <div className="relative aspect-square w-full border-2 border-black/40 overflow-hidden shadow-inner mb-4">
+                  <Link href={`/team/${member.profileSlug}`} className="block" title={`View official profile of ${member.name}`}>
+                    <div className="relative aspect-square w-full border-2 border-black/40 overflow-hidden shadow-inner mb-4 bg-zinc-100">
                       <Image 
                         src={member.image} 
-                        alt={member.name} 
+                        alt={`${member.name} - ${member.role} of Fastit Music India`}
+                        title={`${member.name} - ${member.role} of Fastit Music India`}
                         fill 
+                        priority
+                        itemProp="image"
                         className="object-cover transition-transform duration-700 hover:scale-105" 
                       />
                     </div>
                   </Link>
+
                   {/* Handwritten Polaroid label */}
-                  <div className="text-center mt-3">
-                    <span className="font-handwriting text-zinc-900 text-3.5xl leading-none block">
-                      {member.handwritingNote}
+                  <figcaption className="text-center mt-3">
+                    <span itemProp="name" className="font-handwriting text-zinc-900 text-3.5xl leading-none block">
+                      {member.name}
                     </span>
-                  </div>
-                </div>
+                    <span itemProp="jobTitle" className="text-[11px] font-sans font-bold uppercase tracking-wider text-zinc-700 mt-1 block">
+                      {member.role}
+                    </span>
+                  </figcaption>
+                </figure>
 
                 <div className="text-center space-y-3 px-4 max-w-[340px]">
                   <p className="text-[#ffc301] font-black uppercase tracking-widest text-xs">{member.role}</p>
