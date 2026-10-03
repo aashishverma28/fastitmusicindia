@@ -58,7 +58,7 @@ const teamData: Record<
       {
         degree: "B.Tech – Computer Science Engineering",
         institution: "Birangana Sati Sadhani Rajyik Vishwavidyalaya",
-        year: "2026 – Present",
+        year: "2025 – Present",
       },
     ],
     achievements: [
@@ -124,7 +124,7 @@ const teamData: Record<
       {
         degree: "BCA – Bachelor of Computer Applications",
         institution: "The Assam Kaziranga University",
-        year: "2026 – Present",
+        year: "2025 – Present",
       },
     ],
     achievements: [
@@ -219,8 +219,8 @@ export default function TeamMemberPage() {
             <div
               className={`absolute -inset-4 rounded-3xl bg-gradient-to-b ${member.coverGradient} blur-xl -z-10`}
             />
-            <figure 
-              itemScope 
+            <figure
+              itemScope
               itemType="https://schema.org/Person"
               className="relative rounded-3xl overflow-hidden border border-white/10 shadow-2xl aspect-[4/5] bg-zinc-900"
             >
