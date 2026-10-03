@@ -291,7 +291,7 @@ export default function ArtistProfilePage({ params }: { params: Promise<{ slug: 
                      <div className="flex justify-between items-center">
                         <span className="text-foreground/75 dark:text-zinc-400 text-sm font-sans font-medium">Global Rank</span>
                         <span className="text-primary dark:text-secondary font-black font-display uppercase tracking-widest text-xs px-2.5 py-1 rounded-md bg-primary/10 dark:bg-secondary/10 border border-primary/20 dark:border-secondary/20">
-                          {artist.totalStreams ? (artist.totalStreams > 400000 ? "Top 1%" : artist.totalStreams > 250000 ? "Top 5%" : artist.totalStreams > 100000 ? "Top 10%" : "Top 25%") : "Top 25%"}
+                          {artist.totalStreams && artist.totalStreams > 0 ? (artist.totalStreams > 400000 ? "Top 1%" : artist.totalStreams > 250000 ? "Top 5%" : artist.totalStreams > 100000 ? "Top 10%" : "Top 25%") : "Emerging"}
                         </span>
                      </div>
                   </div>

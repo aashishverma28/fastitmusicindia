@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 import { calculateRealFans } from "@/lib/social-fans";
+import { fetchSpotifyArtistDetails } from "@/lib/spotify";
 
 export const dynamic = "force-dynamic";
 
@@ -46,39 +47,48 @@ export async function GET(
 
     const targetInsta = artist.instagramUrl || artistProfile?.instagramUrl || null;
     const targetSpotify = artist.spotifyUrl || artistProfile?.spotifyUrl || null;
-    const fansInfo = await calculateRealFans(targetInsta, targetSpotify);
+    
+    // Resolve real fans and verified Spotify telemetry in parallel
+    const [fansInfo, spotifyData] = await Promise.all([
+      calculateRealFans(targetInsta, targetSpotify),
+      targetSpotify ? fetchSpotifyArtistDetails(targetSpotify) : Promise.resolve(null)
+    ]);
 
     let totalStreams = 0;
     let monthlyListeners = 0;
     const platformMap: Record<string, number> = {};
 
+    // 1. Check verified database Revenue records
     if (artistProfile) {
       const revenues = await prisma.revenue.findMany({
         where: { artistId: artistProfile.id }
       });
-      totalStreams = revenues.reduce((sum, rev) => sum + rev.streams, 0);
-      monthlyListeners = Math.floor(totalStreams * 0.33);
-      
-      revenues.forEach(rev => {
-        const platform = rev.platform || "Other";
-        platformMap[platform] = (platformMap[platform] || 0) + rev.streams;
-      });
+      if (revenues.length > 0) {
+        totalStreams = revenues.reduce((sum, rev) => sum + rev.streams, 0);
+        revenues.forEach(rev => {
+          const platform = rev.platform || "Other";
+          platformMap[platform] = (platformMap[platform] || 0) + rev.streams;
+        });
+      }
     }
 
-    // Fallback to stable deterministic simulated stats if no real database stream matches
-    if (totalStreams === 0) {
-      let hash = 0;
-      for (let i = 0; i < artist.id.length; i++) {
-        hash = artist.id.charCodeAt(i) + ((hash << 5) - hash);
+    // 2. Real Spotify plays and monthly listeners
+    if (spotifyData && targetSpotify) {
+      monthlyListeners = spotifyData.monthlyListeners;
+      
+      // If Spotify has track plays, aggregate them
+      if (spotifyData.totalPlays > 0) {
+        totalStreams += spotifyData.totalPlays;
+        platformMap["Spotify"] = (platformMap["Spotify"] || 0) + spotifyData.totalPlays;
+      } else {
+        // If Spotify is linked but plays are 0, explicitly record 0 plays for Spotify
+        if (platformMap["Spotify"] === undefined) {
+          platformMap["Spotify"] = 0;
+        }
       }
-      totalStreams = Math.abs(hash % 450000) + 120000; // 120k to 570k
-      monthlyListeners = Math.floor(totalStreams * 0.33);
-
-      platformMap["Spotify"] = Math.floor(totalStreams * 0.40);
-      platformMap["YouTube"] = Math.floor(totalStreams * 0.35);
-      platformMap["YT Music"] = Math.floor(totalStreams * 0.15);
-      platformMap["Apple Music"] = Math.floor(totalStreams * 0.05);
-      platformMap["JioSaavn"] = Math.floor(totalStreams * 0.05);
+    } else {
+      // If Spotify link is not available, strict 0 plays and 0 listeners
+      monthlyListeners = 0;
     }
 
     const platformStats = Object.entries(platformMap).map(([platform, streams]) => ({
@@ -86,7 +96,7 @@ export async function GET(
       streams
     }));
 
-    // Formatted releases with specific calculated streams
+    // Formatted releases with verified streams (real Spotify playcounts or DB revenues)
     const formattedReleases = await Promise.all(releases.map(async (rel: any) => {
       let streams = 0;
       
@@ -105,14 +115,18 @@ export async function GET(
         streams = relRevenues._sum.streams || 0;
       }
       
-      if (streams === 0) {
-        let relHash = 0;
-        for (let i = 0; i < rel.id.length; i++) {
-          relHash = rel.id.charCodeAt(i) + ((relHash << 5) - relHash);
+      // Match with real Spotify track playcount if available
+      if (streams === 0 && spotifyData?.trackPlays) {
+        const normRelTitle = rel.title.toLowerCase().trim();
+        for (const [spotifyTrackTitle, playcount] of Object.entries(spotifyData.trackPlays)) {
+          if (normRelTitle.includes(spotifyTrackTitle) || spotifyTrackTitle.includes(normRelTitle)) {
+            streams = playcount;
+            break;
+          }
         }
-        streams = Math.abs(relHash % 80000) + 15000;
       }
       
+      // Strictly 0 if no play data, never any fake hash
       return {
         id: rel.id,
         title: rel.title,

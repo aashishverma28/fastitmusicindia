@@ -71,6 +71,19 @@ export async function fetchInstagramFollowers(url?: string | null): Promise<numb
 export async function fetchSpotifyFollowers(url?: string | null): Promise<number> {
   if (!url) return 0;
   try {
+    const { fetchSpotifyArtistDetails } = await import("./spotify");
+    const details = await fetchSpotifyArtistDetails(url);
+    if (details.followers > 0) {
+      return details.followers;
+    }
+    if (details.monthlyListeners > 0) {
+      return details.monthlyListeners;
+    }
+  } catch {
+    // fallback to HTML scraper
+  }
+
+  try {
     const match = url.match(/artist\/([a-zA-Z0-9]+)/i);
     if (!match) return 0;
     const artistId = match[1];
